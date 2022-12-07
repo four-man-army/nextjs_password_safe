@@ -9,12 +9,12 @@ import {
 } from "@ant-design/icons";
 import { ReactNode, useState } from "react";
 import React from "react";
+import Link from "next/link";
 
 const { Header, Sider, Content } = Layout;
-const { Title } = Typography;
 
 export default function RootLayout({ children }: { children: ReactNode}) {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -37,12 +37,13 @@ export default function RootLayout({ children }: { children: ReactNode}) {
               {
                 key: "1",
                 icon: <HomeOutlined />,
-                label: "Home",
+                label: <Link href="/">Home</Link>,
+
               },
               {
                 key: "2",
                 icon: <KeyOutlined />,
-                label: "Password Safe",
+                label: <Link href="/safe">Password Safe</Link>,
               },
             ]}
           />
