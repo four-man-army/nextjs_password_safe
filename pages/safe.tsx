@@ -1,3 +1,11 @@
+import { Typography } from "antd";
+
+const { Title } = Typography;
+
 export default function Home() {
-  return <div>hello2</div>;
+  return (
+    <>
+      <Title>Password Safe</Title>
+    </>
+  );
 }
