@@ -1,0 +1,1 @@
+# nextjs_password_safe
