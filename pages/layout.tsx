@@ -13,7 +13,7 @@ import Link from "next/link";
 
 const { Header, Sider, Content } = Layout;
 
-export default function RootLayout({ children }: { children: ReactNode}) {
+export default function RootLayout({ children }: { children: ReactNode}): JSX.Element {
   const [collapsed, setCollapsed] = useState(true);
   const {
     token: { colorBgContainer },
