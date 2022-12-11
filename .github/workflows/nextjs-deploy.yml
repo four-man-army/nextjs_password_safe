@@ -6,14 +6,14 @@ on:
 
 jobs:
   build:
-		name: Build and test
+		- name: Build and test
     runs-on: ubuntu-latest
 
     steps:
-      name: Check out code
+      - name: Check out code
       - uses: actions/checkout@v2
 
-      name: setup node.js
+      - name: setup node.js
       - uses: actions/setup-node@v2
         with:
           node-version: 16
@@ -27,7 +27,7 @@ jobs:
           touch out/.nojekyll
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@4.4.0 
+      - uses: JamesIves/github-pages-deploy-action@4.4.0 
         with:
           branch: gh-pages
           folder: out
