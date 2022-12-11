@@ -1,15 +1,17 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { Layout, Menu, theme, Typography } from "antd";
+import { Layout, Menu, theme } from "antd";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   HomeOutlined,
   KeyOutlined,
+  RobotOutlined,
 } from "@ant-design/icons";
 import { ReactNode, useState } from "react";
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const { Header, Sider, Content } = Layout;
 
@@ -18,6 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+  const router = useRouter();
 
   return (
     <div className={styles.app}>
@@ -32,19 +35,24 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={["1"]}
+            defaultSelectedKeys={[router.pathname]}
             items={[
               {
-                key: "1",
+                key: "/",
                 icon: <HomeOutlined />,
                 label: <Link href="/">Home</Link>,
 
               },
               {
-                key: "2",
+                key: "/safe",
                 icon: <KeyOutlined />,
                 label: <Link href="/safe">Password Safe</Link>,
               },
+              {
+                key: "/generate",
+                icon: <RobotOutlined />,
+                label: <Link href="/generate">Generate Password</Link>,
+              }
             ]}
           />
         </Sider>
