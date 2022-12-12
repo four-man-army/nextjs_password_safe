@@ -1,4 +1,3 @@
-import useStorage from "../../hooks/useStorage";
 import styles from "../../styles/Login.module.css";
 import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
 import React from "react";
@@ -8,11 +7,8 @@ import { signIn } from "next-auth/react";
 const { Title } = Typography;
 
 const SignIn: NextPage = (props): JSX.Element => {
-  const { setItem } = useStorage();
-  const [userInfo, setUserInfo] = React.useState({ email: "", password: "" });
 
   const onFinish = async (values: any) => {
-    setItem("login", "true");
     const res = await signIn("credentials", {
       email: values.username,
       password: values.password,
@@ -28,7 +24,7 @@ const SignIn: NextPage = (props): JSX.Element => {
     <div className={styles.login}>
       <Space align="center" className={styles.loginPanel}>
         <Card className={styles.loginCard}>
-          <Title>Log-In</Title>
+          <Title>Sign-In</Title>
           <Form
             name="basic"
             labelCol={{ span: 8 }}
