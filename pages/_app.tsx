@@ -8,12 +8,16 @@ import useStorage from '../hooks/useStorage'
 
 export default function App({ Component, pageProps }: AppProps) {
   const [login, setLogin] = useState(false)
+  const [register, setRegister] = useState(false)
   const [render, setRender] = useState(false)
   const { getItem } = useStorage()
 
   useEffect(() => {
     if (getItem('login') === 'true') {
       setLogin(true)
+    }
+    if (getItem("firstTime") === "true") {
+      setRegister(true);
     }
     setRender(true)
   }, [])
