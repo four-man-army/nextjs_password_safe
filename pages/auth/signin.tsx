@@ -1,21 +1,23 @@
-import useStorage from "../hooks/useStorage";
-import styles from "../styles/Login.module.css";
+import useStorage from "../../hooks/useStorage";
+import styles from "../../styles/Login.module.css";
 import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
 import React from "react";
+import { NextPage } from "next";
+import { signIn } from "next-auth/react";
 
 const { Title } = Typography;
 
-type LoginProps = {
-    login: boolean,
-    setLogin: (value: boolean) => void,
-}
-
-const Login = ({login, setLogin}: LoginProps): JSX.Element => {
+const SignIn: NextPage = (props): JSX.Element => {
   const { setItem } = useStorage();
+  const [userInfo, setUserInfo] = React.useState({ email: "", password: "" });
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     setItem("login", "true");
-    setLogin(true);
+    const res = await signIn("credentials", {
+      email: values.username,
+      password: values.password,
+      callbackUrl: "/",
+    });
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -76,4 +78,4 @@ const Login = ({login, setLogin}: LoginProps): JSX.Element => {
   );
 };
 
-export default Login;
+export default SignIn;

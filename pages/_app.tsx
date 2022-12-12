@@ -3,33 +3,20 @@ import type { AppProps } from 'next/app'
 import RootLayout from './layout'
 import RootHead from './head'
 import React, { useEffect, useState } from 'react'
-import Login from '../components/login'
-import useStorage from '../hooks/useStorage'
+import { SessionProvider, useSession } from 'next-auth/react'
+import Router from 'next/router'
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [login, setLogin] = useState(false)
-  const [render, setRender] = useState(false)
-  const { getItem } = useStorage()
-
-  useEffect(() => {
-    if (getItem('login') === 'true') {
-      setLogin(true)
-    }
-    setRender(true)
-  }, [])
 
   return (
-    render &&
     <>
+      <SessionProvider session={pageProps.session}>
       <RootHead />
-      {login ? (
         <RootLayout>
           <RootHead />
           <Component {...pageProps} />
         </RootLayout>
-      ) : (
-        <Login login={login} setLogin={setLogin}  />
-      )}
+      </SessionProvider>
     </>
-  );
+    );
 }
