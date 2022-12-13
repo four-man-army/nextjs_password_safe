@@ -4,9 +4,13 @@ import React from "react";
 import { NextPage } from "next";
 import { signIn } from "next-auth/react";
 
+type ValidateStatus = "success" | "warning" | "error" | "validating" | "";
+
 const { Title } = Typography;
 
 const SignIn: NextPage = (props): JSX.Element => {
+  const [valid, setValid] = React.useState<ValidateStatus>("");
+
 
   const onFinish = async (values: any) => {
     const res = await signIn("credentials", {
@@ -14,6 +18,12 @@ const SignIn: NextPage = (props): JSX.Element => {
       password: values.password,
       callbackUrl: "/",
     });
+    if (res) {
+      setValid("success");
+    }
+    else {
+      setValid("error");
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -37,8 +47,11 @@ const SignIn: NextPage = (props): JSX.Element => {
             <Form.Item
               label="Username"
               name="username"
+              hasFeedback
+              validateStatus={valid}
               rules={[
                 { required: true, message: "Please input your username!" },
+                { min: 4, message: "Please input your username!" },
               ]}
             >
               <Input />
@@ -47,6 +60,8 @@ const SignIn: NextPage = (props): JSX.Element => {
             <Form.Item
               label="Password"
               name="password"
+              hasFeedback
+              validateStatus={valid}
               rules={[
                 { required: true, message: "Please input your password!" },
               ]}

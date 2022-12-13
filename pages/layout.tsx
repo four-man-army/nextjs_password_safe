@@ -1,6 +1,6 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { Layout, Menu, theme } from "antd";
+import { Button, Layout, Menu, theme } from "antd";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -12,6 +12,7 @@ import { ReactNode, useState } from "react";
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { signOut, useSession } from "next-auth/react";
 
 const { Header, Sider, Content } = Layout;
 
@@ -21,6 +22,8 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
     token: { colorBgContainer },
   } = theme.useToken();
   const router = useRouter();
+  const { status, data } = useSession();
+
 
   return (
     <div className={styles.app}>
@@ -36,6 +39,8 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
             theme="dark"
             mode="inline"
             defaultSelectedKeys={[router.pathname]}
+            selectable={status !== "unauthenticated"}
+            disabled={status === "unauthenticated"}
             items={[
               {
                 key: "/",
@@ -61,7 +66,7 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
             height: "100vh",
           }}
         >
-          <Header style={{ padding: 0, background: colorBgContainer }}>
+          <Header style={{ padding: 0, background: colorBgContainer, display: "flex", alignItems: "center" }}>
             {collapsed ? (
               <MenuUnfoldOutlined
                 className={styles.trigger}
@@ -72,6 +77,9 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
                 className={styles.trigger}
                 onClick={() => setCollapsed(!collapsed)}
               />
+            )}
+            {status === "authenticated" && (
+                <Button onClick={() => signOut()} type="text" style={{marginLeft: "auto", marginRight: "20px"}}>{"Sign out as " + data.user?.name }</Button>
             )}
           </Header>
           <Content
