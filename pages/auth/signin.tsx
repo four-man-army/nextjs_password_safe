@@ -3,6 +3,7 @@ import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
 import React from "react";
 import { NextPage } from "next";
 import { signIn } from "next-auth/react";
+import Router from "next/router";
 
 type ValidateStatus = "success" | "warning" | "error" | "validating" | "";
 
@@ -16,13 +17,16 @@ const SignIn: NextPage = (props): JSX.Element => {
     const res = await signIn("credentials", {
       email: values.username,
       password: values.password,
-      callbackUrl: "/",
+      redirect: false,
     });
+    console.log(res);
     if (res) {
-      setValid("success");
-    }
-    else {
-      setValid("error");
+      if (res.error) {
+        setValid("error");
+      } else {
+        setValid("success");
+        Router.replace("/")
+      }
     }
   };
 
@@ -51,7 +55,6 @@ const SignIn: NextPage = (props): JSX.Element => {
               validateStatus={valid}
               rules={[
                 { required: true, message: "Please input your username!" },
-                { min: 4, message: "Please input your username!" },
               ]}
             >
               <Input />
