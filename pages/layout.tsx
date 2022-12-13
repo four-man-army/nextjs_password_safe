@@ -1,4 +1,3 @@
-import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { Button, Layout, Menu, theme } from "antd";
 import {
@@ -10,7 +9,6 @@ import {
 } from "@ant-design/icons";
 import { ReactNode, useState } from "react";
 import React from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 
@@ -90,6 +88,7 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
                 ),
               },
             ]}
+            onSelect={(props) => { router.push(props.key) }}
           />
         </Sider>
         <Layout

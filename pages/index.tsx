@@ -17,6 +17,7 @@ export default function Home() {
   return (
     <>
       <Title>Home</Title>
+      <Link href="/safe">Password Safe</Link>
     </>
     );
   
