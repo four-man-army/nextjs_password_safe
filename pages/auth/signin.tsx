@@ -1,21 +1,33 @@
-import useStorage from "../hooks/useStorage";
-import styles from "../styles/Login.module.css";
+import styles from "../../styles/Login.module.css";
 import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
 import React from "react";
+import { NextPage } from "next";
+import { signIn } from "next-auth/react";
+import Router from "next/router";
+
+type ValidateStatus = "success" | "warning" | "error" | "validating" | "";
 
 const { Title } = Typography;
 
-type LoginProps = {
-    login: boolean,
-    setLogin: (value: boolean) => void,
-}
+const SignIn: NextPage = (props): JSX.Element => {
+  const [valid, setValid] = React.useState<ValidateStatus>("");
 
-const Login = ({login, setLogin}: LoginProps): JSX.Element => {
-  const { setItem } = useStorage();
 
-  const onFinish = (values: any) => {
-    setItem("login", "true");
-    setLogin(true);
+  const onFinish = async (values: any) => {
+    const res = await signIn("credentials", {
+      email: values.username,
+      password: values.password,
+      redirect: false,
+    });
+    console.log(res);
+    if (res) {
+      if (res.error) {
+        setValid("error");
+      } else {
+        setValid("success");
+        Router.replace("/")
+      }
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -26,7 +38,7 @@ const Login = ({login, setLogin}: LoginProps): JSX.Element => {
     <div className={styles.login}>
       <Space align="center" className={styles.loginPanel}>
         <Card className={styles.loginCard}>
-          <Title>Log-In</Title>
+          <Title>Sign-In</Title>
           <Form
             name="basic"
             labelCol={{ span: 8 }}
@@ -39,6 +51,8 @@ const Login = ({login, setLogin}: LoginProps): JSX.Element => {
             <Form.Item
               label="Username"
               name="username"
+              hasFeedback
+              validateStatus={valid}
               rules={[
                 { required: true, message: "Please input your username!" },
               ]}
@@ -49,6 +63,8 @@ const Login = ({login, setLogin}: LoginProps): JSX.Element => {
             <Form.Item
               label="Password"
               name="password"
+              hasFeedback
+              validateStatus={valid}
               rules={[
                 { required: true, message: "Please input your password!" },
               ]}
@@ -76,4 +92,4 @@ const Login = ({login, setLogin}: LoginProps): JSX.Element => {
   );
 };
 
-export default Login;
+export default SignIn;
