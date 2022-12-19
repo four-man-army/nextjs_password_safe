@@ -10,7 +10,7 @@ async function search(email:string, pw:string){
     const db = client.db("passwordsafe");
     const collection = db.collection("users");
     const query = { email: {$eq: email}, password: {$eq: pw}};
-    const options = {projection: { _id: 1}};
+    const options = {projection: { _id: 1, email: 1, password: 1}};
     return await collection.find(query, options).toArray();
   } finally {
     await client.close();
