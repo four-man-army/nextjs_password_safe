@@ -15,7 +15,7 @@ const SignIn: NextPage = (props): JSX.Element => {
 
   const onFinish = async (values: any) => {
     const res = await signIn("credentials", {
-      email: values.username,
+      email: values.email,
       password: values.password,
       rember: values.remember,
       redirect: false,
@@ -50,12 +50,12 @@ const SignIn: NextPage = (props): JSX.Element => {
             autoComplete="off"
           >
             <Form.Item
-              label="Username"
-              name="username"
+              label="Email"
+              name="email"
               hasFeedback
               validateStatus={valid}
               rules={[
-                { required: true, message: "Please input your username!" },
+                { required: true, message: "Please input your email!" },
               ]}
             >
               <Input />
@@ -75,7 +75,7 @@ const SignIn: NextPage = (props): JSX.Element => {
 
             <Form.Item
               name="remember"
-              valuePropName="checked"
+              valuePropName="unchecked"
               wrapperCol={{ offset: 8, span: 16 }}
             >
               <Checkbox>Remember me</Checkbox>
