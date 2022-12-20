@@ -1,4 +1,3 @@
-import useStorage from "../hooks/useStorage";
 import styles from "../styles/Login.module.css";
 import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
 import React from "react";
@@ -6,15 +5,13 @@ import React from "react";
 const { Title } = Typography;
 
 type LoginProps = {
-    login: boolean,
-    setLogin: (value: boolean) => void,
-}
+  login: boolean;
+  setLogin: (value: boolean) => void;
+};
 
-const Login = ({login, setLogin}: LoginProps): JSX.Element => {
-  const { setItem } = useStorage();
+const Register = ({ login, setLogin }: LoginProps): JSX.Element => {
 
   const onFinish = (values: any) => {
-    setItem("login", "true");
     setLogin(true);
   };
 
@@ -54,6 +51,16 @@ const Login = ({login, setLogin}: LoginProps): JSX.Element => {
               ]}
             >
               <Input.Password />
+
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={[
+                  { required: true, message: "Please confirm your password!" },
+                ]}
+              >
+                <Input.Password />
+              </Form.Item>
             </Form.Item>
 
             <Form.Item
@@ -76,4 +83,4 @@ const Login = ({login, setLogin}: LoginProps): JSX.Element => {
   );
 };
 
-export default Login;
+export default Register;
