@@ -1,4 +1,3 @@
-import useStorage from "../hooks/useStorage";
 import styles from "../styles/Login.module.css";
 import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
 import React from "react";
@@ -11,10 +10,8 @@ type LoginProps = {
 };
 
 const Register = ({ login, setLogin }: LoginProps): JSX.Element => {
-  const { setItem } = useStorage();
 
   const onFinish = (values: any) => {
-    setItem("login", "true");
     setLogin(true);
   };
 

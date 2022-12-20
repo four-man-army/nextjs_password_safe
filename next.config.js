@@ -1,6 +1,6 @@
 const isGithubActions = process.env.GITHUB_ACTIONS || false;
 
-let assetPrefix = undefined;
+let assetPrefix = "/";
 let basePath = "";
 
 if (isGithubActions) {

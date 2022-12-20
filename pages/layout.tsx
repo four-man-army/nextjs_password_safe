@@ -1,5 +1,5 @@
 import styles from "../styles/Home.module.css";
-import { Layout, Menu, theme } from "antd";
+import { Button, Layout, Menu, theme } from "antd";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -10,6 +10,8 @@ import {
 import { ReactNode, useState } from "react";
 import React from "react";
 import { useRouter } from "next/router";
+import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 
 const { Header, Sider, Content } = Layout;
 
@@ -19,6 +21,8 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
     token: { colorBgContainer },
   } = theme.useToken();
   const router = useRouter();
+  const { status, data } = useSession();
+
 
   return (
     <div className={styles.app}>
@@ -28,24 +32,62 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
           <Menu
             theme="dark"
             mode="inline"
+            defaultSelectedKeys={[router.pathname]}
             selectedKeys={[router.pathname]}
+            selectable={status !== "unauthenticated"}
+            disabled={status === "unauthenticated"}
+            style={{
+              cursor: status === "unauthenticated" ? "not-allowed" : "pointer",
+            }}
             items={[
               {
                 key: "/",
                 icon: <HomeOutlined />,
-                label: "Home",
-
+                label: (
+                  <Link
+                    style={
+                      status === "unauthenticated"
+                        ? { cursor: "not-allowed", pointerEvents: "none" }
+                        : {}
+                    }
+                    href="/"
+                  >
+                    Home
+                  </Link>
+                ),
               },
               {
                 key: "/safe",
                 icon: <KeyOutlined />,
-                label: "Password Safe",
+                label: (
+                  <Link
+                    style={
+                      status === "unauthenticated"
+                        ? { cursor: "not-allowed", pointerEvents: "none" }
+                        : {}
+                    }
+                    href="/safe"
+                  >
+                    Password Safe
+                  </Link>
+                ),
               },
               {
                 key: "/generate",
                 icon: <RobotOutlined />,
-                label: "Generate Password",
-              }
+                label: (
+                  <Link
+                    style={
+                      status === "unauthenticated"
+                        ? { cursor: "not-allowed", pointerEvents: "none" }
+                        : {}
+                    }
+                    href="/generate"
+                  >
+                    Generate Password
+                  </Link>
+                ),
+              },
             ]}
             onSelect={(props) => { router.push(props.key) }}
           />
@@ -55,7 +97,14 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
             height: "100vh",
           }}
         >
-          <Header style={{ padding: 0, background: colorBgContainer }}>
+          <Header
+            style={{
+              padding: 0,
+              background: colorBgContainer,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             {collapsed ? (
               <MenuUnfoldOutlined
                 className={styles.trigger}
@@ -66,6 +115,15 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
                 className={styles.trigger}
                 onClick={() => setCollapsed(!collapsed)}
               />
+            )}
+            {status === "authenticated" && (
+              <Button
+                onClick={() => signOut()}
+                type="text"
+                style={{ marginLeft: "auto", marginRight: "20px" }}
+              >
+                {"Sign out " + data.user?.name}
+              </Button>
             )}
           </Header>
           <Content
