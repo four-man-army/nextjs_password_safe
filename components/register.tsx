@@ -1,34 +1,18 @@
-import styles from "../../styles/Login.module.css";
+import styles from "../styles/Login.module.css";
 import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
 import React from "react";
-import { NextPage } from "next";
-import { signIn } from "next-auth/react";
-import Router from "next/router";
-
-type ValidateStatus = "success" | "warning" | "error" | "validating" | "";
 
 const { Title } = Typography;
 
-const SignIn: NextPage = (props): JSX.Element => {
-  const [valid, setValid] = React.useState<ValidateStatus>("");
+type LoginProps = {
+  login: boolean;
+  setLogin: (value: boolean) => void;
+};
 
+const Register = ({ login, setLogin }: LoginProps): JSX.Element => {
 
-  const onFinish = async (values: any) => {
-    const res = await signIn("credentials", {
-      email: values.email,
-      password: values.password,
-      rember: values.remember,
-      redirect: false,
-    });
-    console.log(res);
-    if (res) {
-      if (res.error) {
-        setValid("error");
-      } else {
-        setValid("success");
-        Router.replace("/")
-      }
-    }
+  const onFinish = (values: any) => {
+    setLogin(true);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -39,7 +23,7 @@ const SignIn: NextPage = (props): JSX.Element => {
     <div className={styles.login}>
       <Space align="center" className={styles.loginPanel}>
         <Card className={styles.loginCard}>
-          <Title>Sign-In</Title>
+          <Title>Log-In</Title>
           <Form
             name="basic"
             labelCol={{ span: 8 }}
@@ -50,12 +34,10 @@ const SignIn: NextPage = (props): JSX.Element => {
             autoComplete="off"
           >
             <Form.Item
-              label="Email"
-              name="email"
-              hasFeedback
-              validateStatus={valid}
+              label="Username"
+              name="username"
               rules={[
-                { required: true, message: "Please input your email!" },
+                { required: true, message: "Please input your username!" },
               ]}
             >
               <Input />
@@ -64,18 +46,26 @@ const SignIn: NextPage = (props): JSX.Element => {
             <Form.Item
               label="Password"
               name="password"
-              hasFeedback
-              validateStatus={valid}
               rules={[
                 { required: true, message: "Please input your password!" },
               ]}
             >
               <Input.Password />
+
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={[
+                  { required: true, message: "Please confirm your password!" },
+                ]}
+              >
+                <Input.Password />
+              </Form.Item>
             </Form.Item>
 
             <Form.Item
               name="remember"
-              valuePropName="unchecked"
+              valuePropName="checked"
               wrapperCol={{ offset: 8, span: 16 }}
             >
               <Checkbox>Remember me</Checkbox>
@@ -93,4 +83,4 @@ const SignIn: NextPage = (props): JSX.Element => {
   );
 };
 
-export default SignIn;
+export default Register;

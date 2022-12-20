@@ -19,9 +19,16 @@ async function searchUser(email:string, pw:string){
     }
   }
 
+import CredentialsProvider from "next-auth/providers/credentials";
+let maxAge = 15 * 60;
+const rememberMe = (remember: Boolean): void => {
+    maxAge = remember ? 30 * 24 * 60 * 60 : 15 * 60;
+}
+
 const authOptions: NextAuthOptions = {
     session: {
-        strategy: 'jwt'
+        strategy: 'jwt',
+        maxAge
     },
     providers: [
         CredentialsProvider({
@@ -35,6 +42,7 @@ const authOptions: NextAuthOptions = {
                 const fetch = await searchUser(email, password)
                 const user = fetch as {id:string, name: string, email: string, password: string};
                 if (user.email === email && user.password === password) {
+                    rememberMe(rember);
                     return user
                 }
                 else{
