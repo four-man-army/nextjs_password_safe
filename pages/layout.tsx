@@ -122,7 +122,7 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
                 type="text"
                 style={{ marginLeft: "auto", marginRight: "20px" }}
               >
-                {"Sign out " + data.user?.email}
+                {"Sign out " + data.user?.name}
               </Button>
             )}
           </Header>
