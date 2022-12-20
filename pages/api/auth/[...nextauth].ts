@@ -1,6 +1,11 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import  CredentialsProvider  from "next-auth/providers/credentials";
 
+let maxAge = 15 * 60;
+const rememberMe = (remember: Boolean): void => {
+    maxAge = remember ? 30 * 24 * 60 * 60 : 15 * 60;
+}
+
 async function searchUser(email:string, pw:string){
     const { MongoClient, ServerApiVersion } = require('mongodb');
     const uri = "mongodb+srv://"+process.env.USERS_READ+":"+process.env.USERS_READ_PW+process.env.DB_URL+"/?retryWrites=true&w=majority";
@@ -17,9 +22,10 @@ async function searchUser(email:string, pw:string){
       await client.close();
     }
   }
-let maxAge = 15 * 60;
-const rememberMe = (remember: Boolean): void => {
-    maxAge = remember ? 30 * 24 * 60 * 60 : 15 * 60;
+
+function hashPassword(input: string): string {
+    const crypto = require('crypto');
+    return crypto.createHash('sha512').update(input, 'utf-8').digest('hex');
 }
 
 const authOptions: NextAuthOptions = {
@@ -38,7 +44,7 @@ const authOptions: NextAuthOptions = {
                 let {email, password, remember} = credentials as {email: string, password: string, remember: boolean};
                 const fetch = await searchUser(email, password)
                 const user = fetch as {id:string, name: string, email: string, password: string};
-                if (user.email === email && user.password === password) {
+                if (user.email === email && user.password === hashPassword(password)) {
                     rememberMe(remember);
                     return user
                 }
