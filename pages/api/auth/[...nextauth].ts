@@ -18,8 +18,6 @@ async function searchUser(email:string, pw:string){
       await client.close();
     }
   }
-
-import CredentialsProvider from "next-auth/providers/credentials";
 let maxAge = 15 * 60;
 const rememberMe = (remember: Boolean): void => {
     maxAge = remember ? 30 * 24 * 60 * 60 : 15 * 60;
@@ -38,11 +36,11 @@ const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
-                let {email, password} = credentials as {email: string, password: string};
+                let {email, password, remember} = credentials as {email: string, password: string, remember: boolean};
                 const fetch = await searchUser(email, password)
                 const user = fetch as {id:string, name: string, email: string, password: string};
                 if (user.email === email && user.password === password) {
-                    rememberMe(rember);
+                    rememberMe(remember);
                     return user
                 }
                 else{
