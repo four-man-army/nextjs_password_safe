@@ -11,8 +11,9 @@ async function searchUser(email:string, pw:string){
       const db = client.db("passwordsafe");
       const collection = db.collection("users");
       const query = { email: {$eq: email}, password: {$eq: pw}};
-      const options = {projection: { _id: 1, username: 1, email: 1, password: 1}};
-      return await collection.find(query, options).toArray();
+      const options = {projection: { _id: 1, name: 1, email: 1, password: 1}};
+      const result = await collection.find(query, options).toArray();
+      return result[0];
     } finally {
       await client.close();
     }
@@ -32,10 +33,11 @@ const authOptions: NextAuthOptions = {
             async authorize(credentials) {
                 let {email, password} = credentials as {email: string, password: string};
                 const fetch = await searchUser(email, password)
-                const user = fetch as {email: string, password: string, id: string, name: string};
+                const user = fetch as {id:string, name: string, email: string, password: string};
                 if (user.email === email && user.password === password) {
                     return user
-                }else{
+                }
+                else{
                     return null
                 }
             }

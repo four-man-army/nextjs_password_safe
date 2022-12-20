@@ -74,7 +74,7 @@ const SignIn: NextPage = (props): JSX.Element => {
 
             <Form.Item
               name="remember"
-              valuePropName="checked"
+              valuePropName="unchecked"
               wrapperCol={{ offset: 8, span: 16 }}
             >
               <Checkbox>Remember me</Checkbox>
