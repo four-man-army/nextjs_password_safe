@@ -37,4 +37,3 @@ next-env.d.ts
 
 # mongodb
 *.mongodb
-/pages/api/config.js

@@ -1,14 +1,13 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import  CredentialsProvider  from "next-auth/providers/credentials";
-import * as config from "../config.js"
 
 async function searchUser(email:string, pw:string){
     const { MongoClient, ServerApiVersion } = require('mongodb');
-    const uri = "mongodb+srv://"+config.read_user+":"+config.read_password+"@passwordsafe.ownrlys.mongodb.net/?retryWrites=true&w=majority";
+    const uri = "mongodb+srv://"+process.env.USERS_READ+":"+process.env.USERS_READ_PW+process.env.DB_URL+"/?retryWrites=true&w=majority";
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
     try {
       await client.connect();
-      const db = client.db("passwordsafe");
+      const db = client.db(process.env.DB_NAME);
       const collection = db.collection("users");
       const query = { email: {$eq: email}, password: {$eq: pw}};
       const options = {projection: { _id: 1, name: 1, email: 1, password: 1}};
