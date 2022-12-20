@@ -17,6 +17,7 @@ const SignIn: NextPage = (props): JSX.Element => {
     const res = await signIn("credentials", {
       email: values.username,
       password: values.password,
+      rember: values.remember,
       redirect: false,
     });
     console.log(res);
