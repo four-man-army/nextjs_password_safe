@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import * as config from "../config.js"
   
-async function search(email:string, pw:string){
+async function searchUser(email:string, pw:string){
   const { MongoClient, ServerApiVersion } = require('mongodb');
   const uri = "mongodb+srv://"+config.read_user+":"+config.read_password+"@passwordsafe.ownrlys.mongodb.net/?retryWrites=true&w=majority";
   const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -10,7 +10,7 @@ async function search(email:string, pw:string){
     const db = client.db("passwordsafe");
     const collection = db.collection("users");
     const query = { email: {$eq: email}, password: {$eq: pw}};
-    const options = {projection: { _id: 1, email: 1, password: 1}};
+    const options = {projection: { _id: 1, username: 1, email: 1, password: 1}};
     return await collection.find(query, options).toArray();
   } finally {
     await client.close();
@@ -26,9 +26,9 @@ export default async function handler(
 
       if (req.method === 'POST') {
         try{ 
-          const data = await search(email, password)
+          const data = await searchUser(email, password)
           if (data.length == 0) {
-            res.status(401).json({ error: 'Invalid credentials'})
+            res.status(401).json({ error: 'Invalid credentials', data: data})
           }else{
             res.status(200).json(data)
           }

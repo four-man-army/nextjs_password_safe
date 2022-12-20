@@ -8,10 +8,12 @@ const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
             type: 'credentials',
-            credentials: {},
+            credentials: {
+                email: { label: "Email", type: "text", placeholder: "Email" },
+                password: { label: "Password", type: "password" }
+            },
             authorize(credentials, req) { 
                 const { email, password } = credentials as { email: string, password: string };
-
                 if (email !== 'oliver' || password !== '123456') {
                     return null;
                 }
