@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -37,4 +37,6 @@ jobs:
         echo DB_URL=${{ secrets.DB_URL }} >> .env.local
         echo USERS_READ=${{ secrets.USERS_READ }} >> .env.local
         echo USERS_READ_PW=${{ secrets.USERS_READ_PW }} >> .env.local
+        echo USERS_WRITE=${{ secrets.USERS_WRITE }} >> .env.local
+        echo USERS_WRITE_PW=${{ secrets.USERS_WRITE_PW }} >> .env.local
         npm run build --if-present
