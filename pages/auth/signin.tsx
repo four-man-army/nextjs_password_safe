@@ -50,11 +50,13 @@ const SignIn: NextPage = (props): JSX.Element => {
             autoComplete="off"
           >
             <Form.Item
-              label="email"
+              label="Email"
               name="email"
               hasFeedback
               validateStatus={valid}
-              rules={[{ required: true, message: "Please input your email!" }]}
+              rules={[
+                { required: true, message: "Please input your email!" },
+              ]}
             >
               <Input />
             </Form.Item>
@@ -73,7 +75,7 @@ const SignIn: NextPage = (props): JSX.Element => {
 
             <Form.Item
               name="remember"
-              valuePropName="checked"
+              valuePropName="unchecked"
               wrapperCol={{ offset: 8, span: 16 }}
             >
               <Checkbox checked={true}>Remember me</Checkbox>
