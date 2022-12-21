@@ -1,11 +1,14 @@
 import styles from "../../styles/Login.module.css";
 import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
 const { Title, Text } = Typography;
 
 const Register = (): JSX.Element => {
+  const [ errorHandle, setErrorHandle ] = useState(false);
+  const [ errorMessage, setErrorMessage ] = useState("");
+  const [ successHandle, setSuccessHandle ] = useState(false);
 
   const onFinish = (values: any) => {
     fetch("/api/signup", {
@@ -18,15 +21,37 @@ const Register = (): JSX.Element => {
         password: values.password,
         name: values.username,
       }),
-    }).then((res) => console.log("Res: " + res.toString()))
-    .then((data) => console.log(data));
+    }).then((res) => res.json())
+    .then((data) => {
+      if(data.error) {
+        console.log(data.error);
+        setErrorMessage(data.error);
+        setErrorHandle(true);
+      }
+      if(data === true) {
+        console.log("User created");
+        setSuccessHandle(true);
+      }
+    });
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
+  if(successHandle) {
+    return (
+      <div className={styles.login}>
+        <Space align="center" className={styles.loginPanel}>
+          <Card className={styles.loginCard}>
+            <Title>Sign up</Title>
+            <Text>Account created successfully. <Link href="/auth/signin">Sign in</Link></Text>
+          </Card>
+        </Space>
+      </div>
+    )
+  };
 
-  return (
+  const render = (
     <div className={styles.login}>
       <Space align="center" className={styles.loginPanel}>
         <Card className={styles.loginCard}>
@@ -103,6 +128,7 @@ const Register = (): JSX.Element => {
       </Space>
     </div>
   );
+  return render;
 };
 
 export default Register;

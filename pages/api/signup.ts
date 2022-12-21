@@ -51,7 +51,7 @@ export default async function handler(
             if(data.error) {
               res.status(409).json({ error: data.error});
             }else{
-              res.status(200).json(data)
+              res.status(200).json(data.acknowledged)
             }
         } catch(e){
           res.status(500).json({ error: 'Operation failed'})
