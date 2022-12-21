@@ -9,10 +9,16 @@
 ## Description
 
 <p>Our application for the school assignment, to make a password safe.
-<br>You can look at the current deplyoment <a href="https://nextjs-password-safe.vercel.app/">here</a>.</p>
+
+### Deployments
+<p>
+<ol>
+  <li><a href="https://nextjs-password-safe.vercel.app/">Main production deployment</a></li>
+  <li><a href="https://nextjs-password-safe-bttmu1od6-four-man-army.vercel.app/">Beta preview deployment</a></li>
+</ol>
+</p>
 <br>
-<br>
-Or just follow the instructions below to run our latest branch.
+Or just follow the instructions below to run your preferred branch.
 
 ## Getting Started
 
