@@ -51,39 +51,21 @@ const Register = (): JSX.Element => {
       <Space align="center" className={styles.loginPanel}>
         <Card className={styles.loginCard}>
           <Title>Sign up</Title>
-          {errorHandle &&
-          <div style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "10px",
-            marginBottom: "10px",
-            backgroundColor: "#f8d7da",
-            border: "1px solid #f5c6cb",
-            borderRadius: "4px",
-          }}>
-            <Text type="danger" style={{textAlign: "center"}}>
-              {errorMessage}
-            </Text>
-          </div>
-          }
-          {successHandle &&
-          <div style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "10px",
-            marginBottom: "10px",
-            backgroundColor: "#d4edda",
-            border: "1px solid #c3e6cb",
-            borderRadius: "4px",
-          }}>
-            <Text type="success" style={{textAlign: "center"}}>
-              {"Account created successfully. "}
-              <Link href="/auth/signin">Sign in</Link>
-            </Text>
-          </div>
-          }
+          {errorHandle && (
+            <div className={styles.feedback}>
+              <Text type="danger" style={{ textAlign: "center" }}>
+                {errorMessage}
+              </Text>
+            </div>
+          )}
+          {successHandle && (
+            <div className={styles.feedback}>
+              <Text type="success" style={{ textAlign: "center" }}>
+                {"Account created successfully. "}
+                <Link href="/auth/signin">Sign in</Link>
+              </Text>
+            </div>
+          )}
           <Form
             name="basic"
             labelCol={{ span: 8 }}
@@ -98,19 +80,24 @@ const Register = (): JSX.Element => {
               name="username"
               rules={[
                 { required: true, message: "Please input your username!" },
-                { min: 4, message: "Username must be at least 4 characters long" },
+                {
+                  min: 4,
+                  message: "Username must be at least 4 characters long",
+                },
               ]}
             >
               <Input />
             </Form.Item>
-    
+
             <Form.Item
               label="Email"
               name="email"
-              hasFeedback
               rules={[
                 { required: true, message: "Please input your email!" },
-                { pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, message: "Please input a valid email!"}
+                {
+                  pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                  message: "Please input a valid email!",
+                },
               ]}
             >
               <Input />
@@ -121,29 +108,37 @@ const Register = (): JSX.Element => {
               name="password"
               rules={[
                 { required: true, message: "Please input your password!" },
-                { pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\+!@#\$%\^&\*])/, message: "password must contain at least one uppercase letter, one number, and one special character" },
+                {
+                  pattern:
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\+!@#\$%\^&\*])/,
+                  message:
+                    "password must contain at least one uppercase letter, one number, and one special character",
+                },
               ]}
             >
               <Input.Password />
-
             </Form.Item>
-              <Form.Item
-                label="Confirm Password"
-                name="cofirmPassword"
-                rules={[
-                  { required: true, message: "Please confirm your password!" },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || getFieldValue('password') === value) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(new Error('The two passwords that you entered do not match!'));
+            <Form.Item
+              label="Confirm Password"
+              name="cofirmPassword"
+              rules={[
+                { required: true, message: "Please confirm your password!" },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
                     }
-                  })
-                ]}
-              >
-                <Input.Password />
-              </Form.Item>
+                    return Promise.reject(
+                      new Error(
+                        "The two passwords that you entered do not match!"
+                      )
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
               <Button type="primary" htmlType="submit">
@@ -153,7 +148,7 @@ const Register = (): JSX.Element => {
           </Form>
           <Text type="secondary">
             Already have an account? <Link href="/auth/signin">Sign-In</Link>
-            </Text>
+          </Text>
         </Card>
       </Space>
     </div>
