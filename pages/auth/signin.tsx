@@ -44,7 +44,7 @@ const SignIn: NextPage = (props): JSX.Element => {
             name="basic"
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
-            initialValues={{ remember: true }}
+            initialValues={{ remember: false }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -75,7 +75,7 @@ const SignIn: NextPage = (props): JSX.Element => {
 
             <Form.Item
               name="remember"
-              valuePropName="unchecked"
+              valuePropName="checked"
               wrapperCol={{ offset: 8, span: 16 }}
             >
               <Checkbox checked={true}>Remember me</Checkbox>
