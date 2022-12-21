@@ -17,7 +17,8 @@ const Register = (): JSX.Element => {
         password: values.password,
         name: values.username,
       }),
-    });
+    }).then((res) => console.log("Res: " + res.toString()))
+    .then((data) => console.log(data));
   };
 
   const onFinishFailed = (errorInfo: any) => {
