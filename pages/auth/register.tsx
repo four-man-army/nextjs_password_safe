@@ -52,14 +52,14 @@ const Register = (): JSX.Element => {
         <Card className={styles.loginCard}>
           <Title>Sign up</Title>
           {errorHandle && (
-            <div className={styles.feedback}>
+            <div className={styles.feedback_error}>
               <Text type="danger" style={{ textAlign: "center" }}>
                 {errorMessage}
               </Text>
             </div>
           )}
           {successHandle && (
-            <div className={styles.feedback}>
+            <div className={styles.feedback_success}>
               <Text type="success" style={{ textAlign: "center" }}>
                 {"Account created successfully. "}
                 <Link href="/auth/signin">Sign in</Link>
