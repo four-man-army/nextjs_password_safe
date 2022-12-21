@@ -29,7 +29,7 @@ const Register = (): JSX.Element => {
     <div className={styles.login}>
       <Space align="center" className={styles.loginPanel}>
         <Card className={styles.loginCard}>
-          <Title>Register</Title>
+          <Title>Sign up</Title>
           <Form
             name="basic"
             labelCol={{ span: 8 }}
