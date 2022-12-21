@@ -4,14 +4,14 @@ import React from "react";
 import { NextPage } from "next";
 import { signIn } from "next-auth/react";
 import Router from "next/router";
+import Link from "next/link";
 
 type ValidateStatus = "success" | "warning" | "error" | "validating" | "";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const SignIn: NextPage = (props): JSX.Element => {
   const [valid, setValid] = React.useState<ValidateStatus>("");
-
 
   const onFinish = async (values: any) => {
     const res = await signIn("credentials", {
@@ -26,7 +26,7 @@ const SignIn: NextPage = (props): JSX.Element => {
         setValid("error");
       } else {
         setValid("success");
-        Router.replace("/")
+        Router.replace("/");
       }
     }
   };
@@ -78,7 +78,7 @@ const SignIn: NextPage = (props): JSX.Element => {
               valuePropName="unchecked"
               wrapperCol={{ offset: 8, span: 16 }}
             >
-              <Checkbox>Remember me</Checkbox>
+              <Checkbox checked={true}>Remember me</Checkbox>
             </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
@@ -87,6 +87,9 @@ const SignIn: NextPage = (props): JSX.Element => {
               </Button>
             </Form.Item>
           </Form>
+          <Text type="secondary">
+            Don't have an account? <Link href="/auth/register">Sign up</Link>
+          </Text>
         </Card>
       </Space>
     </div>
