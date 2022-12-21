@@ -88,7 +88,7 @@ const SignIn: NextPage = (props): JSX.Element => {
             </Form.Item>
           </Form>
           <Text type="secondary">
-            Don't have an account? <Link href="/auth/register">Sign up</Link>
+            Don&apos;t have an account? <Link href="/auth/register">Sign up</Link>
           </Text>
         </Card>
       </Space>
