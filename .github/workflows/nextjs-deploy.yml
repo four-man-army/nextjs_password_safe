@@ -24,6 +24,13 @@ jobs:
       - name: Build
         run: |
           npm ci
+          > .env.local
+          echo DB_NAME=${{ secrets.DB_NAME }} >> .env.local
+          echo DB_URL=${{ secrets.DB_URL }} >> .env.local
+          echo USERS_READ=${{ secrets.USERS_READ }} >> .env.local
+          echo USERS_READ_PW=${{ secrets.USERS_READ_PW }} >> .env.local
+          echo USERS_WRITE=${{ secrets.USERS_WRITE }} >> .env.local
+          echo USERS_WRITE_PW=${{ secrets.USERS_WRITE_PW }} >> .env.local
           npm run build
           npm run export
           touch out/.nojekyll

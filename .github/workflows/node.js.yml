@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -26,6 +26,17 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm install
-    - run: npm ci
-    - run: npm run build --if-present
+    - name: Install packages
+      run: npm install
+    - name: Run CI
+      run: npm ci
+    - name: Build the project
+      run: |
+        > .env.local
+        echo DB_NAME=${{ secrets.DB_NAME }} >> .env.local
+        echo DB_URL=${{ secrets.DB_URL }} >> .env.local
+        echo USERS_READ=${{ secrets.USERS_READ }} >> .env.local
+        echo USERS_READ_PW=${{ secrets.USERS_READ_PW }} >> .env.local
+        echo USERS_WRITE=${{ secrets.USERS_WRITE }} >> .env.local
+        echo USERS_WRITE_PW=${{ secrets.USERS_WRITE_PW }} >> .env.local
+        npm run build --if-present
