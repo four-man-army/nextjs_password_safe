@@ -1,11 +1,16 @@
 import styles from "../../styles/Login.module.css";
-import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
-import React from "react";
+import { Button, Card, Form, Input, Space, Typography } from "antd";
+import React, { useState } from "react";
 import Link from "next/link";
+import Router from "next/router";
 
 const { Title, Text } = Typography;
 
+type ValidateStatus = "success" | "warning" | "error" | "validating" | "";
+
 const Register = (): JSX.Element => {
+
+  const [valid, setValid] = useState<ValidateStatus>("");
 
   const onFinish = (values: any) => {
     fetch("/api/signup", {
@@ -18,7 +23,13 @@ const Register = (): JSX.Element => {
         password: values.password,
         name: values.username,
       }),
-    });
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) setValid("error");
+        if (!data.error) Router.replace("/")
+      });
+    
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -44,6 +55,7 @@ const Register = (): JSX.Element => {
               name="username"
               rules={[
                 { required: true, message: "Please input your username!" },
+                { min: 4, message: "Username must be at least 4 characters long" },
               ]}
             >
               <Input />
@@ -52,6 +64,9 @@ const Register = (): JSX.Element => {
             <Form.Item
               label="Email"
               name="email"
+              hasFeedback
+              validateStatus={valid}
+              help={valid === "error" ? "Email already exists" : ""}
               rules={[
                 { required: true, message: "Please input your email!" },
                 { pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, message: "Please input a valid email!"}
