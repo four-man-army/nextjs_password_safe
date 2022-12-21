@@ -2,7 +2,6 @@ import styles from "../../styles/Login.module.css";
 import { Button, Card, Form, Input, Space, Typography } from "antd";
 import React, { useState } from "react";
 import Link from "next/link";
-import Router from "next/router";
 
 const { Title, Text } = Typography;
 
@@ -12,7 +11,6 @@ const Register = (): JSX.Element => {
   const [ errorHandle, setErrorHandle ] = useState(false);
   const [ errorMessage, setErrorMessage ] = useState("");
   const [ successHandle, setSuccessHandle ] = useState(false);
-  const [valid, setValid] = useState<ValidateStatus>("");
 
   const onFinish = (values: any) => {
     fetch("/api/signup", {
@@ -31,9 +29,11 @@ const Register = (): JSX.Element => {
         console.log(data.error);
         setErrorMessage(data.error);
         setErrorHandle(true);
+        setSuccessHandle(false);
       }
       if(data === true) {
         console.log("User created");
+        setErrorHandle(false);
         setSuccessHandle(true);
       }
     });
@@ -41,18 +41,9 @@ const Register = (): JSX.Element => {
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
-  };
-  if(successHandle) {
-    return (
-      <div className={styles.login}>
-        <Space align="center" className={styles.loginPanel}>
-          <Card className={styles.loginCard}>
-            <Title>Sign up</Title>
-            <Text>Account created successfully. <Link href="/auth/signin">Sign in</Link></Text>
-          </Card>
-        </Space>
-      </div>
-    )
+    setErrorMessage("Please fill in all fields");
+    setErrorHandle(true);
+    setSuccessHandle(false);
   };
 
   const render = (
@@ -60,6 +51,39 @@ const Register = (): JSX.Element => {
       <Space align="center" className={styles.loginPanel}>
         <Card className={styles.loginCard}>
           <Title>Sign up</Title>
+          {errorHandle &&
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "10px",
+            marginBottom: "10px",
+            backgroundColor: "#f8d7da",
+            border: "1px solid #f5c6cb",
+            borderRadius: "4px",
+          }}>
+            <Text type="danger" style={{textAlign: "center"}}>
+              {errorMessage}
+            </Text>
+          </div>
+          }
+          {successHandle &&
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "10px",
+            marginBottom: "10px",
+            backgroundColor: "#d4edda",
+            border: "1px solid #c3e6cb",
+            borderRadius: "4px",
+          }}>
+            <Text type="success" style={{textAlign: "center"}}>
+              {"Account created successfully. "}
+              <Link href="/auth/signin">Sign in</Link>
+            </Text>
+          </div>
+          }
           <Form
             name="basic"
             labelCol={{ span: 8 }}
@@ -84,8 +108,6 @@ const Register = (): JSX.Element => {
               label="Email"
               name="email"
               hasFeedback
-              validateStatus={valid}
-              help={valid === "error" ? "Email already exists" : ""}
               rules={[
                 { required: true, message: "Please input your email!" },
                 { pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, message: "Please input a valid email!"}
