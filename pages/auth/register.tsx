@@ -1,14 +1,18 @@
 import styles from "../../styles/Login.module.css";
-import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
+import { Button, Card, Form, Input, Space, Typography } from "antd";
 import React, { useState } from "react";
 import Link from "next/link";
+import Router from "next/router";
 
 const { Title, Text } = Typography;
+
+type ValidateStatus = "success" | "warning" | "error" | "validating" | "";
 
 const Register = (): JSX.Element => {
   const [ errorHandle, setErrorHandle ] = useState(false);
   const [ errorMessage, setErrorMessage ] = useState("");
   const [ successHandle, setSuccessHandle ] = useState(false);
+  const [valid, setValid] = useState<ValidateStatus>("");
 
   const onFinish = (values: any) => {
     fetch("/api/signup", {
@@ -70,6 +74,7 @@ const Register = (): JSX.Element => {
               name="username"
               rules={[
                 { required: true, message: "Please input your username!" },
+                { min: 4, message: "Username must be at least 4 characters long" },
               ]}
             >
               <Input />
@@ -78,6 +83,9 @@ const Register = (): JSX.Element => {
             <Form.Item
               label="Email"
               name="email"
+              hasFeedback
+              validateStatus={valid}
+              help={valid === "error" ? "Email already exists" : ""}
               rules={[
                 { required: true, message: "Please input your email!" },
                 { pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, message: "Please input a valid email!"}
