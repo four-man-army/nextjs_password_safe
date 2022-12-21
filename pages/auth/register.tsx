@@ -1,6 +1,7 @@
 import styles from "../../styles/Login.module.css";
 import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
 import React from "react";
+import Link from "next/link";
 
 const { Title, Text } = Typography;
 
@@ -95,7 +96,7 @@ const Register = (): JSX.Element => {
             </Form.Item>
           </Form>
           <Text type="secondary">
-            Already have an account? <a href="/auth/signin">Sign-In</a>
+            Already have an account? <Link href="/auth/signin">Sign-In</Link>
             </Text>
         </Card>
       </Space>
