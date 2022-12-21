@@ -18,7 +18,6 @@ const Register = (): JSX.Element => {
         name: values.username,
       }),
     });
-
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -50,7 +49,7 @@ const Register = (): JSX.Element => {
             </Form.Item>
     
             <Form.Item
-              label="email"
+              label="Email"
               name="email"
               rules={[
                 { required: true, message: "Please input your email!" },
@@ -72,7 +71,7 @@ const Register = (): JSX.Element => {
 
             </Form.Item>
               <Form.Item
-                label="Password"
+                label="Confirm Password"
                 name="cofirmPassword"
                 rules={[
                   { required: true, message: "Please confirm your password!" },
