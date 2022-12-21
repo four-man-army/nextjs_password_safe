@@ -9,7 +9,7 @@
 ## Description
 
 <p>Our application for the school assignment, to make a password safe.
-<br>You can look at the current deplyoment <a href="https://four-man-army.github.io/nextjs_password_safe/">here</a>.</p>
+<br>You can look at the current deplyoment <a href="https://nextjs-password-safe.vercel.app/">here</a>.</p>
 <br>
 <br>
 Or just follow the instructions below to run our latest branch.
