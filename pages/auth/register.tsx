@@ -1,18 +1,24 @@
-import styles from "../styles/Login.module.css";
+import styles from "../../styles/Login.module.css";
 import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
 import React from "react";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
-type LoginProps = {
-  login: boolean;
-  setLogin: (value: boolean) => void;
-};
-
-const Register = ({ login, setLogin }: LoginProps): JSX.Element => {
+const Register = (): JSX.Element => {
 
   const onFinish = (values: any) => {
-    setLogin(true);
+    fetch("/api/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: values.email,
+        password: values.password,
+        name: values.username,
+      }),
+    });
+
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -23,7 +29,7 @@ const Register = ({ login, setLogin }: LoginProps): JSX.Element => {
     <div className={styles.login}>
       <Space align="center" className={styles.loginPanel}>
         <Card className={styles.loginCard}>
-          <Title>Log-In</Title>
+          <Title>Register</Title>
           <Form
             name="basic"
             labelCol={{ span: 8 }}
@@ -42,26 +48,46 @@ const Register = ({ login, setLogin }: LoginProps): JSX.Element => {
             >
               <Input />
             </Form.Item>
+    
+            <Form.Item
+              label="email"
+              name="email"
+              rules={[
+                { required: true, message: "Please input your email!" },
+                { pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, message: "Please input a valid email!"}
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
             <Form.Item
               label="Password"
               name="password"
               rules={[
                 { required: true, message: "Please input your password!" },
+                { pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\+!@#\$%\^&\*])/, message: "password must contain at least one uppercase letter, one number, and one special character" },
               ]}
             >
               <Input.Password />
 
+            </Form.Item>
               <Form.Item
                 label="Password"
-                name="password"
+                name="cofirmPassword"
                 rules={[
                   { required: true, message: "Please confirm your password!" },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('password') === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                    }
+                  })
                 ]}
               >
                 <Input.Password />
               </Form.Item>
-            </Form.Item>
 
             <Form.Item
               name="remember"
@@ -77,6 +103,9 @@ const Register = ({ login, setLogin }: LoginProps): JSX.Element => {
               </Button>
             </Form.Item>
           </Form>
+          <Text type="secondary">
+            Already have an account? <a href="/auth/signin">Sign-In</a>
+            </Text>
         </Card>
       </Space>
     </div>
