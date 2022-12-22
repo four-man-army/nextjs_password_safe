@@ -63,7 +63,7 @@ export default function Home() {
               </Row>
             )}
               {list?.map((listItem: ListItem) => (
-                <Node item={listItem} />
+                <Node key={listItem.id} item={listItem} />
               ))}
               <Button className={styles.button} type="primary">
                 + Add
@@ -81,7 +81,7 @@ const Node: any = (item: any): JSX.Element => {
   const [visible, setVisible] = useState<boolean>(false);
 
   return (
-    <Row className={styles.row} key={item.item.id} gutter={48}>
+    <Row className={styles.row} gutter={48}>
       <Col span={8}>
         <Paragraph>{item.item.title}</Paragraph>
       </Col>
