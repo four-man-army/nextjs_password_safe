@@ -81,7 +81,7 @@ const Node: any = (item: any): JSX.Element => {
   const [visible, setVisible] = useState<boolean>(false);
 
   return (
-    <Row className={styles.row} key={item.id} gutter={48}>
+    <Row className={styles.row} key={item.item.id} gutter={48}>
       <Col span={8}>
         <Paragraph>{item.item.title}</Paragraph>
       </Col>
