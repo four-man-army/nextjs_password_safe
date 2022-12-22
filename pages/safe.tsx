@@ -93,8 +93,8 @@ const Node: any = (item: any): JSX.Element => {
           className={!visible ? styles.hide : styles.show}
           copyable={{
             icon: visible
-              ? [<EyeInvisibleOutlined />, <CopyOutlined />]
-              : [<EyeOutlined />, <EyeOutlined />],
+              ? [<EyeInvisibleOutlined key={1} />, <CopyOutlined key={2} />]
+              : [<EyeOutlined key={1} />, <EyeOutlined key={2} />],
             onCopy: () => {
               setVisible(!visible);
               if (visible) navigator.clipboard.writeText(item.password);
