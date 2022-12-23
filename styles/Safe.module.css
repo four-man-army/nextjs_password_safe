@@ -13,6 +13,7 @@
 
 .button {
     margin-top: 10px;
+    margin-left: 10px;
     float: right;
 }
 
@@ -27,4 +28,8 @@
 
 .row {
   text-align: left;
+}
+
+.add {
+  width: 100%;
 }
