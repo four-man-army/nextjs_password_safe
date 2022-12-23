@@ -61,7 +61,7 @@ export default function Home() {
                     </Row>
                   )}
                 {list?.map((listItem: ListItem) => (
-                  <Node item={listItem} />
+                  <Node key={listItem.id} item={listItem} />
                 ))}
                 {adding && (
                   <>
