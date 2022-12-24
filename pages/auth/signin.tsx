@@ -17,7 +17,7 @@ const SignIn: NextPage = (props): JSX.Element => {
     const res = await signIn("credentials", {
       email: values.email,
       password: values.password,
-      rember: values.remember,
+      remember: values.remember,
       redirect: false,
     });
     console.log(res);
@@ -78,7 +78,7 @@ const SignIn: NextPage = (props): JSX.Element => {
               valuePropName="checked"
               wrapperCol={{ offset: 8, span: 16 }}
             >
-              <Checkbox checked={true}>Remember me</Checkbox>
+              <Checkbox>Remember me</Checkbox>
             </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
