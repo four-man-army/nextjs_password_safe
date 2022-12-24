@@ -5,7 +5,6 @@ import {
   Input,
   Row,
   Space,
-  Tooltip,
   Typography,
 } from "antd";
 import { useSession } from "next-auth/react";
@@ -45,7 +44,7 @@ export default function Home() {
           <Space align="center" className={styles.paper}>
             <Card className={styles.card}>
               <>
-                {list || adding && (
+                {(list || adding) && (
                     <Row className={styles.row} gutter={48}>
                       <Col span={8}>
                         <Title level={3}>Website</Title>
