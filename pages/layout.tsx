@@ -8,7 +8,7 @@ import {
   KeyOutlined,
   RobotOutlined,
 } from "@ant-design/icons";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -21,6 +21,11 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
     token: { colorBgContainer },
   } = theme.useToken();
   const router = useRouter();
+  const [currentRoute, setCurrentRoute] = useState(router.pathname);
+
+  useEffect(() => {
+    setCurrentRoute(router.pathname);
+  }, [router.pathname]);
 
   return (
     <div className={styles.app}>
@@ -30,7 +35,10 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
           <Menu
             theme="dark"
             mode="inline"
-            selectedKeys={[router.pathname]}
+            selectedKeys={[currentRoute]}
+            onClick={({ key }) => {
+              setCurrentRoute(key);
+            }}
             items={[
               {
                 key: "/",
