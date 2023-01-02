@@ -1,4 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
+const dotenv = require("dotenv");
+dotenv.config({ path: ".env.test.local" });
 
 test.describe("Signin failed", () => {
   test.beforeEach(async ({ page }: { page: Page }) => {
@@ -40,25 +42,15 @@ test.describe("Signin failed", () => {
 });
 
 test.describe("Signin success", () => {
-  test.beforeEach(async ({ page }: { page: Page }) => {
-    await page.route("**/api/auth/session", (route) => {
-      route.fulfill({
-        status: 200,
-        body: JSON.stringify({
-          user: { name: "oliver", email: "test@mail.com" },
-          expires: "2024-01-01T17:02:17.171Z",
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    });
-  });
-
   test("test success", async ({ page }: { page: Page }) => {
     await page.goto("/");
+    await page.getByLabel("Email").click();
+    await page.getByLabel("Email").fill(process.env.EMAIL as string);
+    await page.getByLabel("Password").click();
+    await page.getByLabel("Password").fill(process.env.PASSWORD as string);
+    await page.getByLabel("Password").press("Enter");
     await expect.poll(async () => {
-      return page.url();
-    }).toBe("http://localhost:3000/");
+      return page.getByRole("button", { name: /Sign out/ });
+    }).not.toBeNull();
   });
 });
