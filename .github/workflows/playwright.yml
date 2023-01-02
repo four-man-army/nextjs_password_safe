@@ -21,6 +21,7 @@ jobs:
         echo PASSWORD=${{secrets.PASSWORD}} >> .env
         echo EMAIL=${{secrets.EMAIL}} >> .env
         echo TEST_URL=$URL >> .env
+        echo CI=true >> .env
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
