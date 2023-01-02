@@ -15,6 +15,12 @@ jobs:
         URL=https://nextjs-password-safe-git-$CURRENT_BRANCH-four-man-army.vercel.app/
         echo $CURRENT_BRANCH
         echo $URL
+    - name: create env file
+      run: |
+        touch .env
+        echo PASSWORD=${{secrets.PASSWORD}} >> .env
+        echo EMAIL=${{secrets.EMAIL}} >> .env
+        echo TEST_URL=$URL >> .env
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
@@ -25,10 +31,6 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: npx playwright test
-      env:
-        PASSWORD: ${{secrets.PASSWORD}}
-        EMAIL: ${{secrets.EMAIL}}
-        TEST_URL: $URL
     - uses: actions/upload-artifact@v3
       if: always()
       with:
