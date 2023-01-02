@@ -6,15 +6,15 @@ on:
     branches: [ main, beta ]
 jobs:
   test:
-    - name: extract current branch
-      run: CURRENT_BRANCH=$(echo $GITHUB_REF | sed -e 's/refs\/heads\///g' | sed -e 's/_//g')
-    env:
-      PASSWORD: ${{secrets.PASSWORD}}
-      EMAIL: ${{secrets.EMAIL}}
-      TEST_URL: https://nextjs-password-safe-git-$CURRENT_BRANCH-four-man-army.vercel.app/
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
+    - name: extract current branch
+      run: CURRENT_BRANCH=$(echo $GITHUB_REF | sed -e 's/refs\/heads\///g' | sed -e 's/_//g')
+      env:
+        PASSWORD: ${{secrets.PASSWORD}}
+        EMAIL: ${{secrets.EMAIL}}
+        TEST_URL: https://nextjs-password-safe-git-$CURRENT_BRANCH-four-man-army.vercel.app/
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
