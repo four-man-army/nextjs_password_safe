@@ -12,6 +12,7 @@
 <p>Our application for the school assignment, to make a password safe.
 
 ### Deployments
+[![.github/workflows/playwright.yml](https://github.com/four-man-army/nextjs_password_safe/actions/workflows/playwright.yml/badge.svg)](https://github.com/four-man-army/nextjs_password_safe/actions/workflows/playwright.yml)
 <p>
 <ol>
   <li><a href="https://nextjs-password-safe.vercel.app/">Main production deployment</a></li>
