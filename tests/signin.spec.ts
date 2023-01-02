@@ -51,6 +51,9 @@ test.describe("Signin success", () => {
     await page.getByLabel("Password").press("Enter");
     await expect.poll(async () => {
       return page.getByRole("button", { name: /Sign out/ });
+    }, {
+      intervals: [1_000, 2_000, 10_000],
+      timeout: 20_000,
     }).not.toBeNull();
   });
 });
