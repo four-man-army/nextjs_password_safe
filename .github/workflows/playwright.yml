@@ -10,11 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: extract current branch
-      run: CURRENT_BRANCH=$(echo $GITHUB_REF | sed -e 's/refs\/heads\///g' | sed -e 's/_//g')
+      run: |
+        CURRENT_BRANCH=$(echo $GITHUB_REF | sed -e 's/refs\/heads\///g' | sed -e 's/_//g')
+        URL=https://nextjs-password-safe-git-$CURRENT_BRANCH-four-man-army.vercel.app/
+        echo $CURRENT_BRANCH
+        echo $URL
       env:
         PASSWORD: ${{secrets.PASSWORD}}
         EMAIL: ${{secrets.EMAIL}}
-        TEST_URL: https://nextjs-password-safe-git-$CURRENT_BRANCH-four-man-army.vercel.app/
+        TEST_URL: $URL
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
