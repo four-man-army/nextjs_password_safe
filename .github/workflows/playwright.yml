@@ -6,6 +6,10 @@ on:
     branches: [ main, beta ]
 jobs:
   test:
+    env:
+      PASSWORD: ${{secrets.PASSWORD}}
+      EMAIL: ${{secrets.EMAIL}}
+      TEST_URL: https://nextjs-password-safe-git-$CURRENT_BRANCH-four-man-army.vercel.app/
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -15,11 +19,6 @@ jobs:
         node-version: 16
     - name: extract current branch
       run: CURRENT_BRANCH=$(echo $GITHUB_REF | sed -e 's/refs\/heads\///g' | sed -e 's/_//g')
-    - name: set environment variables
-      env:
-        PASSWORD: ${{secrets.PASSWORD}}
-        EMAIL: ${{secrets.EMAIL}}
-        TEST_URL: https://nextjs-password-safe-git-$CURRENT_BRANCH-four-man-army.vercel.app/
     - name: Install dependencies
       run: npm ci
     - name: Install Playwright Browsers
