@@ -167,7 +167,7 @@ const Node: React.FC<{ item: ListItem }> = ({ item }) => {
             tooltips: visible ? ["Hide", "Copied!"] : ["Show", "Hidden"],
           }}
         >
-          {visible ? item.password : "muschi"}
+          {visible ? item.password : "********"}
         </Paragraph>
       </Col>
     </Row>
