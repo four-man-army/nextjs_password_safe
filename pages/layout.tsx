@@ -7,7 +7,7 @@ import {
   KeyOutlined,
   RobotOutlined,
 } from "@ant-design/icons";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import React from "react";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
@@ -21,8 +21,13 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
     token: { colorBgContainer },
   } = theme.useToken();
   const router = useRouter();
-  const { status, data } = useSession();
+  const [currentRoute, setCurrentRoute] = useState(router.pathname);
 
+  useEffect(() => {
+    setCurrentRoute(router.pathname);
+  }, [router.pathname]);
+
+  const { status, data } = useSession();
 
   return (
     <div className={styles.app}>
@@ -32,8 +37,10 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={[router.pathname]}
-            selectedKeys={[router.pathname]}
+            selectedKeys={[currentRoute]}
+            onClick={({ key }) => {
+              setCurrentRoute(key);
+            }}
             selectable={status !== "unauthenticated"}
             disabled={status === "unauthenticated"}
             style={{
