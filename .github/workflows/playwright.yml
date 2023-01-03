@@ -1,7 +1,6 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, beta ]
   pull_request:
     branches: [ main, beta ]
 jobs:
@@ -15,13 +14,6 @@ jobs:
         URL=https://nextjs-password-safe-git-$CURRENT_BRANCH-four-man-army.vercel.app/
         echo $CURRENT_BRANCH
         echo $URL
-    - name: create env file
-      run: |
-        touch .env
-        echo PASSWORD=${{secrets.PASSWORD}} >> .env
-        echo EMAIL=${{secrets.EMAIL}} >> .env
-        echo TEST_URL=$URL >> .env
-        echo CI=true >> .env
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
