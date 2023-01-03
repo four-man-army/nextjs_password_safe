@@ -9,8 +9,6 @@ import { devices } from '@playwright/test';
 
 const baseURL = process.env.CI ? process.env.TEST_URL : 'http://localhost:3000';
 
-console.log('baseURL', baseURL);
-
 /**
 * See https://playwright.dev/docs/test-configuration.
 */
@@ -23,7 +21,7 @@ const config: PlaywrightTestConfig = {
     command: "npm run dev",
     url: baseURL,
     timeout: 120 * 1000,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
   },
 
   expect: {
