@@ -16,8 +16,8 @@ jobs:
         else
           CURRENT_BRANCH=$(echo $GITHUB_REF | sed -e 's/refs\/heads\///g' | sed -e 's/_//g')
           URL=https://nextjs-password-safe-git-$CURRENT_BRANCH-four-man-army.vercel.app/
-          echo "TEST_URL=$URL" >> $GITHUB_ENV
         fi
+        echo "TEST_URL=$URL" >> $GITHUB_ENV
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
