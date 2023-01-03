@@ -12,8 +12,7 @@ jobs:
       run: |
         CURRENT_BRANCH=$(echo $GITHUB_REF | sed -e 's/refs\/heads\///g' | sed -e 's/_//g')
         URL=https://nextjs-password-safe-git-$CURRENT_BRANCH-four-man-army.vercel.app/
-        echo $CURRENT_BRANCH
-        echo $URL
+        echo "TEST_URL=$URL" >> $GITHUB_ENV
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
@@ -27,7 +26,6 @@ jobs:
       env:
         PASSWORD: ${{secrets.PASSWORD}}
         EMAIL: ${{secrets.EMAIL}}
-        TEST_URL: $(echo $URL)
     - uses: actions/upload-artifact@v3
       if: always()
       with:
