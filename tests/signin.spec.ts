@@ -13,31 +13,19 @@ test.describe("Signin failed", () => {
   });
 
   test("test invalid password", async ({ page }: { page: Page }) => {
-    await expect
-      .poll(
-        async () => {
-          return page.locator(".ant-input-suffix").last();
-        },
-        {
-          intervals: [1_000, 2_000, 10_000],
-          timeout: 20_000,
-        }
-      )
-      .not.toBeNull();
+    expect(page.locator(".ant-input-suffix").last()).not.toBeNull();
   });
 
   test("test invalid email", async ({ page }: { page: Page }) => {
-    await expect
-      .poll(
-        async () => {
-          return page.locator(".ant-input-suffix").first();
-        },
-        {
-          intervals: [1_000, 2_000, 10_000],
-          timeout: 20_000,
-        }
-      )
-      .not.toBeNull();
+    expect(page.locator(".ant-input-suffix").first()).not.toBeNull();
+  });
+});
+
+test.describe("Signin error", () => { 
+  test("test error", async ({ page }: { page: Page }) => { 
+    await page.goto("/"); 
+    await page.getByRole("button", { name: "Submit" }).click();
+    expect(page.locator(".ant-form-item-explain").first()).not.toBeNull();
   });
 });
 
@@ -49,11 +37,6 @@ test.describe("Signin success", () => {
     await page.getByLabel("Password").click();
     await page.getByLabel("Password").fill(process.env.PASSWORD as string);
     await page.getByLabel("Password").press("Enter");
-    await expect.poll(async () => {
-      return page.getByRole("button", { name: /Sign out/ });
-    }, {
-      intervals: [1_000, 2_000, 10_000],
-      timeout: 20_000,
-    }).not.toBeNull();
+    expect(page.getByRole("button", { name: /Sign out/ })).not.toBeNull();
   });
 });
