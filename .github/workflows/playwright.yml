@@ -11,7 +11,7 @@ jobs:
     steps:
     - name: extract current branch
       run: |
-        if [ ${{github.event_name}}=='pull_request' ]; then
+        if [ '${{github.event_name}}'='pull_request' ]; then
           URL=https://nextjs-password-safe-git-$(echo ${{github.head_ref}} | sed -e 's/_//g')-four-man-army.vercel.app/
           echo $URL
           echo "TEST_URL=$URL" >> $GITHUB_ENV
