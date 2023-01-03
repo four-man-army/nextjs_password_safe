@@ -11,9 +11,13 @@ jobs:
     steps:
     - name: extract current branch
       run: |
-        CURRENT_BRANCH=$(echo $GITHUB_REF | sed -e 's/refs\/heads\///g' | sed -e 's/_//g')
-        URL=https://nextjs-password-safe-git-$CURRENT_BRANCH-four-man-army.vercel.app/
-        echo "TEST_URL=$URL" >> $GITHUB_ENV
+        if [ ${{github.event}}==true ] then
+          URL=https://nextjs-password-safe-git-${{github.head_ref}}-four-man-army.vercel.app/
+        else
+          CURRENT_BRANCH=$(echo $GITHUB_REF | sed -e 's/refs\/heads\///g' | sed -e 's/_//g')
+          URL=https://nextjs-password-safe-git-$CURRENT_BRANCH-four-man-army.vercel.app/
+          echo "TEST_URL=$URL" >> $GITHUB_ENV
+        fi
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
