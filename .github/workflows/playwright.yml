@@ -27,7 +27,7 @@ jobs:
       env:
         PASSWORD: ${{secrets.PASSWORD}}
         EMAIL: ${{secrets.EMAIL}}
-        TEST_URL: $URL
+        TEST_URL: $(echo $URL)
     - uses: actions/upload-artifact@v3
       if: always()
       with:
