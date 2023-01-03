@@ -11,17 +11,13 @@ jobs:
     steps:
     - name: extract current branch
       run: |
-        CURRENT_BRANCH=$(echo $GITHUB_REF | sed -e 's/refs\/heads\///g' | sed -e 's/_//g')
-        URL=https://nextjs-password-safe-git-$CURRENT_BRANCH-four-man-army.vercel.app/
-        echo $CURRENT_BRANCH
-        echo $URL
-    - name: create env file
-      run: |
-        touch .env
-        echo PASSWORD=${{secrets.PASSWORD}} >> .env
-        echo EMAIL=${{secrets.EMAIL}} >> .env
-        echo TEST_URL=$URL >> .env
-        echo CI=true >> .env
+        if [ ${{github.event_name}}=='pull_request' ]; then
+          URL=https://nextjs-password-safe-git-$(echo ${{github.head_ref}} | sed -e 's/_//g')-four-man-army.vercel.app/
+        else
+          CURRENT_BRANCH=$(echo $GITHUB_REF | sed -e 's/refs\/heads\///g' | sed -e 's/_//g')
+          URL=https://nextjs-password-safe-git-$CURRENT_BRANCH-four-man-army.vercel.app/
+        fi
+        echo "TEST_URL=$URL" >> $GITHUB_ENV
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
@@ -35,7 +31,6 @@ jobs:
       env:
         PASSWORD: ${{secrets.PASSWORD}}
         EMAIL: ${{secrets.EMAIL}}
-        TEST_URL: $URL
     - uses: actions/upload-artifact@v3
       if: always()
       with:
