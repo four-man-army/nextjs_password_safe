@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import * as argon2 from "argon2";
 
-function hashPassword(target: string, salt:string): string {
-    const crypto = require('crypto');
-    return crypto.createHash('sha512').update(target+salt, 'utf-8').digest('hex');
+async function hashPassword(target: string, salt:string): Promise<string> {
+    return await argon2.hash(target, {type: argon2.argon2i, hashLength:32, salt: Buffer.from(salt, 'hex')})
 }
 
 function generateSalt(): string {
@@ -12,12 +12,14 @@ function generateSalt(): string {
 
 async function registerUser(email:string, name:string, pw:string){
     const { MongoClient, ServerApiVersion } = require('mongodb');
-    const uri = "mongodb+srv://"+process.env.USERS_WRITE+":"+process.env.USERS_WRITE_PW+process.env.DB_URL+"/?retryWrites=true&w=majority";
+    //const uri = "mongodb+srv://"+process.env.USERS_WRITE+":"+process.env.USERS_WRITE_PW+process.env.DB_URL+"/?retryWrites=true&w=majority";
+    const uri = "mongodb+srv://" + process.env.TEST_USER + ":" + process.env.TEST_USER_PW + process.env.DB_URL + "/?retryWrites=true&w=majority"; //! Using test db 
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
     const salt = generateSalt();
     try {
       await client.connect();
-      const db = client.db(process.env.DB_NAME);
+      //const db = client.db(process.env.DB_NAME);
+      const db = client.db(process.env.TEST_DB); //! Using test db
       const collection = db.collection("users");
       const query = { email: {$eq: email}};
       const options = {projection: { _id: 1 }};
@@ -28,7 +30,7 @@ async function registerUser(email:string, name:string, pw:string){
         return await db.collection('users').insertOne({
           email: email,
           name: name,
-          password: hashPassword(pw, salt),
+          password: await hashPassword(pw, salt),
           salt: salt
         });
       }
@@ -55,5 +57,4 @@ export default async function handler(
       } else {
           res.status(405).json({ error: 'Only POST is supported'})
         }
-
   }

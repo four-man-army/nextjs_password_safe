@@ -11,12 +11,12 @@ const { Title } = Typography;
 
 const SignIn: NextPage = (props): JSX.Element => {
   const [valid, setValid] = React.useState<ValidateStatus>("");
-
+  const crypto = require('crypto');
 
   const onFinish = async (values: any) => {
     const res = await signIn("credentials", {
       email: values.email,
-      password: values.password,
+      password: crypto.createHash('sha512').update(values.password, 'utf-8').digest('hex'),
       rember: values.remember,
       redirect: false,
     });

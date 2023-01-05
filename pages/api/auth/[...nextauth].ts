@@ -1,5 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import  CredentialsProvider  from "next-auth/providers/credentials";
+import * as argon2 from "argon2";
 
 let maxAge = 15 * 60;
 const rememberMe = (remember: Boolean): void => {
@@ -8,11 +9,13 @@ const rememberMe = (remember: Boolean): void => {
 
 async function getSalt(email:string){
     const { MongoClient, ServerApiVersion } = require('mongodb');
-    const uri = "mongodb+srv://"+process.env.USERS_READ+":"+process.env.USERS_READ_PW+process.env.DB_URL+"/?retryWrites=true&w=majority";
+    //const uri = "mongodb+srv://"+process.env.USERS_WRITE+":"+process.env.USERS_WRITE_PW+process.env.DB_URL+"/?retryWrites=true&w=majority";
+    const uri = "mongodb+srv://" + process.env.TEST_USER + ":" + process.env.TEST_USER_PW + process.env.DB_URL + "/?retryWrites=true&w=majority"; //! Using test db 
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
     try {
         await client.connect();
-        const db = client.db(process.env.DB_NAME);
+        //const db = client.db(process.env.DB_NAME);
+        const db = client.db(process.env.TEST_DB); //! Using test db
         const collection = db.collection("users");
         const query = { email: {$eq: email}};
         const options = {projection: { _id: 0, salt: 1}};
@@ -25,11 +28,13 @@ async function getSalt(email:string){
 
 async function authUser(email:string){
     const { MongoClient, ServerApiVersion } = require('mongodb');
-    const uri = "mongodb+srv://"+process.env.USERS_READ+":"+process.env.USERS_READ_PW+process.env.DB_URL+"/?retryWrites=true&w=majority";
+    //const uri = "mongodb+srv://"+process.env.USERS_WRITE+":"+process.env.USERS_WRITE_PW+process.env.DB_URL+"/?retryWrites=true&w=majority";
+    const uri = "mongodb+srv://" + process.env.TEST_USER + ":" + process.env.TEST_USER_PW + process.env.DB_URL + "/?retryWrites=true&w=majority"; //! Using test db 
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
     try {
         await client.connect();
-        const db = client.db(process.env.DB_NAME);
+        //const db = client.db(process.env.DB_NAME);
+        const db = client.db(process.env.TEST_DB); //! Using test db
         const collection = db.collection("users");
         const query = { email: {$eq: email}};
         const options = {projection: { _id: 1, name: 1, email: 1, password: 1}};
@@ -40,9 +45,8 @@ async function authUser(email:string){
     }
 }
 
-function hashPassword(target: string, salt:string): string {
-    const crypto = require('crypto');
-    return crypto.createHash('sha512').update(target+salt, 'utf-8').digest('hex');
+async function hashPassword(target: string, salt:string): Promise<string> {
+    return await argon2.hash(target, {type: argon2.argon2i, hashLength:32, salt: Buffer.from(salt, 'hex')})
 }
 
 const authOptions: NextAuthOptions = {
@@ -63,7 +67,7 @@ const authOptions: NextAuthOptions = {
                 const salt = await getSalt(email);
                 const user = fetch as {id:string, name: string, email: string, password: string};
                 if (user.email === email) {
-                    if(hashPassword(password,salt) === user.password){
+                    if(await hashPassword(password, salt) === user.password){
                         rememberMe(remember);
                         return user
                     }
