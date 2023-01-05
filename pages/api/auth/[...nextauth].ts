@@ -46,6 +46,7 @@ async function authUser(email:string){
 }
 
 async function hashPassword(target: string, salt:string): Promise<string> {
+    
     return await argon2.hash(target, {type: argon2.argon2i, hashLength:32, salt: Buffer.from(salt, 'hex')})
 }
 

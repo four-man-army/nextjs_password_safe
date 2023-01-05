@@ -11,6 +11,7 @@ const Register = (): JSX.Element => {
   const [ errorHandle, setErrorHandle ] = useState(false);
   const [ errorMessage, setErrorMessage ] = useState("");
   const [ successHandle, setSuccessHandle ] = useState(false);
+  const crypto = require('crypto');
 
   const onFinish = (values: any) => {
     fetch("/api/signup", {
@@ -20,7 +21,7 @@ const Register = (): JSX.Element => {
       },
       body: JSON.stringify({
         email: values.email,
-        password: values.password,
+        password: crypto.createHash('sha512').update(values.password, 'utf-8').digest('hex'),
         name: values.username,
       }),
     }).then((res) => res.json())
