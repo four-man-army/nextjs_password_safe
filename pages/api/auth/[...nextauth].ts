@@ -2,7 +2,8 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import * as argon2 from "argon2";
 
-const uri = "mongodb+srv://" + process.env.USERS_READ + ":" + process.env.USERS_READ_PW + process.env.DB_URL + "/?retryWrites=true&w=majority";
+//const uri = "mongodb+srv://" + process.env.USERS_WRITE + ":" + process.env.USERS_WRITE_PW + process.env.DB_URL + "/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://" + process.env.TEST_USER + ":" + process.env.TEST_USER_PW + process.env.DB_URL + "/?retryWrites=true&w=majority"; //! Using test db 
 
 let maxAge = 15 * 60;
 const rememberMe = (remember: Boolean): void => {
@@ -15,7 +16,8 @@ async function getSalt(email: string) {
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
     try {
         await client.connect();
-        const db = client.db(process.env.DB_NAME);
+        //const db = client.db(process.env.DB_NAME);
+        const db = client.db(process.env.TEST_DB); //! Using test db
         const collection = db.collection("users");
         const query = { email: { $eq: email } };
         const options = { projection: { _id: 0, salt: 1 } };
@@ -31,7 +33,8 @@ async function authUser(email: string) {
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
     try {
         await client.connect();
-        const db = client.db(process.env.DB_NAME);
+        //const db = client.db(process.env.DB_NAME);
+        const db = client.db(process.env.TEST_DB); //! Using test db
         const collection = db.collection("users");
         const query = { email: { $eq: email } };
         const options = { projection: { _id: 1, name: 1, email: 1, password: 1 } };
@@ -75,6 +78,24 @@ const authOptions: NextAuthOptions = {
     ],
     pages: {
         signIn: '/auth/signin',
+    },
+    callbacks: {
+        async jwt({ token, user }) {
+            if (user) {
+                token.user = {
+                    id: user._id,    //* Ignore Error - It works
+                    name: user.name,
+                    email: user.email
+                }
+            }
+            return Promise.resolve(token);
+        },
+        session: async ({ session, token }) => {
+            if(session){
+               session.user = token.user as { id: string, name: string, email: string };
+            }
+            return Promise.resolve(session) 
+        },
     }
 }
 
