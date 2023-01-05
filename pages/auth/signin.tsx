@@ -17,8 +17,10 @@ const SignIn: NextPage = (props): JSX.Element => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successHandle, setSuccessHandle] = useState(false);
   const crypto = require('crypto');
+  const redirect = useRouter().query["registered"]
 
   const onFinish = async (values: any) => {
+    if(redirect) Router.replace("/auth/signin");
     setValidMail("validating");
     setValidPw("validating");
     const res = await signIn("credentials", {
@@ -30,7 +32,7 @@ const SignIn: NextPage = (props): JSX.Element => {
     if (res) {
       if (res.error) {
         setValidAll("error");
-        setErrorMessage("Email or password is incorrect");
+        setErrorMessage("Email or password does not match");
         setErrorHandle(true);
         setSuccessHandle(false);
       } else {
@@ -41,6 +43,7 @@ const SignIn: NextPage = (props): JSX.Element => {
   };
 
   const onFinishFailed = (values: any) => {
+    if(redirect) Router.replace("/auth/signin");
     setValidAll("");
     values.errorFields.map((field: any) => {
       if (field.name[0] === "username") setValidMail("error")
