@@ -8,9 +8,14 @@ const { Title, Text } = Typography;
 type ValidateStatus = "success" | "warning" | "error" | "validating" | "";
 
 const Register = (): JSX.Element => {
-  const [ errorHandle, setErrorHandle ] = useState(false);
-  const [ errorMessage, setErrorMessage ] = useState("");
-  const [ successHandle, setSuccessHandle ] = useState(false);
+  const [validName, setValidName] = React.useState<ValidateStatus>("");
+  const [validMail, setValidMail] = React.useState<ValidateStatus>("");
+  const [validPw, setValidPw] = React.useState<ValidateStatus>("");
+  const [validConfirmPw, setValidConfirmPw] = React.useState<ValidateStatus>("");
+  const [errorHandle, setErrorHandle] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successHandle, setSuccessHandle] = useState(false);
+  const crypto = require('crypto');
 
   const onFinish = (values: any) => {
     fetch("/api/signup", {
@@ -109,11 +114,20 @@ const Register = (): JSX.Element => {
               rules={[
                 { required: true, message: "Please input your password!" },
                 {
-                  pattern:
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\+!@#\$%\^&\*])/,
-                  message:
-                    "password must contain at least one uppercase letter, one number, and one special character",
+                  pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\+!@#\$%\^&\*])/,
+                  message: "password must contain at least one uppercase letter, one number, and one special character",
                 },
+                () => ({
+                  validator(_, value) {
+                    const regex = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\+!@#\$%\^&\*])/);
+                    if (regex.test(value)) {
+                      setValidPw("success");
+                      return Promise.resolve();
+                    }
+                    setValidPw("warning")
+                    return Promise.reject()
+                  },
+                }),
               ]}
             >
               <Input.Password />
@@ -121,13 +135,17 @@ const Register = (): JSX.Element => {
             <Form.Item
               label="Confirm Password"
               name="cofirmPassword"
+              validateStatus={validConfirmPw}
+              hasFeedback
               rules={[
                 { required: true, message: "Please confirm your password!" },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue("password") === value) {
+                      setValidConfirmPw("success");
                       return Promise.resolve();
                     }
+                    setValidConfirmPw("warning")
                     return Promise.reject(
                       new Error(
                         "The two passwords that you entered do not match!"
