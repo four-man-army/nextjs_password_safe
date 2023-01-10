@@ -12,6 +12,7 @@ const Register = (): JSX.Element => {
   const [validName, setValidName] = React.useState<ValidateStatus>("");
   const [validMail, setValidMail] = React.useState<ValidateStatus>("");
   const [validPw, setValidPw] = React.useState<ValidateStatus>("");
+  const [validConfirmPw, setValidConfirmPw] = React.useState<ValidateStatus>("");
   const [errorHandle, setErrorHandle] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successHandle, setSuccessHandle] = useState(false);
@@ -167,14 +168,13 @@ const Register = (): JSX.Element => {
               rules={[
                 { required: true, message: "Please input your password!" },
                 {
-                  pattern:
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\+!@#\$%\^&\*])/,
-                  message:
-                    "password must contain at least one uppercase letter, one number, and one special character",
+                  pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\+!@#\$%\^&\*])/,
+                  message: "password must contain at least one uppercase letter, one number, and one special character",
                 },
-                ({ getFieldValue }) => ({
+                () => ({
                   validator(_, value) {
-                    if (!value || getFieldValue("cofirmPassword") === value) {
+                    const regex = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\+!@#\$%\^&\*])/);
+                    if (regex.test(value)) {
                       setValidPw("success");
                       return Promise.resolve();
                     }
@@ -189,17 +189,17 @@ const Register = (): JSX.Element => {
             <Form.Item
               label="Confirm Password"
               name="cofirmPassword"
-              validateStatus={validPw}
+              validateStatus={validConfirmPw}
               hasFeedback
               rules={[
                 { required: true, message: "Please confirm your password!" },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue("password") === value) {
-                      setValidPw("success");
+                      setValidConfirmPw("success");
                       return Promise.resolve();
                     }
-                    setValidPw("warning")
+                    setValidConfirmPw("warning")
                     return Promise.reject(
                       new Error(
                         "The two passwords that you entered do not match!"
