@@ -1,15 +1,7 @@
-import {
-  Button,
-  Card,
-  Col,
-  Input,
-  Row,
-  Space,
-  Typography,
-} from "antd";
+import { Button, Card, Col, Input, Row, Space, Typography } from "antd";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import styles from "../styles/Safe.module.css";
 import {
   EyeOutlined,
@@ -45,20 +37,20 @@ export default function Home() {
             <Card className={styles.card}>
               <>
                 {(list || adding) && (
-                    <Row className={styles.row} gutter={48}>
-                      <Col span={8}>
-                        <Title level={3}>Website</Title>
-                      </Col>
-                      <Col span={8}>
-                        <Title level={3}>Username</Title>
-                      </Col>
-                      <Col span={8}>
-                        <Title className={styles.show} level={3}>
-                          Password
-                        </Title>
-                      </Col>
-                    </Row>
-                  )}
+                  <Row className={styles.row} gutter={48}>
+                    <Col span={8}>
+                      <Title level={3}>Website</Title>
+                    </Col>
+                    <Col span={8}>
+                      <Title level={3}>Username</Title>
+                    </Col>
+                    <Col span={8}>
+                      <Title className={styles.show} level={3}>
+                        Password
+                      </Title>
+                    </Col>
+                  </Row>
+                )}
                 {list?.map((listItem: ListItem) => (
                   <Node key={listItem.id} item={listItem} />
                 ))}
@@ -98,20 +90,12 @@ export default function Home() {
                     </Row>
                     <div className={styles.button}>
                       <Button
+                        style={{ marginRight: "1rem" }}
                         type="primary"
                         onClick={() => {
                           setAdding(false);
-                          if (list === undefined)
-                            setListItem({ ...listItem, id: 0 } as ListItem);
-                          else
-                            setListItem({
-                              ...listItem,
-                              id: list.length + 1,
-                            } as ListItem);
-                          if (listItem !== undefined) {
-                            if (list === undefined) setList([listItem]);
-                            else setList([...list, listItem]);
-                          }
+                          if (list === undefined) setList([{ ...listItem, id: 0 }] as ListItem[]);
+                          else setList([...list, {...listItem, id: list.length} as ListItem] as ListItem[]);
                         }}
                       >
                         Save
