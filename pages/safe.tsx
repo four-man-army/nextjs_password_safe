@@ -38,7 +38,6 @@ export default function Home() {
   const crypto = require("crypto");
 
   const uploadSafe = () => {
-    const { status } = useSession();
     const key = crypto
       .createHash("sha512")
       .update(password, "utf-8")
