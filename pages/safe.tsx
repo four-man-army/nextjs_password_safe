@@ -21,7 +21,11 @@ interface ListItem {
 }
 
 async function hashPassword(target: string, salt: string): Promise<string> {
-  return await argon2.hash(target, { type: argon2.argon2i, hashLength: 32, salt: Buffer.from(salt, 'hex') })
+  return await argon2.hash(target, {
+    type: argon2.argon2i,
+    hashLength: 32,
+    salt: Buffer.from(salt, "hex"),
+  });
 }
 
 export default function Home() {
@@ -31,12 +35,15 @@ export default function Home() {
   const [adding, setAdding] = useState<boolean>(false);
   const { password } = useContext(PasswordContext);
   const CryptoJs = require("crypto-js");
-  const crypto = require('crypto');
+  const crypto = require("crypto");
 
   const uploadSafe = () => {
     const { status } = useSession();
-    const key = crypto.createHash('sha512').update(password, 'utf-8').digest('hex');
-    const secret = JSON.stringify(list)
+    const key = crypto
+      .createHash("sha512")
+      .update(password, "utf-8")
+      .digest("hex");
+    const secret = JSON.stringify(list);
     var encrypted = CryptoJs.AES.encrypt(secret, key).toString();
 
     fetch("/api/vault", {
@@ -48,114 +55,120 @@ export default function Home() {
         status: status,
         vault: encrypted,
       }),
-    }).then((res) => res.json())
+    })
+      .then((res) => res.json())
       .then((data) => {
         if (data === "Vault updated") {
           console.log("Vault updated");
         }
       });
+  };
 
-    useEffect(() => {
-      if (status === "unauthenticated") Router.replace("/auth/signin");
-    }, [status]);
+  useEffect(() => {
+    if (status === "unauthenticated") Router.replace("/auth/signin");
+  }, [status]);
 
-    if (status === "authenticated")
-      return (
-        <>
-          <Title>Password Safe</Title>
-          <div className={styles.container}>
-            <Space align="center" className={styles.paper}>
-              <Card className={styles.card}>
-                <>
-                  {(list || adding) && (
+  if (status === "authenticated")
+    return (
+      <>
+        <Title>Password Safe</Title>
+        <div className={styles.container}>
+          <Space align="center" className={styles.paper}>
+            <Card className={styles.card}>
+              <>
+                {(list || adding) && (
+                  <Row className={styles.row} gutter={48}>
+                    <Col span={8}>
+                      <Title level={3}>Website</Title>
+                    </Col>
+                    <Col span={8}>
+                      <Title level={3}>Username</Title>
+                    </Col>
+                    <Col span={8}>
+                      <Title className={styles.show} level={3}>
+                        Password
+                      </Title>
+                    </Col>
+                  </Row>
+                )}
+                {list?.map((listItem: ListItem) => (
+                  <Node key={listItem.id} item={listItem} />
+                ))}
+                {adding && (
+                  <>
                     <Row className={styles.row} gutter={48}>
                       <Col span={8}>
-                        <Title level={3}>Website</Title>
+                        <Input
+                          onChange={(e) => {
+                            setListItem({
+                              ...listItem,
+                              title: e.target.value,
+                            } as ListItem);
+                          }}
+                        />
                       </Col>
                       <Col span={8}>
-                        <Title level={3}>Username</Title>
+                        <Input
+                          onChange={(e) => {
+                            setListItem({
+                              ...listItem,
+                              user: e.target.value,
+                            } as ListItem);
+                          }}
+                        />
                       </Col>
                       <Col span={8}>
-                        <Title className={styles.show} level={3}>
-                          Password
-                        </Title>
+                        <Input
+                          onChange={(e) => {
+                            setListItem({
+                              ...listItem,
+                              password: e.target.value,
+                            } as ListItem);
+                          }}
+                        />
                       </Col>
                     </Row>
-                  )}
-                  {list?.map((listItem: ListItem) => (
-                    <Node key={listItem.id} item={listItem} />
-                  ))}
-                  {adding && (
-                    <>
-                      <Row className={styles.row} gutter={48}>
-                        <Col span={8}>
-                          <Input
-                            onChange={(e) => {
-                              setListItem({
-                                ...listItem,
-                                title: e.target.value,
-                              } as ListItem);
-                            }}
-                          />
-                        </Col>
-                        <Col span={8}>
-                          <Input
-                            onChange={(e) => {
-                              setListItem({
-                                ...listItem,
-                                user: e.target.value,
-                              } as ListItem);
-                            }}
-                          />
-                        </Col>
-                        <Col span={8}>
-                          <Input
-                            onChange={(e) => {
-                              setListItem({
-                                ...listItem,
-                                password: e.target.value,
-                              } as ListItem);
-                            }}
-                          />
-                        </Col>
-                      </Row>
-                      <div className={styles.button}>
-                        <Button
-                          style={{ marginRight: "1rem" }}
-                          type="primary"
-                          onClick={() => {
-                            setAdding(false);
-                            if (list === undefined) setList([{ ...listItem, id: 0 }] as ListItem[]);
-                            else setList([...list, { ...listItem, id: list.length } as ListItem] as ListItem[]);
-                            uploadSafe();
-                          }}
-                        >
-                          Save
-                        </Button>
-                        <Button onClick={() => setAdding(false)}>Cancel</Button>
-                      </div>
-                    </>
-                  )}
-                  {!adding && (
-                    <Button
-                      className={list || adding ? styles.button : styles.add}
-                      onClick={() => {
-                        setAdding(true);
-                      }}
-                      type="primary"
-                    >
-                      + Add
-                    </Button>
-                  )}
-                </>
-              </Card>
-            </Space>
-          </div>
-        </>
-      );
+                    <div className={styles.button}>
+                      <Button
+                        style={{ marginRight: "1rem" }}
+                        type="primary"
+                        onClick={() => {
+                          setAdding(false);
+                          if (list === undefined)
+                            setList([{ ...listItem, id: 0 }] as ListItem[]);
+                          else
+                            setList([
+                              ...list,
+                              { ...listItem, id: list.length } as ListItem,
+                            ] as ListItem[]);
+                          uploadSafe();
+                        }}
+                      >
+                        Save
+                      </Button>
+                      <Button onClick={() => setAdding(false)}>Cancel</Button>
+                    </div>
+                  </>
+                )}
+                {!adding && (
+                  <Button
+                    className={list || adding ? styles.button : styles.add}
+                    onClick={() => {
+                      setAdding(true);
+                    }}
+                    type="primary"
+                  >
+                    + Add
+                  </Button>
+                )}
+              </>
+            </Card>
+          </Space>
+        </div>
+      </>
+    );
 
-    return <div>loading...</div>;
-  }
+  return <div>loading...</div>;
 }
 
 const Node: React.FC<{ item: ListItem }> = ({ item }) => {
