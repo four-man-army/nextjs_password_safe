@@ -9,7 +9,6 @@ import {
   EyeInvisibleOutlined,
 } from "@ant-design/icons";
 import { PasswordContext } from "../context/usePass";
-import * as argon2 from "argon2";
 
 const { Title, Paragraph } = Typography;
 
@@ -18,14 +17,6 @@ interface ListItem {
   title: string;
   user: string;
   password: string;
-}
-
-async function hashPassword(target: string, salt: string): Promise<string> {
-  return await argon2.hash(target, {
-    type: argon2.argon2i,
-    hashLength: 32,
-    salt: Buffer.from(salt, "hex"),
-  });
 }
 
 export default function Home() {
@@ -62,6 +53,7 @@ export default function Home() {
         }
       });
   };
+
 
   useEffect(() => {
     if (status === "unauthenticated") Router.replace("/auth/signin");
