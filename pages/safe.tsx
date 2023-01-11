@@ -156,36 +156,37 @@ export default function Home() {
 
     return <div>loading...</div>;
   }
+}
 
-  const Node: React.FC<{ item: ListItem }> = ({ item }) => {
-    const [visible, setVisible] = useState<boolean>(false);
+const Node: React.FC<{ item: ListItem }> = ({ item }) => {
+  const [visible, setVisible] = useState<boolean>(false);
 
-    return (
-      <Row className={styles.row} key={item.id} gutter={48}>
-        <Col span={8}>
-          <Paragraph>{item.title}</Paragraph>
-        </Col>
-        <Col span={8}>
-          <Paragraph>{item.user}</Paragraph>
-        </Col>
-        <Col span={8}>
-          <Paragraph
-            className={!visible ? styles.hide : styles.show}
-            copyable={{
-              icon: visible
-                ? [<EyeInvisibleOutlined key={1} />, <CopyOutlined key={2} />]
-                : [<EyeOutlined key={1} />, <EyeOutlined key={2} />],
-              onCopy: () => {
-                setVisible(!visible);
-                if (visible)
-                  navigator.clipboard.writeText(item.password as string);
-              },
-              tooltips: visible ? ["Hide", "Copied!"] : ["Show", "Hidden"],
-            }}
-          >
-            {visible ? item.password : "********"}
-          </Paragraph>
-        </Col>
-      </Row>
-    );
-  };
+  return (
+    <Row className={styles.row} key={item.id} gutter={48}>
+      <Col span={8}>
+        <Paragraph>{item.title}</Paragraph>
+      </Col>
+      <Col span={8}>
+        <Paragraph>{item.user}</Paragraph>
+      </Col>
+      <Col span={8}>
+        <Paragraph
+          className={!visible ? styles.hide : styles.show}
+          copyable={{
+            icon: visible
+              ? [<EyeInvisibleOutlined key={1} />, <CopyOutlined key={2} />]
+              : [<EyeOutlined key={1} />, <EyeOutlined key={2} />],
+            onCopy: () => {
+              setVisible(!visible);
+              if (visible)
+                navigator.clipboard.writeText(item.password as string);
+            },
+            tooltips: visible ? ["Hide", "Copied!"] : ["Show", "Hidden"],
+          }}
+        >
+          {visible ? item.password : "********"}
+        </Paragraph>
+      </Col>
+    </Row>
+  );
+};
