@@ -36,7 +36,7 @@ export default function Home() {
     const secret = JSON.stringify(list);
     var encrypted = CryptoJs.AES.encrypt(secret, key).toString();
 
-    fetch("/api/vault", {
+    fetch("/api/setvault", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -44,6 +44,7 @@ export default function Home() {
       body: JSON.stringify({
         status: status,
         vault: encrypted,
+        email: data?.user?.email,
       }),
     })
       .then((res) => res.json())
@@ -54,6 +55,26 @@ export default function Home() {
       });
   };
 
+  useEffect(() => {
+    const key = crypto
+      .createHash("sha512")
+      .update(password, "utf-8")
+      .digest("hex");
+
+    fetch("/api/getvault", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        status: status,
+        email: data?.user?.email,
+        key: key
+      })
+    })
+    .then((res) => res.json())
+    .then((data) => console.log(data))
+  }, [])
 
   useEffect(() => {
     if (status === "unauthenticated") Router.replace("/auth/signin");
