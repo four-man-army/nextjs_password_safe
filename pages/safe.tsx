@@ -1,13 +1,14 @@
 import { Button, Card, Col, Input, Row, Space, Typography } from "antd";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import styles from "../styles/Safe.module.css";
 import {
   EyeOutlined,
   CopyOutlined,
   EyeInvisibleOutlined,
 } from "@ant-design/icons";
+import { PasswordContext } from "../context/usePass";
 
 const { Title, Paragraph } = Typography;
 
@@ -23,15 +24,17 @@ export default function Home() {
   const [list, setList] = useState<ListItem[]>();
   const [listItem, setListItem] = useState<ListItem>();
   const [adding, setAdding] = useState<boolean>(false);
+  const { password } = useContext(PasswordContext);
+  const CryptoJs = require("crypto-js");
 
   const uploadSafe = () => {
-    fetch("/api/vault", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(list),
-    });
+    var key = password;
+    var secret = JSON.stringify(list)
+    var encrypted = CryptoJs.AES.encrypt(secret, key).toString();
+    console.log(encrypted);
+    var decrypt = CryptoJs.AES.decrypt(encrypted, key)
+    console.log(CryptoJs.enc.Utf8.stringify(decrypt));
+    
   };
 
   useEffect(() => {

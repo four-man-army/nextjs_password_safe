@@ -5,6 +5,7 @@ import RootHead from './head'
 import React from 'react'
 import { SessionProvider, useSession } from "next-auth/react";
 import { NextComponentType } from "next";
+import { PasswordContext } from "../context/usePass";
 
 type CustomAppProps = AppProps & {
   Component: NextComponentType & { auth?: boolean };
@@ -14,8 +15,13 @@ export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: CustomAppProps) {
+
+  const [password, setPassword] = React.useState<string>("");
+  const passwordData = React.useMemo(() => ({ password, setPassword: (password: string) => setPassword(password) }), [password]);
+
   return (
     <>
+      <PasswordContext.Provider value={passwordData}>
       <SessionProvider session={session}>
         <RootHead />
         {Component.auth ? (
@@ -29,7 +35,8 @@ export default function App({
             <Component {...pageProps} />
           </RootLayout>
         )}
-      </SessionProvider>
+        </SessionProvider>
+      </PasswordContext.Provider>
     </>
   );
 }

@@ -1,10 +1,11 @@
 import styles from "../../styles/Login.module.css";
 import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction, useContext, useState } from "react";
 import { NextPage } from "next";
 import { signIn } from "next-auth/react";
 import Router, { useRouter } from "next/router";
 import Link from "next/link";
+import { PasswordContext } from "../../context/usePass";
 
 type ValidateStatus = "success" | "warning" | "error" | "validating" | "";
 
@@ -18,6 +19,7 @@ const SignIn: NextPage = (props): JSX.Element => {
   const [successHandle, setSuccessHandle] = useState(false);
   const crypto = require('crypto');
   const redirect = useRouter().query["registered"]
+  const { setPassword } = useContext(PasswordContext);
 
   const onFinish = async (values: any) => {
     if(redirect) Router.replace("/auth/signin");
@@ -36,8 +38,9 @@ const SignIn: NextPage = (props): JSX.Element => {
         setErrorHandle(true);
         setSuccessHandle(false);
       } else {
+        setPassword(values.password);
         setValidAll("success");
-        Router.replace("/");
+        Router.replace("/");     
       }
     }
   };
