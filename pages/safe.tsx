@@ -24,6 +24,16 @@ export default function Home() {
   const [listItem, setListItem] = useState<ListItem>();
   const [adding, setAdding] = useState<boolean>(false);
 
+  const uploadSafe = () => {
+    fetch("/api/vault", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(list),
+    });
+  };
+
   useEffect(() => {
     if (status === "unauthenticated") Router.replace("/auth/signin");
   }, [status]);
@@ -95,7 +105,8 @@ export default function Home() {
                         onClick={() => {
                           setAdding(false);
                           if (list === undefined) setList([{ ...listItem, id: 0 }] as ListItem[]);
-                          else setList([...list, {...listItem, id: list.length} as ListItem] as ListItem[]);
+                          else setList([...list, { ...listItem, id: list.length } as ListItem] as ListItem[]);
+                          uploadSafe();
                         }}
                       >
                         Save
