@@ -99,7 +99,7 @@ const SignIn: NextPage = (props): JSX.Element => {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             onValuesChange={onValuesChange}
-            autoComplete="off"
+            autoComplete="on"
           >
             <Form.Item
               label="Email"
