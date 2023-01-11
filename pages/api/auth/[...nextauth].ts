@@ -82,13 +82,11 @@ const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token.user = {
-                    id: user._id,    //* Ignore Error - It works
-                    name: user.name,
-                    email: user.email
-                }
+                token.userId = user.id;
+                token.email = user.email;
+                token.name = user.name;
             }
-            return Promise.resolve(token);
+            return token;
         },
         session: async ({ session, token }) => {
             if(session){
