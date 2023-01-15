@@ -17,7 +17,7 @@ async function updateVault(vault: string, email: string) {
       const user_id = result[0]._id
       const res2 = await db.collection("users").updateOne(
         { "_id": user_id },
-        { $set: { "encryptedVault": vault } }
+        { $set: { "vault": vault } }
       );
       return res2
     } else {
@@ -42,7 +42,8 @@ export default async function handler(
     if (req.method === 'POST') {
       try {
         const result = await updateVault(vault, email)
-        if (result.aknowledged) res.status(200).json('Vault updated')
+        if (result.acknowledged) res.status(200).json('Vault updated')
+        else res.status(500).json({ error: 'Operation failed' })
       } catch (e: any) {
         res.status(500).json({ error: "Operation failed" })
       }

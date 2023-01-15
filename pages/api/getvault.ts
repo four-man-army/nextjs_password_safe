@@ -1,21 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 const CryptoJs = require("crypto-js");
 
-async function getVault(key: string, email: string) {
+async function getVault(email: string) {
   const { MongoClient, ServerApiVersion } = require("mongodb");
   //const uri = "mongodb+srv://" + process.env.USERS_WRITE + ":" + process.env.USERS_WRITE_PW + process.env.DB_URL + "/?retryWrites=true&w=majority";
-  const uri =
-    "mongodb+srv://" +
-    process.env.TEST_USER +
-    ":" +
-    process.env.TEST_USER_PW +
-    process.env.DB_URL +
-    "/?retryWrites=true&w=majority"; //! Using test db
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverApi: ServerApiVersion.v1,
-  });
+  const uri = "mongodb+srv://" + process.env.TEST_USER + ":" + process.env.TEST_USER_PW + process.env.DB_URL + "/?retryWrites=true&w=majority"; //! Using test db 
+  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
   try {
     await client.connect();
     //const db = client.db(process.env.DB_NAME);
@@ -25,9 +15,8 @@ async function getVault(key: string, email: string) {
     const options = { projection: { _id: 1 } };
     const result = await collection.find(query, options).toArray();
     if (result.length > 0) {
-        var encrypted = result.encryptedVault;
-        var decrypt = CryptoJs.AES.decrypt(encrypted, key);
-        return JSON.parse(CryptoJs.enc.Utf8.stringify(decrypt));
+      const user_id = result[0]._id
+      return await db.collection("users").find({ "_id": user_id }, { projection: { vault: 1, _id: 0 } }).toArray();
     } else {
       return { error: "User not found" };
     }
@@ -42,16 +31,15 @@ export default async function handler(
 ) {
   const { status } = req.body;
   const { email } = req.body;
-  const { key } = req.body;
 
   if (status === "unauthenticated")
     res.status(401).json({ error: "Not authenticated" });
   else {
     if (req.method === "POST") {
       try {
-          const result = await getVault(key, email);
-          console.log(result);
-        if (result.aknowledged) res.status(200).json(result);
+        const result = await getVault(email);
+        if (result) res.status(200).json(result[0].vault);
+        else res.status(500).json({ error: "Operation failed" });
       } catch (e: any) {
         res.status(500).json({ error: "Operation failed" });
       }

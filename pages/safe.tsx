@@ -56,25 +56,35 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const key = crypto
-      .createHash("sha512")
-      .update(password, "utf-8")
-      .digest("hex");
+    if (status === "authenticated") {
+      const key = crypto
+        .createHash("sha512")
+        .update(password, "utf-8")
+        .digest("hex");
 
-    fetch("/api/getvault", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        status: status,
-        email: data?.user?.email,
-        key: key
+      fetch("/api/getvault", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: status,
+          email: data?.user?.email,
+        })
       })
-    })
-    .then((res) => res.json())
-    .then((data) => console.log(data))
-  }, [])
+        .then((res) => res.json())
+        .then((data) => {
+          try{
+            const bytes = CryptoJs.AES.decrypt(data, key)
+            const decrypted = bytes.toString(CryptoJs.enc.Utf8);
+            console.log(decrypted) //! Doesn't work; Returns empty string
+          }
+          catch(err){
+            console.log(err)
+          }
+        })
+    }
+  }, [status])
 
   useEffect(() => {
     if (status === "unauthenticated") Router.replace("/auth/signin");
