@@ -7,6 +7,7 @@ import {
   EyeOutlined,
   CopyOutlined,
   EyeInvisibleOutlined,
+  KeyOutlined
 } from "@ant-design/icons";
 import { PasswordContext } from "../context/usePass";
 import useStorage from "../hooks/useStorage";
@@ -89,7 +90,7 @@ export default function Home() {
   if (status === "authenticated")
     return (
       <>
-        <Title>Password Safe</Title>
+        <Title><KeyOutlined style={{fontSize:"32px", padding:"10px"}}/>Password Safe</Title>
         <div className={styles.container}>
           <Space align="center" className={styles.paper}>
             <Card className={styles.card}>

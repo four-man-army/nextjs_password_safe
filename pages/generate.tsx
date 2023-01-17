@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Typography, Col, InputNumber, Row, Slider, Button, Tooltip, Checkbox } from 'antd';
-import { CopyOutlined, CheckOutlined, RedoOutlined } from '@ant-design/icons';
+import { CopyOutlined, CheckOutlined, RedoOutlined, RobotOutlined } from '@ant-design/icons';
 import { useSession } from "next-auth/react";
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import Router from "next/router";
@@ -73,7 +73,7 @@ export default function Home() {
   if (status === "authenticated")
     return (
       <>
-        <Title>Generate Password</Title>
+        <Title><RobotOutlined style={{fontSize:"32px", padding:"10px"}}/>Generate Password</Title>
         <div className={styles.container}>
           <div className={styles.input}>
             <Title level={4} className={styles.input_title}>Password Length</Title>
