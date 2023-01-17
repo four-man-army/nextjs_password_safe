@@ -1,13 +1,15 @@
 import { Button, Card, Col, Input, Row, Space, Typography } from "antd";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import styles from "../styles/Safe.module.css";
 import {
   EyeOutlined,
   CopyOutlined,
   EyeInvisibleOutlined,
 } from "@ant-design/icons";
+import { PasswordContext } from "../context/usePass";
+import useStorage from "../hooks/useStorage";
 
 const { Title, Paragraph } = Typography;
 
@@ -23,6 +25,62 @@ export default function Home() {
   const [list, setList] = useState<ListItem[]>();
   const [listItem, setListItem] = useState<ListItem>();
   const [adding, setAdding] = useState<boolean>(false);
+  const { password } = useContext(PasswordContext);
+  const { getItem } = useStorage();
+  const CryptoJs = require("crypto-js");
+  var key = password === "" ? getItem("pass") : password;
+
+  useEffect(() => {
+    if (list === undefined) return;
+    var encrypted = ""
+    const secret = JSON.stringify(list);
+    encrypted = CryptoJs.AES.encrypt(secret, key).toString();
+    
+
+    fetch("/api/setvault", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        status: status,
+        vault: encrypted,
+        email: data?.user?.email,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data === "Vault updated") {
+          console.log("Vault updated");
+        }
+      });
+  }, [list])
+
+  useEffect(() => {
+    if (status !== "authenticated") return;
+    fetch("/api/getvault", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        status: status,
+        email: data?.user?.email,
+      })
+    })
+      .then((res) => res.text())
+      .then((data) => {
+        data = data.replace(/"/g, "");
+        try{
+          const bytes = CryptoJs.AES.decrypt(data, key)
+          const decrypted = bytes.toString(CryptoJs.enc.Utf8);
+          setList(JSON.parse(decrypted));
+        }
+        catch(err){
+          console.log(err)
+        }
+      })
+  }, [status])
 
   useEffect(() => {
     if (status === "unauthenticated") Router.replace("/auth/signin");
@@ -94,8 +152,13 @@ export default function Home() {
                         type="primary"
                         onClick={() => {
                           setAdding(false);
-                          if (list === undefined) setList([{ ...listItem, id: 0 }] as ListItem[]);
-                          else setList([...list, {...listItem, id: list.length} as ListItem] as ListItem[]);
+                          if (list === undefined)
+                            setList([{ ...listItem, id: 0 }] as ListItem[]);
+                          else
+                            setList([
+                              ...list,
+                              { ...listItem, id: list.length } as ListItem,
+                            ] as ListItem[]);
                         }}
                       >
                         Save

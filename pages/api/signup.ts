@@ -37,6 +37,23 @@ async function registerUser(email: string, name: string, pw: string) {
   }
 }
 
+async function generateVault(userid: string) {
+  const { MongoClient, ServerApiVersion } = require('mongodb');
+  const uri = "mongodb+srv://" + process.env.USERS_WRITE + ":" + process.env.USERS_WRITE_PW + process.env.DB_URL + "/?retryWrites=true&w=majority";
+  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+  try {
+    await client.connect();
+    const db = client.db(process.env.DB_NAME);
+    return await db.collection('vaults').insertOne({
+      owner_id: userid,
+      content: {
+      },
+    });
+  } finally {
+    await client.close();
+  }
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -51,7 +68,12 @@ export default async function handler(
       if (data.error) {
         res.status(409).json({ error: data.error });
       } else {
-        res.status(200).json(data.acknowledged)
+        try{
+          const vault = await generateVault(data.insertedId)
+          res.status(200).json({user:data.acknowledged,vault:vault.acknowledged})
+        }catch(e:any){
+          res.status(500).json({ error: e })
+        }
       }
     } catch (e: any) {
       if (e === 'Email already in use') {

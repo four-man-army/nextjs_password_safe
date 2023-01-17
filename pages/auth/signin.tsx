@@ -1,10 +1,12 @@
 import styles from "../../styles/Login.module.css";
 import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction, useContext, useState } from "react";
 import { NextPage } from "next";
 import { signIn } from "next-auth/react";
 import Router, { useRouter } from "next/router";
 import Link from "next/link";
+import { PasswordContext } from "../../context/usePass";
+import useStorage from "../../hooks/useStorage";
 
 type ValidateStatus = "success" | "warning" | "error" | "validating" | "";
 
@@ -18,6 +20,8 @@ const SignIn: NextPage = (props): JSX.Element => {
   const [successHandle, setSuccessHandle] = useState(false);
   const crypto = require('crypto');
   const redirect = useRouter().query["registered"]
+  const { setPassword } = useContext(PasswordContext);
+  const { setItem } = useStorage();
 
   const onFinish = async (values: any) => {
     if(redirect) Router.replace("/auth/signin");
@@ -36,8 +40,14 @@ const SignIn: NextPage = (props): JSX.Element => {
         setErrorHandle(true);
         setSuccessHandle(false);
       } else {
+        let key = crypto
+          .createHash("sha256")
+          .update(values.password, "utf-8")
+          .digest("hex");
+        setItem("pass", key);
+        setPassword(key);
         setValidAll("success");
-        Router.replace("/");
+        Router.replace("/");     
       }
     }
   };
@@ -99,7 +109,7 @@ const SignIn: NextPage = (props): JSX.Element => {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             onValuesChange={onValuesChange}
-            autoComplete="off"
+            autoComplete="on"
           >
             <Form.Item
               label="Email"
