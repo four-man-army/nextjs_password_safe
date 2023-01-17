@@ -18,7 +18,8 @@ export default function Home() {
   return (
     <>
       <Title>Home</Title>
-      <Link href="/safe">Password Safe</Link>
+      <Link href="/safe">Password Safe</Link><br/>
+      <Link href="/generate">Password Generator</Link>
     </>
     );
   
