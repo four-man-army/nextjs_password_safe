@@ -9,6 +9,7 @@ import {
   EyeInvisibleOutlined,
 } from "@ant-design/icons";
 import { PasswordContext } from "../context/usePass";
+import useStorage from "../hooks/useStorage";
 
 const { Title, Paragraph } = Typography;
 
@@ -25,16 +26,16 @@ export default function Home() {
   const [listItem, setListItem] = useState<ListItem>();
   const [adding, setAdding] = useState<boolean>(false);
   const { password } = useContext(PasswordContext);
+  const { getItem } = useStorage();
   const CryptoJs = require("crypto-js");
-  const crypto = require("crypto");
+  var key = password === "" ? getItem("pass") : password;
 
-  const uploadSafe = () => {
-    const key = crypto
-      .createHash("sha512")
-      .update(password, "utf-8")
-      .digest("hex");
+  useEffect(() => {
+    if (list === undefined) return;
+    var encrypted = ""
     const secret = JSON.stringify(list);
-    var encrypted = CryptoJs.AES.encrypt(secret, key).toString();
+    encrypted = CryptoJs.AES.encrypt(secret, key).toString();
+    
 
     fetch("/api/setvault", {
       method: "POST",
@@ -53,37 +54,32 @@ export default function Home() {
           console.log("Vault updated");
         }
       });
-  };
+  }, [list])
 
   useEffect(() => {
-    if (status === "authenticated") {
-      const key = crypto
-        .createHash("sha512")
-        .update(password, "utf-8")
-        .digest("hex");
-
-      fetch("/api/getvault", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          status: status,
-          email: data?.user?.email,
-        })
+    if (status !== "authenticated") return;
+    fetch("/api/getvault", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        status: status,
+        email: data?.user?.email,
       })
-        .then((res) => res.json())
-        .then((data) => {
-          try{
-            const bytes = CryptoJs.AES.decrypt(data, key)
-            const decrypted = bytes.toString(CryptoJs.enc.Utf8);
-            console.log(decrypted) //! Doesn't work; Returns empty string
-          }
-          catch(err){
-            console.log(err)
-          }
-        })
-    }
+    })
+      .then((res) => res.text())
+      .then((data) => {
+        data = data.replace(/"/g, "");
+        try{
+          const bytes = CryptoJs.AES.decrypt(data, key)
+          const decrypted = bytes.toString(CryptoJs.enc.Utf8);
+          setList(JSON.parse(decrypted));
+        }
+        catch(err){
+          console.log(err)
+        }
+      })
   }, [status])
 
   useEffect(() => {
@@ -163,7 +159,6 @@ export default function Home() {
                               ...list,
                               { ...listItem, id: list.length } as ListItem,
                             ] as ListItem[]);
-                          uploadSafe();
                         }}
                       >
                         Save
