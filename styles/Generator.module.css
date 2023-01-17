@@ -1,8 +1,7 @@
 .container{
-    box-shadow: 0 6px 16px -8px #00000014, 0 9px 28px #0000000d,
-    0 12px 48px 16px #00000008;
+    box-shadow: 0 6px 16px -8px #00000014, 0 9px 28px #0000000d, 0 12px 48px 16px #00000008;
     text-align: left;
-    padding-bottom: 1vh;
+    padding-bottom: 0.1vh;
 }
 
 .input{
@@ -11,19 +10,25 @@
     padding-top: 2rem;
     text-align: center;
     margin: auto;
-    margin-bottom: 0;
+    margin-left:34vw;
+    margin-bottom: 50px;
 }
 .input_title{
-    margin-right: 200px;
+    margin-right: 350px;
     word-break: keep-all;
 }
 
-.outfield{
-    width: 30vw;
-    min-width: fit-content;
-    height: 20px;
-    padding: 10px;
-    border: 1px solid black;
-    margin-left: 25vw;
+.outbox{
+    margin-top: 20px;
+    margin-left: 35vw;
     margin-bottom: 100px;
+}
+
+.outfield{
+    width: 15vw;
+    padding: 10px;
+    border: 4px solid rgb(202, 202, 202);
+    border-radius: 10px;
+    box-shadow: 0 6px 16px -8px #00000014, 0 9px 28px #0000000d, 0 12px 48px 16px #00000008;
+    word-break: break-all;
 }
