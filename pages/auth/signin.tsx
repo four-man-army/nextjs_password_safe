@@ -6,6 +6,7 @@ import { signIn } from "next-auth/react";
 import Router, { useRouter } from "next/router";
 import Link from "next/link";
 import { PasswordContext } from "../../context/usePass";
+import useStorage from "../../hooks/useStorage";
 
 type ValidateStatus = "success" | "warning" | "error" | "validating" | "";
 
@@ -20,6 +21,7 @@ const SignIn: NextPage = (props): JSX.Element => {
   const crypto = require('crypto');
   const redirect = useRouter().query["registered"]
   const { setPassword } = useContext(PasswordContext);
+  const { setItem } = useStorage();
 
   const onFinish = async (values: any) => {
     if(redirect) Router.replace("/auth/signin");
@@ -42,6 +44,7 @@ const SignIn: NextPage = (props): JSX.Element => {
           .createHash("sha256")
           .update(values.password, "utf-8")
           .digest("hex");
+        setItem("pass", key);
         setPassword(key);
         setValidAll("success");
         Router.replace("/");     

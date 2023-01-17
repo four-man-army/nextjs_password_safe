@@ -9,6 +9,7 @@ import {
   EyeInvisibleOutlined,
 } from "@ant-design/icons";
 import { PasswordContext } from "../context/usePass";
+import useStorage from "../hooks/useStorage";
 
 const { Title, Paragraph } = Typography;
 
@@ -25,12 +26,16 @@ export default function Home() {
   const [listItem, setListItem] = useState<ListItem>();
   const [adding, setAdding] = useState<boolean>(false);
   const { password } = useContext(PasswordContext);
+  const { getItem } = useStorage();
   const CryptoJs = require("crypto-js");
+  var key = password === "" ? getItem("pass") : password;
 
   useEffect(() => {
-    if(list === undefined) return;
+    if (list === undefined) return;
+    var encrypted = ""
     const secret = JSON.stringify(list);
-    var encrypted = CryptoJs.AES.encrypt(secret, password).toString();
+    encrypted = CryptoJs.AES.encrypt(secret, key).toString();
+    
 
     fetch("/api/setvault", {
       method: "POST",
@@ -67,7 +72,7 @@ export default function Home() {
       .then((data) => {
         data = data.replace(/"/g, "");
         try{
-          const bytes = CryptoJs.AES.decrypt(data, password)
+          const bytes = CryptoJs.AES.decrypt(data, key)
           const decrypted = bytes.toString(CryptoJs.enc.Utf8);
           setList(JSON.parse(decrypted));
         }
