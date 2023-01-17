@@ -76,8 +76,8 @@ export default function Home() {
           const decrypted = bytes.toString(CryptoJs.enc.Utf8);
           setList(JSON.parse(decrypted));
         }
-        catch(err){
-          console.log(err)
+        catch{
+          console.log("Failed to decrypt")
         }
       })
   }, [status])
