@@ -38,7 +38,11 @@ const SignIn: NextPage = (props): JSX.Element => {
         setErrorHandle(true);
         setSuccessHandle(false);
       } else {
-        setPassword(values.password);
+        let key = crypto
+          .createHash("sha256")
+          .update(values.password, "utf-8")
+          .digest("hex");
+        setPassword(key);
         setValidAll("success");
         Router.replace("/");     
       }
