@@ -1,0 +1,29 @@
+.container{
+    box-shadow: 0 6px 16px -8px #00000014, 0 9px 28px #0000000d,
+    0 12px 48px 16px #00000008;
+    text-align: left;
+    padding-bottom: 1vh;
+}
+
+.input{
+    width: 30vw;
+    height: 150px;
+    padding-top: 2rem;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 0;
+}
+.input_title{
+    margin-right: 200px;
+    word-break: keep-all;
+}
+
+.outfield{
+    width: 30vw;
+    min-width: fit-content;
+    height: 20px;
+    padding: 10px;
+    border: 1px solid black;
+    margin-left: 25vw;
+    margin-bottom: 100px;
+}
