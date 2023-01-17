@@ -21,7 +21,7 @@ const IntegerStep = () => {
         <Slider
           min={12}
           max={32}
-          onChange={onChange}
+          onChange={(e) => onChange(e)}
           value={typeof inputValue === 'number' ? inputValue : 12}
         />
       </Col>
@@ -31,7 +31,9 @@ const IntegerStep = () => {
           max={20}
           style={{ margin: '0 16px' }}
           value={inputValue}
-          onChange={onChange}
+          onChange={(e) => {
+            if (e !== null) onChange(e);
+          }}
         />
       </Col>
     </Row>
