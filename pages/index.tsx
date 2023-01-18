@@ -1,9 +1,9 @@
 import { Typography } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import Router from "next/router";
 import { useEffect } from "react";
+import styles from "../styles/Home.module.css";
 
 const { Title } = Typography
 
@@ -18,12 +18,24 @@ export default function Home() {
   if (status === "authenticated")
     return (
       <>
-        <div className="title">
-          
-          <Title><HomeOutlined style={{fontSize:"32px", padding:"10px"}}/> Home</Title>
+        <div className={styles.title}>
+
+          <Title><HomeOutlined style={{ fontSize: "32px", padding: "10px" }} /> Home</Title>
         </div>
-        <Link href="/safe">Password Safe</Link><br />
-        <Link href="/generate">Password Generator</Link>
+        <div className={styles.cardContainer}>
+          <div className={styles.card} onClick={() => window.location.href = "/safe"}>
+            <div className={styles.iconContainer}>
+              <img src="/safe.png" alt="safe" className={styles.safe} />
+            </div>
+            <label className={styles.cardTitle}>Safe</label>
+          </div>
+          <div className={styles.card} onClick={() => window.location.href = "/generate"}>
+          <div className={styles.iconContainer}>
+              <img src="/gear.png" alt="safe" className={styles.safe} />
+            </div>
+            <label className={styles.cardTitle}>Generator</label>
+          </div>
+        </div>
       </>
     );
 

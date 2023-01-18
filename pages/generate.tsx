@@ -73,7 +73,7 @@ export default function Home() {
   if (status === "authenticated")
     return (
       <>
-        <Title><RobotOutlined style={{fontSize:"32px", padding:"10px"}}/>Generate Password</Title>
+        <div className={styles.title}><Title><RobotOutlined style={{fontSize:"32px", padding:"10px"}}/>Generate Password</Title></div>
         <div className={styles.container}>
           <div className={styles.input}>
             <Title level={4} className={styles.input_title}>Password Length</Title>

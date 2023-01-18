@@ -17,6 +17,7 @@
 .logoBox {
   text-align: center;
   background-color: rgb(251, 76, 57);
+  margin-bottom: 10px;
 }
 .logo {
   height: 80px;
@@ -39,4 +40,59 @@
 .signout {
   display: flex;
   justify-content: flex-end;
+}
+
+.title{
+  text-align: center;
+}
+
+.cardContainer{
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 60vw;
+  margin: auto;
+  margin-top: 10%;
+}
+
+.card{
+  height: 330px;
+  width: 512px;
+  border: 3px solid #e8e8e8;
+  border-radius: 20px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(26,26,26,.1);
+  transition: all 0.8s;
+  cursor: pointer;
+  color: #1f1d1e;
+}
+.card:hover{
+  background-color: #001529;
+  border: 3px solid #1890ff;
+  transition: all 0.8s;
+}
+.card:hover .iconContainer{
+  filter:brightness(8);
+  transition: all 0.3s;
+}
+.card:hover .cardTitle{
+  transition: all 0.3s;
+  color: rgb(199, 199, 199);
+}
+.cardTitle{
+  margin-top: 10px;
+  font-size: 60px;
+  font-weight: 700;
+  display: block;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.iconContainer{
+  text-align: center;
+  margin-top: 8%;
+  transition: all 0.3s;
+}
+.safe{
+  height: 150px;
 }

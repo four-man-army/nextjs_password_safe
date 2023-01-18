@@ -6,11 +6,12 @@
 
 .input{
     width: 30vw;
+    min-width: fit-content;
     height: 150px;
     padding-top: 2rem;
     text-align: center;
     margin: auto;
-    margin-left:34vw;
+    margin-left:38vw;
     margin-bottom: 50px;
 }
 .input_title{
@@ -19,8 +20,9 @@
 }
 
 .outbox{
+    min-width: fit-content;
     margin-top: 20px;
-    margin-left: 35vw;
+    margin-left: 39vw;
     margin-bottom: 100px;
 }
 
@@ -31,4 +33,8 @@
     border-radius: 10px;
     box-shadow: 0 6px 16px -8px #00000014, 0 9px 28px #0000000d, 0 12px 48px 16px #00000008;
     word-break: break-all;
+}
+
+.title{
+    text-align: center;
 }

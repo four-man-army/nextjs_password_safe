@@ -1,4 +1,5 @@
-import { Button, Card, Col, Input, Row, Space, Typography } from "antd";
+import { Button, Card, Col, Input, Row, Space, Typography, Tooltip } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 import React, { useContext, useEffect, useReducer, useState } from "react";
@@ -31,12 +32,18 @@ export default function Home() {
   const CryptoJs = require("crypto-js");
   var key = password === "" ? getItem("pass") : password;
 
+  const deleteHandle = (e: number) => {
+    list?.splice(e, 1);
+    setList([...list!]);
+  };
+
+
   useEffect(() => {
     if (list === undefined) return;
     var encrypted = ""
     const secret = JSON.stringify(list);
     encrypted = CryptoJs.AES.encrypt(secret, key).toString();
-    
+
 
     fetch("/api/setvault", {
       method: "POST",
@@ -55,6 +62,7 @@ export default function Home() {
           console.log("Vault updated");
         }
       });
+      if (list.length === 0) setList(undefined);
   }, [list])
 
   useEffect(() => {
@@ -72,12 +80,12 @@ export default function Home() {
       .then((res) => res.text())
       .then((data) => {
         data = data.replace(/"/g, "");
-        try{
+        try {
           const bytes = CryptoJs.AES.decrypt(data, key)
           const decrypted = bytes.toString(CryptoJs.enc.Utf8);
           setList(JSON.parse(decrypted));
         }
-        catch(err){
+        catch (err) {
           console.log(err)
         }
       })
@@ -87,10 +95,47 @@ export default function Home() {
     if (status === "unauthenticated") Router.replace("/auth/signin");
   }, [status]);
 
+  const Node: React.FC<{ item: ListItem }> = ({ item }) => {
+    const [visible, setVisible] = useState<boolean>(false);
+
+    return (
+      <Row className={styles.row} key={item.id} gutter={48}>
+        <Col span={8}>
+          <Paragraph>{item.title}</Paragraph>
+        </Col>
+        <Col span={8}>
+          <Paragraph>{item.user}</Paragraph>
+        </Col>
+        <Col span={8}>
+          <Paragraph
+            className={!visible ? styles.hide : styles.show}
+            copyable={{
+              icon: visible
+                ? [<EyeInvisibleOutlined key={1} />, <CopyOutlined key={2} />]
+                : [<EyeOutlined key={1} />, <EyeOutlined key={2} />],
+              onCopy: () => {
+                setVisible(!visible);
+                if (visible)
+                  navigator.clipboard.writeText(item.password as string);
+              },
+              tooltips: visible ? ["Hide", "Copied!"] : ["Show", "Hidden"],
+            }}
+          >
+            <span style={{ paddingRight: "10px" }}>{visible ? item.password : "***************"}</span>
+            <Tooltip title={"Delete"}>
+              <Button type="link" shape="round" size='small' icon={<DeleteOutlined style={{ fontSize: '15px' }} onClick={() => deleteHandle(item.id)} />}
+                style={{ marginLeft: "20px", position: "absolute" }} />
+            </Tooltip>
+          </Paragraph>
+        </Col>
+      </Row>
+    );
+  };
+
   if (status === "authenticated")
     return (
       <>
-        <Title><KeyOutlined style={{fontSize:"32px", padding:"10px"}}/>Password Safe</Title>
+        <div className={styles.title}><Title><KeyOutlined style={{ fontSize: "32px", padding: "10px" }} />Password Safe</Title></div>
         <div className={styles.container}>
           <Space align="center" className={styles.paper}>
             <Card className={styles.card}>
@@ -153,12 +198,12 @@ export default function Home() {
                         type="primary"
                         onClick={() => {
                           setAdding(false);
-                          if (list === undefined)
+                          if (list === undefined || list.length === 0)
                             setList([{ ...listItem, id: 0 }] as ListItem[]);
                           else
                             setList([
                               ...list,
-                              { ...listItem, id: list.length } as ListItem,
+                              { ...listItem, id: list[list.length - 1].id + 1 } as ListItem,
                             ] as ListItem[]);
                         }}
                       >
@@ -189,35 +234,5 @@ export default function Home() {
   return <div>loading...</div>;
 }
 
-const Node: React.FC<{ item: ListItem }> = ({ item }) => {
-  const [visible, setVisible] = useState<boolean>(false);
 
-  return (
-    <Row className={styles.row} key={item.id} gutter={48}>
-      <Col span={8}>
-        <Paragraph>{item.title}</Paragraph>
-      </Col>
-      <Col span={8}>
-        <Paragraph>{item.user}</Paragraph>
-      </Col>
-      <Col span={8}>
-        <Paragraph
-          className={!visible ? styles.hide : styles.show}
-          copyable={{
-            icon: visible
-              ? [<EyeInvisibleOutlined key={1} />, <CopyOutlined key={2} />]
-              : [<EyeOutlined key={1} />, <EyeOutlined key={2} />],
-            onCopy: () => {
-              setVisible(!visible);
-              if (visible)
-                navigator.clipboard.writeText(item.password as string);
-            },
-            tooltips: visible ? ["Hide", "Copied!"] : ["Show", "Hidden"],
-          }}
-        >
-          {visible ? item.password : "********"}
-        </Paragraph>
-      </Col>
-    </Row>
-  );
-};
+
