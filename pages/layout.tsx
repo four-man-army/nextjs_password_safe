@@ -15,7 +15,7 @@ import Link from "next/link";
 
 const { Header, Sider, Content } = Layout;
 
-export default function RootLayout({ children }: { children: ReactNode}): JSX.Element {
+export default function RootLayout({ children }: { children: ReactNode }): JSX.Element {
   const [collapsed, setCollapsed] = useState(true);
   const {
     token: { colorBgContainer },
@@ -33,7 +33,9 @@ export default function RootLayout({ children }: { children: ReactNode}): JSX.El
     <div className={styles.app}>
       <Layout>
         <Sider trigger={null} collapsible collapsed={collapsed}>
-          <div className={styles.logo} />
+            <div className={styles.logoBox}>
+              <img src="/logo.jpeg" alt="logo" className={styles.logo} />
+            </div>
           <Menu
             theme="dark"
             mode="inline"
