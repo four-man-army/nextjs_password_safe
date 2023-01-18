@@ -47,10 +47,10 @@ export default function Home() {
   };
   const redoHandle = () => {
     setPw(genPw(inputValue, checked));
-    for(let i = 0; i < 360; i++) {
+    for (let i = 0; i < 360; i++) {
       setTimeout(() => {
         setRotate(i);
-      }, 0.8*i);
+      }, 0.8 * i);
     }
   };
 
@@ -73,7 +73,7 @@ export default function Home() {
   if (status === "authenticated")
     return (
       <>
-        <div className={styles.title}><Title><RobotOutlined style={{fontSize:"32px", padding:"10px"}}/>Generate Password</Title></div>
+        <div className={styles.title}><Title><RobotOutlined style={{ fontSize: "32px", padding: "10px" }} />Generate Password</Title></div>
         <div className={styles.container}>
           <div className={styles.input}>
             <Title level={4} className={styles.input_title}>Password Length</Title>
@@ -108,23 +108,23 @@ export default function Home() {
               copied ? (
                 <Tooltip title={"Copied!"}>
                   <Button type="primary" shape="round" size='large' icon={<CheckOutlined style={{ fontSize: '17px' }} />}
-                    style={{ marginTop: "20px", marginLeft: "120px", marginRight: "30px" }} />
+                    style={{ marginTop: "20px", marginRight: "30px" }} />
                 </Tooltip>
               ) : (
                 <Tooltip title={"Copy to clipboard"}>
                   <Button type="primary" shape="round" size='large' icon={<CopyOutlined style={{ fontSize: '17px' }} />}
-                    style={{ marginTop: "20px", marginLeft: "120px", marginRight: "30px" }} onClick={() => copyHandle()} />
+                    style={{ marginTop: "20px", marginRight: "30px" }} onClick={() => copyHandle()} />
                 </Tooltip>
               )
             }
             <Tooltip title={"Generate New"}>
               <Button type="primary" shape="round" size='large' icon={<RedoOutlined rotate={rotate} style={{ fontSize: '17px' }} />}
-                style={{ marginTop: "20px" }} onClick={() => redoHandle()} />
+                style={{ marginTop: "20px", marginRight: "35vw"  }} onClick={() => redoHandle()} />
             </Tooltip>
           </div>
         </div>
       </>
     );
 
-  return <div className={styles.loading}><LoadingOutlined style={{fontSize: "80px"}}/></div>;
+  return <div className={styles.loading}><LoadingOutlined style={{ fontSize: "80px" }} /></div>;
 }

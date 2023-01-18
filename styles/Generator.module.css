@@ -2,6 +2,8 @@
     box-shadow: 0 6px 16px -8px #00000014, 0 9px 28px #0000000d, 0 12px 48px 16px #00000008;
     text-align: left;
     padding-bottom: 0.1vh;
+    align-items: center;
+    align-self: center;
 }
 
 .input{
@@ -24,6 +26,8 @@
     margin-top: 20px;
     margin-left: 39vw;
     margin-bottom: 100px;
+    text-align: center;
+    align-items: center;
 }
 
 .outfield{

@@ -23,7 +23,7 @@ export default function Home() {
           <Title><HomeOutlined style={{ fontSize: "32px", padding: "10px" }} /> Home</Title>
         </div>
         <div className={styles.cardContainer}>
-          <div className={styles.card} onClick={() => window.location.href = "/safe"}>
+          <div className={styles.card} onClick={() => window.location.href = "/safe"} style={{marginRight:"5vw"}}>
             <div className={styles.iconContainer}>
               <img src="/safe.png" alt="safe" className={styles.safe} />
             </div>

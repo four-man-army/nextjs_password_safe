@@ -1,5 +1,5 @@
 .app {
-  height: 100vh;
+  height: 100%;
 }
 
 .trigger {
@@ -39,15 +39,19 @@
 .cardContainer{
   display: flex;
   justify-content: space-around;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   width: 60vw;
   margin: auto;
-  margin-top: 10%;
+  margin-top: 5%;
+  align-items: center;
 }
 
 .card{
-  height: 330px;
-  width: 512px;
+  height: 40vh;
+  min-height: 350px;
+  width: 29vw;
+  max-width: 470px;
+  max-width: 326px;
   border: 3px solid #e8e8e8;
   border-radius: 20px;
   background-color: #fff;
@@ -80,7 +84,7 @@
 }
 .iconContainer{
   text-align: center;
-  margin-top: 8%;
+  margin-top: 8vh;
   transition: all 0.3s;
 }
 .safe{
