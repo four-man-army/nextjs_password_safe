@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Typography, Col, InputNumber, Row, Slider, Button, Tooltip, Checkbox } from 'antd';
-import { CopyOutlined, CheckOutlined, RedoOutlined } from '@ant-design/icons';
+import { CopyOutlined, CheckOutlined, RedoOutlined, RobotOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useSession } from "next-auth/react";
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import Router from "next/router";
@@ -47,10 +47,10 @@ export default function Home() {
   };
   const redoHandle = () => {
     setPw(genPw(inputValue, checked));
-    for(let i = 0; i < 360; i++) {
+    for (let i = 0; i < 360; i++) {
       setTimeout(() => {
         setRotate(i);
-      }, 0.8*i);
+      }, 0.8 * i);
     }
   };
 
@@ -73,17 +73,18 @@ export default function Home() {
   if (status === "authenticated")
     return (
       <>
-        <Title>Generate Password</Title>
+        <div className={styles.title}><Title><RobotOutlined style={{ fontSize: "32px", padding: "10px" }} />Generate Password</Title></div>
         <div className={styles.container}>
           <div className={styles.input}>
             <Title level={4} className={styles.input_title}>Password Length</Title>
-            <Row>
+            <Row style={{justifyContent: "space-between"}}>
               <Col span={12}>
                 <Slider
                   min={12}
                   max={32}
-                  onChange={(e) => { if (e !== null) setInputValue(e); }}
+                  onChange={(e: number) => { if (e !== null) setInputValue(e); }}
                   value={typeof inputValue === 'number' ? inputValue : 12}
+                  style={{ width: "30vw"}}
                 />
               </Col>
               <Col span={4}>
@@ -96,7 +97,7 @@ export default function Home() {
                 />
               </Col>
             </Row>
-            <Checkbox checked={checked} onChange={onCheckBoxChange} style={{ marginRight: "330px" }}>
+            <Checkbox checked={checked} onChange={onCheckBoxChange}>
               Include special characters (e.g. !@#$...)
             </Checkbox>
           </div>
@@ -104,27 +105,29 @@ export default function Home() {
             <div className={styles.outfield}>
               {pw}
             </div>
+            <div className={styles.button}>
             {
               copied ? (
                 <Tooltip title={"Copied!"}>
                   <Button type="primary" shape="round" size='large' icon={<CheckOutlined style={{ fontSize: '17px' }} />}
-                    style={{ marginTop: "20px", marginLeft: "120px", marginRight: "30px" }} />
+                    style={{ marginTop: "20px" }} />
                 </Tooltip>
               ) : (
                 <Tooltip title={"Copy to clipboard"}>
                   <Button type="primary" shape="round" size='large' icon={<CopyOutlined style={{ fontSize: '17px' }} />}
-                    style={{ marginTop: "20px", marginLeft: "120px", marginRight: "30px" }} onClick={() => copyHandle()} />
+                    style={{ marginTop: "20px" }} onClick={() => copyHandle()} />
                 </Tooltip>
-              )
-            }
+                )
+              }
             <Tooltip title={"Generate New"}>
               <Button type="primary" shape="round" size='large' icon={<RedoOutlined rotate={rotate} style={{ fontSize: '17px' }} />}
                 style={{ marginTop: "20px" }} onClick={() => redoHandle()} />
             </Tooltip>
+                </div>
           </div>
         </div>
       </>
     );
 
-  return <div>loading...</div>;
+  return <div className={styles.loading}><LoadingOutlined style={{ fontSize: "80px" }} /></div>;
 }

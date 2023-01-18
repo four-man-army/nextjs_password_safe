@@ -10,7 +10,7 @@ test.describe("password list", () => {
         await page.getByLabel("Password").click();
         await page.getByLabel("Password").fill(process.env.PASSWORD as string);
         await page.getByLabel("Password").press("Enter");
-        await page.getByRole('main').getByRole('link', { name: 'Password Safe' }).click();
+        await page.locator('div').filter({ hasText: 'Safe' }).nth(4).click();
     });
     test("add password", async ({ page }) => {
         await page.getByRole("button", { name: "+ Add" }).click();

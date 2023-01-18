@@ -2,26 +2,40 @@
     box-shadow: 0 6px 16px -8px #00000014, 0 9px 28px #0000000d, 0 12px 48px 16px #00000008;
     text-align: left;
     padding-bottom: 0.1vh;
+    align-items: center;
+    align-self: center;
 }
 
 .input{
-    width: 30vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: fit-content;
     height: 150px;
     padding-top: 2rem;
     text-align: center;
     margin: auto;
-    margin-left:34vw;
-    margin-bottom: 50px;
 }
 .input_title{
-    margin-right: 350px;
-    word-break: keep-all;
+    display: flex;
+    justify-content: center;
 }
 
 .outbox{
+    display: flex;
+    flex-direction: column;
+    min-width: fit-content;
     margin-top: 20px;
-    margin-left: 35vw;
     margin-bottom: 100px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.button{
+    display: flex;
+    gap: 10px;
 }
 
 .outfield{
@@ -32,3 +46,14 @@
     box-shadow: 0 6px 16px -8px #00000014, 0 9px 28px #0000000d, 0 12px 48px 16px #00000008;
     word-break: break-all;
 }
+
+.title{
+    text-align: center;
+}
+
+.loading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+  }
