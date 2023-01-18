@@ -77,13 +77,14 @@ export default function Home() {
         <div className={styles.container}>
           <div className={styles.input}>
             <Title level={4} className={styles.input_title}>Password Length</Title>
-            <Row>
+            <Row style={{justifyContent: "space-between"}}>
               <Col span={12}>
                 <Slider
                   min={12}
                   max={32}
                   onChange={(e: number) => { if (e !== null) setInputValue(e); }}
                   value={typeof inputValue === 'number' ? inputValue : 12}
+                  style={{ width: "30vw"}}
                 />
               </Col>
               <Col span={4}>
@@ -96,7 +97,7 @@ export default function Home() {
                 />
               </Col>
             </Row>
-            <Checkbox checked={checked} onChange={onCheckBoxChange} style={{ marginRight: "330px" }}>
+            <Checkbox checked={checked} onChange={onCheckBoxChange}>
               Include special characters (e.g. !@#$...)
             </Checkbox>
           </div>
@@ -104,23 +105,25 @@ export default function Home() {
             <div className={styles.outfield}>
               {pw}
             </div>
+            <div className={styles.button}>
             {
               copied ? (
                 <Tooltip title={"Copied!"}>
                   <Button type="primary" shape="round" size='large' icon={<CheckOutlined style={{ fontSize: '17px' }} />}
-                    style={{ marginTop: "20px", marginRight: "30px" }} />
+                    style={{ marginTop: "20px" }} />
                 </Tooltip>
               ) : (
                 <Tooltip title={"Copy to clipboard"}>
                   <Button type="primary" shape="round" size='large' icon={<CopyOutlined style={{ fontSize: '17px' }} />}
-                    style={{ marginTop: "20px", marginRight: "30px" }} onClick={() => copyHandle()} />
+                    style={{ marginTop: "20px" }} onClick={() => copyHandle()} />
                 </Tooltip>
-              )
-            }
+                )
+              }
             <Tooltip title={"Generate New"}>
               <Button type="primary" shape="round" size='large' icon={<RedoOutlined rotate={rotate} style={{ fontSize: '17px' }} />}
-                style={{ marginTop: "20px", marginRight: "35vw"  }} onClick={() => redoHandle()} />
+                style={{ marginTop: "20px" }} onClick={() => redoHandle()} />
             </Tooltip>
+                </div>
           </div>
         </div>
       </>

@@ -7,27 +7,35 @@
 }
 
 .input{
-    width: 30vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     min-width: fit-content;
     height: 150px;
     padding-top: 2rem;
     text-align: center;
     margin: auto;
-    margin-left:38vw;
-    margin-bottom: 50px;
 }
 .input_title{
-    margin-right: 350px;
-    word-break: keep-all;
+    display: flex;
+    justify-content: center;
 }
 
 .outbox{
+    display: flex;
+    flex-direction: column;
     min-width: fit-content;
     margin-top: 20px;
-    margin-left: 39vw;
     margin-bottom: 100px;
     text-align: center;
     align-items: center;
+    justify-content: center;
+}
+
+.button{
+    display: flex;
+    gap: 10px;
 }
 
 .outfield{
