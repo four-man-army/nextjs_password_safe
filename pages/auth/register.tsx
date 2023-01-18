@@ -116,16 +116,17 @@ const Register = (): JSX.Element => {
                 { required: true, message: "Please input your username!" },
                 {
                   min: 4,
-                  message: "Username must be at least 4 characters long",
+                  max: 20,
+                  message: "Username must be 4-20 characters long",
                 },
                 () => ({
                   validator(_, value) {
-                    if (value.length >= 4) {
+                    if (value.length >= 4 && value.length <= 20) {
                       setValidName("success");
                       return Promise.resolve();
                     }
-                    setValidName("warning")
-                    return Promise.reject()
+                    setValidName("warning");
+                    return Promise.reject();
                   },
                 }),
               ]}
@@ -167,14 +168,15 @@ const Register = (): JSX.Element => {
               hasFeedback
               rules={[
                 { required: true, message: "Please input your password!" },
+                {min: 8, message: "Password must be at least 8 characters long"},
                 {
                   pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\+!@#\$%\^&\*])/,
-                  message: "password must contain at least one uppercase letter, one number, and one special character",
+                  message: "Password must contain at least one uppercase letter, one number, and one special character",
                 },
                 () => ({
                   validator(_, value) {
                     const regex = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\+!@#\$%\^&\*])/);
-                    if (regex.test(value)) {
+                    if (regex.test(value) && value.length >= 8) {
                       setValidPw("success");
                       return Promise.resolve();
                     }
