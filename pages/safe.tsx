@@ -1,5 +1,5 @@
 import { Button, Card, Col, Input, Row, Space, Typography, Tooltip } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 import React, { useContext, useEffect, useReducer, useState } from "react";
@@ -231,7 +231,7 @@ export default function Home() {
       </>
     );
 
-  return <div>loading...</div>;
+  return <div className={styles.loading}><LoadingOutlined style={{fontSize: "80px"}}/></div>;
 }
 
 

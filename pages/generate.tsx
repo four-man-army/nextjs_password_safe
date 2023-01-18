@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Typography, Col, InputNumber, Row, Slider, Button, Tooltip, Checkbox } from 'antd';
-import { CopyOutlined, CheckOutlined, RedoOutlined, RobotOutlined } from '@ant-design/icons';
+import { CopyOutlined, CheckOutlined, RedoOutlined, RobotOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useSession } from "next-auth/react";
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import Router from "next/router";
@@ -82,7 +82,7 @@ export default function Home() {
                 <Slider
                   min={12}
                   max={32}
-                  onChange={(e) => { if (e !== null) setInputValue(e); }}
+                  onChange={(e: number) => { if (e !== null) setInputValue(e); }}
                   value={typeof inputValue === 'number' ? inputValue : 12}
                 />
               </Col>
@@ -126,5 +126,5 @@ export default function Home() {
       </>
     );
 
-  return <div>loading...</div>;
+  return <div className={styles.loading}><LoadingOutlined style={{fontSize: "80px"}}/></div>;
 }

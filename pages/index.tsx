@@ -1,5 +1,5 @@
 import { Typography } from "antd";
-import { HomeOutlined } from "@ant-design/icons";
+import { HomeOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 import { useEffect } from "react";
@@ -39,5 +39,5 @@ export default function Home() {
       </>
     );
 
-  return <div>loading...</div>
+  return <div className={styles.loading}><LoadingOutlined style={{fontSize: "80px"}}/></div>
 }

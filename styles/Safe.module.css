@@ -44,3 +44,10 @@
 .title{
   text-align: center;
 }
+
+.loading{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
