@@ -33,15 +33,9 @@ export default function RootLayout({ children }: { children: ReactNode }): JSX.E
     <div className={styles.app}>
       <Layout>
         <Sider trigger={null} collapsible collapsed={collapsed}>
-          {collapsed ? (
             <div className={styles.logoBox}>
-              <img src="/icon.jfif" alt="logo" className={styles.logo} />
+              <img src="/logo.jpeg" alt="logo" className={styles.logo} />
             </div>
-          ) : (
-            <div className={styles.logoBox}>
-              <img src="/icon.jfif" alt="logo" className={styles.logo2} />
-            </div>)
-          }
           <Menu
             theme="dark"
             mode="inline"
