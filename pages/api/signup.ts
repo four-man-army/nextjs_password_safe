@@ -37,23 +37,6 @@ async function registerUser(email: string, name: string, pw: string) {
   }
 }
 
-async function generateVault(userid: string) {
-  const { MongoClient, ServerApiVersion } = require('mongodb');
-  const uri = "mongodb+srv://" + process.env.USERS_WRITE + ":" + process.env.USERS_WRITE_PW + process.env.DB_URL + "/?retryWrites=true&w=majority";
-  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-  try {
-    await client.connect();
-    const db = client.db(process.env.DB_NAME);
-    return await db.collection('vaults').insertOne({
-      owner_id: userid,
-      content: {
-      },
-    });
-  } finally {
-    await client.close();
-  }
-}
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -63,25 +46,16 @@ export default async function handler(
   const { password } = req.body
 
   if (req.method === 'POST') {
-    try {
       const data = await registerUser(email, name, password)
-      if (data.error) {
-        res.status(409).json({ error: data.error });
-      } else {
-        try{
-          const vault = await generateVault(data.insertedId)
-          res.status(200).json({user:data.acknowledged,vault:vault.acknowledged})
-        }catch(e:any){
-          res.status(500).json({ error: e })
-        }
+      if (data.error === "Email already in use") {
+        res.status(409).json({ error: "Email already in use"});
+      } 
+      if (data.acknowledged){
+        res.status(200).json(data.acknowledged)
       }
-    } catch (e: any) {
-      if (e === 'Email already in use') {
-        res.status(500).json({ error: e })
-      } else {
-        res.status(500).json({ error: 'Something went wrong' })
+      else{
+        res.status(500).json({ error: "Something went wrong" })
       }
-    }
   } else {
     res.status(405).json({ error: 'Only POST is supported' })
   }
