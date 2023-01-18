@@ -14,27 +14,17 @@
   color: #1890ff;
 }
 
-.logoBox {
-  text-align: center;
-  background-color: rgb(251, 76, 57);
-  margin-bottom: 10px;
+.logoBox{
+  display: flex;
+  justify-content: center;
+  height: 32px;
+  margin: 16px;
+  background: #f8412f;
 }
+
 .logo {
-  height: 80px;
-  animation-name: logo;
-  animation-duration: 0.226s;
-}
-@keyframes logo {
-  from {height: 200px;}
-  to {height: 80px;}
-}
-.logo2 {
-  animation-name: logo2;
-  animation-duration: 0.224s;
-}
-@keyframes logo2 {
-  from {height: 80px;}
-  to {height: 200px;}
+  height: 32px;
+  margin: auto;
 }
 
 .signout {
