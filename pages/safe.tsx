@@ -1,5 +1,5 @@
 import { Button, Card, Col, Input, Row, Space, Typography, Tooltip } from "antd";
-import { DeleteOutlined, LoadingOutlined } from "@ant-design/icons";
+import { DeleteOutlined, LoadingOutlined, CheckOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 import React, { useContext, useEffect, useReducer, useState } from "react";
@@ -32,11 +32,11 @@ export default function Home() {
   const CryptoJs = require("crypto-js");
   var key = password === "" ? getItem("pass") : password;
 
+
   const deleteHandle = (e: number) => {
     list?.splice(e, 1);
     setList([...list!]);
   };
-
 
   useEffect(() => {
     if (list === undefined) return;
@@ -62,7 +62,7 @@ export default function Home() {
           console.log("Vault updated");
         }
       });
-      if (list.length === 0) setList(undefined);
+    if (list.length === 0) setList(undefined);
   }, [list])
 
   useEffect(() => {
@@ -85,7 +85,7 @@ export default function Home() {
           const decrypted = bytes.toString(CryptoJs.enc.Utf8);
           setList(JSON.parse(decrypted));
         }
-        catch{
+        catch {
           console.log("Failed to decrypt")
         }
       })
@@ -95,8 +95,22 @@ export default function Home() {
     if (status === "unauthenticated") Router.replace("/auth/signin");
   }, [status]);
 
+  
+
   const Node: React.FC<{ item: ListItem }> = ({ item }) => {
     const [visible, setVisible] = useState<boolean>(false);
+    const [copy, setCopy] = useState<boolean>(false);
+    const copyHandle = (e: number) => {
+      navigator.clipboard.writeText(list![e].password);
+      setCopy(true);
+    };
+    useEffect(() => {
+      if (copy) {
+        setTimeout(() => {
+          setCopy(false);
+        }, 1000);
+      }
+    }, [copy]);
 
     return (
       <Row className={styles.row} key={item.id} gutter={48}>
@@ -107,26 +121,39 @@ export default function Home() {
           <Paragraph>{item.user}</Paragraph>
         </Col>
         <Col span={8}>
-          <Paragraph
-            className={!visible ? styles.hide : styles.show}
-            copyable={{
-              icon: visible
-                ? [<EyeInvisibleOutlined key={1} />, <CopyOutlined key={2} />]
-                : [<EyeOutlined key={1} />, <EyeOutlined key={2} />],
-              onCopy: () => {
-                setVisible(!visible);
-                if (visible)
-                  navigator.clipboard.writeText(item.password as string);
-              },
-              tooltips: visible ? ["Hide", "Copied!"] : ["Show", "Hidden"],
-            }}
-          >
-            <span style={{ paddingRight: "10px" }}>{visible ? item.password : "***************"}</span>
-            <Tooltip title={"Delete"}>
-              <Button type="link" shape="round" size='small' icon={<DeleteOutlined style={{ fontSize: '15px' }} onClick={() => deleteHandle(item.id)} />}
-                style={{ marginLeft: "20px", position: "absolute" }} />
-            </Tooltip>
-          </Paragraph>
+          <span style={{ paddingRight: "10px" }}>{visible ? item.password : "***************"}</span>
+          {visible ?
+            (
+              <Tooltip title={"Hide"}>
+                <Button type="link" shape="round" size='small' icon={<EyeInvisibleOutlined style={{ fontSize: '15px' }} onClick={() => setVisible(!visible)} />}
+                  style={{ marginLeft: "-10px", position: "absolute" }} />
+              </Tooltip>
+            ) :
+            (
+              <Tooltip title={"Show"}>
+                <Button type="link" shape="round" size='small' icon={<EyeOutlined style={{ fontSize: '15px' }} onClick={() => setVisible(!visible)} />}
+                  style={{ marginLeft: "-10px", position: "absolute" }} />
+              </Tooltip>
+            )
+          }
+          {copy ?
+            (
+              <Tooltip title={"Copied"}>
+                <Button type="link" shape="round" size='small' icon={<CheckOutlined style={{ fontSize: '15px' }} />}
+                  style={{ marginLeft: "15px", position: "absolute" }} />
+              </Tooltip>
+            ) :
+            (
+              <Tooltip title={"Copy"}>
+                <Button type="link" shape="round" size='small' icon={<CopyOutlined style={{ fontSize: '15px' }} onClick={() => copyHandle(item.id)} />}
+                  style={{ marginLeft: "15px", position: "absolute" }} />
+              </Tooltip>
+            )
+          }
+          <Tooltip title={"Delete"}>
+            <Button type="link" shape="round" size='small' icon={<DeleteOutlined style={{ fontSize: '15px' }} onClick={() => deleteHandle(item.id)} />}
+              style={{ marginLeft: "40px", position: "absolute" }} />
+          </Tooltip>
         </Col>
       </Row>
     );
@@ -231,7 +258,7 @@ export default function Home() {
       </>
     );
 
-  return <div className={styles.loading}><LoadingOutlined style={{fontSize: "80px"}}/></div>;
+  return <div className={styles.loading}><LoadingOutlined style={{ fontSize: "80px" }} /></div>;
 }
 
 
