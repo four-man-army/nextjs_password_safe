@@ -15,7 +15,11 @@ import Link from "next/link";
 
 const { Header, Sider, Content } = Layout;
 
-export default function RootLayout({ children }: { children: ReactNode }): JSX.Element {
+export default function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}): JSX.Element {
   const [collapsed, setCollapsed] = useState(true);
   const {
     token: { colorBgContainer },
@@ -30,8 +34,14 @@ export default function RootLayout({ children }: { children: ReactNode }): JSX.E
   const { status, data } = useSession();
 
   return (
-    <>
-      {children}
-    </>
+    <div className="h-screen">
+      <section className="flex flex-row h-full">
+        <aside className="w-20 bg-blue-950"></aside>
+        <section className="flex flex-col w-full bg-slate-100">
+          <header className="h-16 bg-white"></header>
+          <main className="my-6 mx-4 p-6 h-full bg-white">{children}</main>
+        </section>
+      </section>
+    </div>
   );
 }
