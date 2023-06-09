@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import React from "react";
 import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
+import NavbarToggle from "@/components/NavbarToggle";
 
 export default function RootLayout({
   children,
@@ -15,7 +16,9 @@ export default function RootLayout({
         <section className="flex flex-row h-full">
           <Navbar />
           <section className="flex flex-col w-full bg-slate-100">
-            <header className="h-16 bg-white"></header>
+            <header className="h-16 bg-white">
+              <NavbarToggle />
+            </header>
             <main className="my-6 mx-4 p-6 h-full bg-white">{children}</main>
           </section>
         </section>
