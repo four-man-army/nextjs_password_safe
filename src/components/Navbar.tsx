@@ -2,6 +2,8 @@ import { NavbarOpenContext } from "@/context/NavbarOpen";
 import { FC, useContext } from "react";
 import { Home, Key, Bot } from "lucide-react";
 import { useRouter } from "next/router";
+import Link from "next/link";
+import Image from "next/image";
 
 interface NavbarProps {}
 
@@ -14,12 +16,12 @@ const Navbar: FC<NavbarProps> = ({}) => {
         navbarOpen ? "w-52" : "w-20"
       } bg-blue-950 transition-all duration-300`}
     >
-      <div className="flex h-6 m-4 bg-red-500 justify-center">
-        <img src="/logo.jpeg" alt="" />
+      <div className="flex h-6 m-4 bg-red-500 justify-center relative">
+        <Image src="/logo.jpeg" alt="logo" width={24} height={24}/>
       </div>
       <ul className="w-full text-slate-300 text-sm">
         <li className="h-full w-full">
-          <a
+          <Link
             href="/"
             className={`flex m-1 px-6 gap-2 justify-end h-10 rounded-lg hover:text-white transition-all ${
               router.pathname === "/" ? "bg-blue-500" : "bg-transparent"
@@ -35,10 +37,10 @@ const Navbar: FC<NavbarProps> = ({}) => {
             >
               Home
             </span>
-          </a>
+          </Link>
         </li>
         <li className="h-full w-full">
-          <a
+          <Link
             href="/safe"
             className={`flex m-1 px-6 gap-2 justify-end h-10 rounded-lg hover:text-white transition-all ${
               router.pathname === "/safe" ? "bg-blue-500" : "bg-transparent"
@@ -54,10 +56,10 @@ const Navbar: FC<NavbarProps> = ({}) => {
             >
               Password Safe
             </span>
-          </a>
+          </Link>
         </li>
         <li className="h-full w-full">
-          <a
+          <Link
             href="/generate"
             className={`flex m-1 px-6 gap-2 justify-end h-10 rounded-lg hover:text-white transition-all ${
               router.pathname === "/generate" ? "bg-blue-500" : "bg-transparent"
@@ -73,7 +75,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
             >
               Password Genrator
             </span>
-          </a>
+          </Link>
         </li>
       </ul>
     </aside>
