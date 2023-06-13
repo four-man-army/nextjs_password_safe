@@ -1,7 +1,9 @@
+'use client';
+
 import { NavbarOpenContext } from "@/context/NavbarOpen";
 import { FC, useContext } from "react";
 import { Home, Key, Bot } from "lucide-react";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -9,7 +11,7 @@ interface NavbarProps {}
 
 const Navbar: FC<NavbarProps> = ({}) => {
   const { navbarOpen } = useContext(NavbarOpenContext);
-  const router = useRouter();
+  const path = usePathname();
   return (
     <aside
       className={`${
@@ -24,7 +26,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
           <Link
             href="/"
             className={`flex m-1 px-6 gap-2 justify-end h-10 rounded-lg hover:text-white transition-all ${
-              router.pathname === "/" ? "bg-blue-500" : "bg-transparent"
+              path === "/" ? "bg-blue-500" : "bg-transparent"
             }`}
           >
             <span className="flex">
@@ -43,7 +45,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
           <Link
             href="/safe"
             className={`flex m-1 px-6 gap-2 justify-end h-10 rounded-lg hover:text-white transition-all ${
-              router.pathname === "/safe" ? "bg-blue-500" : "bg-transparent"
+              path === "/safe" ? "bg-blue-500" : "bg-transparent"
             }`}
           >
             <span className="flex">
@@ -62,7 +64,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
           <Link
             href="/generate"
             className={`flex m-1 px-6 gap-2 justify-end h-10 rounded-lg hover:text-white transition-all ${
-              router.pathname === "/generate" ? "bg-blue-500" : "bg-transparent"
+              path === "/generate" ? "bg-blue-500" : "bg-transparent"
             }`}
           >
             <span className="flex">

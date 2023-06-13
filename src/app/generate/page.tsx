@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Typography, Col, InputNumber, Row, Slider, Button, Tooltip, Checkbox } from 'antd';
 import { CopyOutlined, CheckOutlined, RedoOutlined, RobotOutlined, LoadingOutlined } from '@ant-design/icons';
@@ -5,7 +7,6 @@ import { useSession } from "next-auth/react";
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import Router from "next/router";
 import { useEffect } from "react";
-import styles from "../styles/Generator.module.css";
 
 const { Title } = Typography;
 
@@ -30,7 +31,6 @@ function genPw(length: number, specialChars: boolean): string {
 }
 
 export default function Home() {
-  const { status, data } = useSession();
   const [inputValue, setInputValue] = useState<number>(12);
   const [pw, setPw] = useState<string>("");
   const [copied, setCopied] = useState<boolean>(false);
@@ -58,9 +58,6 @@ export default function Home() {
     setPw(genPw(inputValue, checked));
   }, [inputValue, checked]);
   useEffect(() => {
-    if (status === "unauthenticated") Router.replace("/auth/signin");
-  }, [status]);
-  useEffect(() => {
     if (copied) {
       setTimeout(() => {
         setCopied(false);
@@ -70,13 +67,12 @@ export default function Home() {
 
 
 
-  if (status === "authenticated")
     return (
       <>
-        <div className={styles.title}><Title><RobotOutlined style={{ fontSize: "32px", padding: "10px" }} />Generate Password</Title></div>
-        <div className={styles.container}>
-          <div className={styles.input}>
-            <Title level={4} className={styles.input_title}>Password Length</Title>
+        <div><Title><RobotOutlined style={{ fontSize: "32px", padding: "10px" }} />Generate Password</Title></div>
+        <div>
+          <div>
+            <Title>Password Length</Title>
             <Row style={{justifyContent: "space-between"}}>
               <Col span={12}>
                 <Slider
@@ -101,11 +97,11 @@ export default function Home() {
               Include special characters (e.g. !@#$...)
             </Checkbox>
           </div>
-          <div className={styles.outbox}>
-            <div className={styles.outfield}>
+          <div>
+            <div>
               {pw}
             </div>
-            <div className={styles.button}>
+            <div>
             {
               copied ? (
                 <Tooltip title={"Copied!"}>
@@ -128,6 +124,4 @@ export default function Home() {
         </div>
       </>
     );
-
-  return <div className={styles.loading}><LoadingOutlined style={{ fontSize: "80px" }} /></div>;
 }

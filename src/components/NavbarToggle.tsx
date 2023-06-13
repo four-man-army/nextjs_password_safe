@@ -1,3 +1,5 @@
+'use client';
+
 import { NavbarOpenContext } from "@/context/NavbarOpen";
 import { PanelLeftOpen, PanelLeftClose } from "lucide-react";
 import { FC, useContext } from "react";

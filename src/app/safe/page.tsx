@@ -1,17 +1,18 @@
+'use client';
+
 import { Button, Card, Col, Input, Row, Space, Typography, Tooltip } from "antd";
 import { DeleteOutlined, LoadingOutlined, CheckOutlined } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 import React, { useContext, useEffect, useReducer, useState } from "react";
-import styles from "../styles/Safe.module.css";
 import {
   EyeOutlined,
   CopyOutlined,
   EyeInvisibleOutlined,
   KeyOutlined
 } from "@ant-design/icons";
-import { PasswordContext } from "../context/usePass";
-import useStorage from "../hooks/useStorage";
+import { PasswordContext } from "../../context/usePass";
+import useStorage from "../../hooks/useStorage";
 
 const { Title, Paragraph } = Typography;
 
@@ -23,7 +24,6 @@ interface ListItem {
 }
 
 export default function Home() {
-  const { status, data } = useSession();
   const [list, setList] = useState<ListItem[]>();
   const [listItem, setListItem] = useState<ListItem>();
   const [adding, setAdding] = useState<boolean>(false);
@@ -53,7 +53,7 @@ export default function Home() {
       body: JSON.stringify({
         status: status,
         vault: encrypted,
-        email: data?.user?.email,
+        email: "email",
       }),
     })
       .then((res) => res.json())
@@ -74,7 +74,7 @@ export default function Home() {
       },
       body: JSON.stringify({
         status: status,
-        email: data?.user?.email,
+        email: "email",
       })
     })
       .then((res) => res.text())
@@ -89,11 +89,7 @@ export default function Home() {
           console.log("Failed to decrypt")
         }
       })
-  }, [status])
-
-  useEffect(() => {
-    if (status === "unauthenticated") Router.replace("/auth/signin");
-  }, [status]);
+  })
 
   
 
@@ -113,7 +109,7 @@ export default function Home() {
     }, [copy]);
 
     return (
-      <Row className={styles.row} key={item.id} gutter={48}>
+      <Row key={item.id} gutter={48}>
         <Col span={8}>
           <Paragraph>{item.title}</Paragraph>
         </Col>
@@ -158,17 +154,15 @@ export default function Home() {
       </Row>
     );
   };
-
-  if (status === "authenticated")
     return (
       <>
-        <div className={styles.title}><Title><KeyOutlined style={{ fontSize: "32px", padding: "10px" }} />Password Safe</Title></div>
-        <div className={styles.container}>
-          <Space align="center" className={styles.paper}>
-            <Card className={styles.card}>
+        <div><Title><KeyOutlined style={{ fontSize: "32px", padding: "10px" }} />Password Safe</Title></div>
+        <div>
+          <Space align="center">
+            <Card>
               <>
                 {(list || adding) && (
-                  <Row className={styles.row} gutter={48}>
+                  <Row gutter={48}>
                     <Col span={8}>
                       <Title level={3}>Website</Title>
                     </Col>
@@ -176,7 +170,7 @@ export default function Home() {
                       <Title level={3}>Username</Title>
                     </Col>
                     <Col span={8}>
-                      <Title className={styles.show} level={3}>
+                      <Title level={3}>
                         Password
                       </Title>
                     </Col>
@@ -187,7 +181,7 @@ export default function Home() {
                 ))}
                 {adding && (
                   <>
-                    <Row className={styles.row} gutter={48}>
+                    <Row gutter={48}>
                       <Col span={8}>
                         <Input
                           onChange={(e) => {
@@ -219,7 +213,7 @@ export default function Home() {
                         />
                       </Col>
                     </Row>
-                    <div className={styles.button}>
+                    <div>
                       <Button
                         style={{ marginRight: "1rem" }}
                         type="primary"
@@ -242,7 +236,6 @@ export default function Home() {
                 )}
                 {!adding && (
                   <Button
-                    className={list || adding ? styles.button : styles.add}
                     onClick={() => {
                       setAdding(true);
                     }}
@@ -257,8 +250,6 @@ export default function Home() {
         </div>
       </>
     );
-
-  return <div className={styles.loading}><LoadingOutlined style={{ fontSize: "80px" }} /></div>;
 }
 
 
