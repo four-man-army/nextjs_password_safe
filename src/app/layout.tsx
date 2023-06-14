@@ -10,6 +10,7 @@ import { authOptions } from "@/lib/auth";
 import Image from "next/image";
 import SignOutButton from "@/components/SignOutButton";
 import { Inter } from "next/font/google";
+import { buttonVariants } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
   title: "Password Safe",
@@ -41,7 +42,7 @@ export default async function RootLayout({
                       <div className="my-auto mr-4">
                         <a
                           href="/login"
-                          className="bg-blue-950 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300"
+                          className={buttonVariants({variant: "ghost", size: "sm"})}
                         >                 
                           Login
                         </a>
