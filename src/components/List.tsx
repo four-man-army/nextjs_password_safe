@@ -1,5 +1,6 @@
+"use client";
 import { Password } from "@/lib/validators/password";
-import { FC } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,12 +9,21 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/Table";
+import { PasswordContext } from "@/context/Password";
 
 interface ListProps {
-  passwords: Password[];
+  initialPasswords: Password[];
 }
 
-const List: FC<ListProps> = ({ passwords }) => {
+const List: FC<ListProps> = ({ initialPasswords }) => {
+  const [passwords, setPasswords] = useState<Password[]>(initialPasswords);
+    const { passwords: passwordsUpdater, setPasswords: setInitialPasswords } = useContext(PasswordContext);
+    useEffect(() => {
+      setInitialPasswords(initialPasswords);
+    }, [initialPasswords]);
+    useEffect(() => {
+        setPasswords(passwordsUpdater);
+  }, [passwordsUpdater]);
   if (passwords.length === 0) {
     return (
       <div>
@@ -22,10 +32,10 @@ const List: FC<ListProps> = ({ passwords }) => {
     );
   }
   return (
-    <div>
+    <div className="max-h-full overflow-y-auto">
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="text-lg">
             <TableHead>Username</TableHead>
             <TableHead>Website</TableHead>
             <TableHead>Password</TableHead>
