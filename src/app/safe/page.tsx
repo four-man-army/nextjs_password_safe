@@ -1,16 +1,8 @@
 'use client';
 
-import { Button, Card, Col, Input, Row, Space, Typography, Tooltip } from "antd";
-import { DeleteOutlined, LoadingOutlined, CheckOutlined } from "@ant-design/icons";
-import { useSession } from "next-auth/react";
-import Router from "next/router";
-import React, { useContext, useEffect, useReducer, useState } from "react";
-import {
-  EyeOutlined,
-  CopyOutlined,
-  EyeInvisibleOutlined,
-  KeyOutlined
-} from "@ant-design/icons";
+import { CheckOutlined, CopyOutlined, DeleteOutlined, EyeInvisibleOutlined, EyeOutlined, KeyOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Input, Row, Space, Tooltip, Typography } from "antd";
+import React, { useContext, useEffect, useState } from "react";
 import { PasswordContext } from "../../context/usePass";
 import useStorage from "../../hooks/useStorage";
 
