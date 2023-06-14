@@ -1,248 +1,50 @@
-'use client';
+import List from "@/components/List";
+import { fetchRedis } from "@/helpers/redis";
+import { authOptions } from "@/lib/auth";
+import { Password, passwordListValidator } from "@/lib/validators/password";
+import { Key } from "lucide-react";
+import { getServerSession } from "next-auth";
+import { notFound } from "next/navigation";
 
-import { CheckOutlined, CopyOutlined, DeleteOutlined, EyeInvisibleOutlined, EyeOutlined, KeyOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Input, Row, Space, Tooltip, Typography } from "antd";
-import React, { useContext, useEffect, useState } from "react";
-import { PasswordContext } from "../../context/usePass";
-import useStorage from "../../hooks/useStorage";
-
-const { Title, Paragraph } = Typography;
-
-interface ListItem {
-  id: number;
-  title: string;
-  user: string;
-  password: string;
-}
-
-export default function Home() {
-  const [list, setList] = useState<ListItem[]>();
-  const [listItem, setListItem] = useState<ListItem>();
-  const [adding, setAdding] = useState<boolean>(false);
-  const { password } = useContext(PasswordContext);
-  const { getItem } = useStorage();
-  const CryptoJs = require("crypto-js");
-  var key = password === "" ? getItem("pass") : password;
-
-
-  const deleteHandle = (e: number) => {
-    list?.splice(e, 1);
-    setList([...list!]);
-  };
-
-  useEffect(() => {
-    if (list === undefined) return;
-    var encrypted = ""
-    const secret = JSON.stringify(list);
-    encrypted = CryptoJs.AES.encrypt(secret, key).toString();
-
-
-    fetch("/api/setvault", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        status: status,
-        vault: encrypted,
-        email: "email",
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data === "Vault updated") {
-          console.log("Vault updated");
-        }
-      });
-    if (list.length === 0) setList(undefined);
-  }, [list])
-
-  useEffect(() => {
-    if (status !== "authenticated") return;
-    fetch("/api/getvault", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        status: status,
-        email: "email",
-      })
-    })
-      .then((res) => res.text())
-      .then((data) => {
-        data = data.replace(/"/g, "");
-        try {
-          const bytes = CryptoJs.AES.decrypt(data, key)
-          const decrypted = bytes.toString(CryptoJs.enc.Utf8);
-          setList(JSON.parse(decrypted));
-        }
-        catch {
-          console.log("Failed to decrypt")
-        }
-      })
-  })
-
-  
-
-  const Node: React.FC<{ item: ListItem }> = ({ item }) => {
-    const [visible, setVisible] = useState<boolean>(false);
-    const [copy, setCopy] = useState<boolean>(false);
-    const copyHandle = (e: number) => {
-      navigator.clipboard.writeText(list![e].password);
-      setCopy(true);
-    };
-    useEffect(() => {
-      if (copy) {
-        setTimeout(() => {
-          setCopy(false);
-        }, 1000);
-      }
-    }, [copy]);
-
-    return (
-      <Row key={item.id} gutter={48}>
-        <Col span={8}>
-          <Paragraph>{item.title}</Paragraph>
-        </Col>
-        <Col span={8}>
-          <Paragraph>{item.user}</Paragraph>
-        </Col>
-        <Col span={8}>
-          <span style={{ paddingRight: "10px" }}>{visible ? item.password : "***************"}</span>
-          {visible ?
-            (
-              <Tooltip title={"Hide"}>
-                <Button type="link" shape="round" size='small' icon={<EyeInvisibleOutlined style={{ fontSize: '15px' }} onClick={() => setVisible(!visible)} />}
-                  style={{ marginLeft: "-10px", position: "absolute" }} />
-              </Tooltip>
-            ) :
-            (
-              <Tooltip title={"Show"}>
-                <Button type="link" shape="round" size='small' icon={<EyeOutlined style={{ fontSize: '15px' }} onClick={() => setVisible(!visible)} />}
-                  style={{ marginLeft: "-10px", position: "absolute" }} />
-              </Tooltip>
-            )
-          }
-          {copy ?
-            (
-              <Tooltip title={"Copied"}>
-                <Button type="link" shape="round" size='small' icon={<CheckOutlined style={{ fontSize: '15px' }} />}
-                  style={{ marginLeft: "15px", position: "absolute" }} />
-              </Tooltip>
-            ) :
-            (
-              <Tooltip title={"Copy"}>
-                <Button type="link" shape="round" size='small' icon={<CopyOutlined style={{ fontSize: '15px' }} onClick={() => copyHandle(item.id)} />}
-                  style={{ marginLeft: "15px", position: "absolute" }} />
-              </Tooltip>
-            )
-          }
-          <Tooltip title={"Delete"}>
-            <Button type="link" shape="round" size='small' icon={<DeleteOutlined style={{ fontSize: '15px' }} onClick={() => deleteHandle(item.id)} />}
-              style={{ marginLeft: "40px", position: "absolute" }} />
-          </Tooltip>
-        </Col>
-      </Row>
+const getPasswords = async (userId: string) => {
+  try {
+    const result: string[] = await fetchRedis(
+      "zrange",
+      `safe:${userId}:passwords`,
+      0,
+      -1
     );
-  };
-    return (
-      <>
-        <div><Title><KeyOutlined style={{ fontSize: "32px", padding: "10px" }} />Password Safe</Title></div>
-        <div>
-          <Space align="center">
-            <Card>
-              <>
-                {(list || adding) && (
-                  <Row gutter={48}>
-                    <Col span={8}>
-                      <Title level={3}>Website</Title>
-                    </Col>
-                    <Col span={8}>
-                      <Title level={3}>Username</Title>
-                    </Col>
-                    <Col span={8}>
-                      <Title level={3}>
-                        Password
-                      </Title>
-                    </Col>
-                  </Row>
-                )}
-                {list?.map((listItem: ListItem) => (
-                  <Node key={listItem.id} item={listItem} />
-                ))}
-                {adding && (
-                  <>
-                    <Row gutter={48}>
-                      <Col span={8}>
-                        <Input
-                          onChange={(e) => {
-                            setListItem({
-                              ...listItem,
-                              title: e.target.value,
-                            } as ListItem);
-                          }}
-                        />
-                      </Col>
-                      <Col span={8}>
-                        <Input
-                          onChange={(e) => {
-                            setListItem({
-                              ...listItem,
-                              user: e.target.value,
-                            } as ListItem);
-                          }}
-                        />
-                      </Col>
-                      <Col span={8}>
-                        <Input
-                          onChange={(e) => {
-                            setListItem({
-                              ...listItem,
-                              password: e.target.value,
-                            } as ListItem);
-                          }}
-                        />
-                      </Col>
-                    </Row>
-                    <div>
-                      <Button
-                        style={{ marginRight: "1rem" }}
-                        type="primary"
-                        onClick={() => {
-                          setAdding(false);
-                          if (list === undefined || list.length === 0)
-                            setList([{ ...listItem, id: 0 }] as ListItem[]);
-                          else
-                            setList([
-                              ...list,
-                              { ...listItem, id: list[list.length - 1].id + 1 } as ListItem,
-                            ] as ListItem[]);
-                        }}
-                      >
-                        Save
-                      </Button>
-                      <Button onClick={() => setAdding(false)}>Cancel</Button>
-                    </div>
-                  </>
-                )}
-                {!adding && (
-                  <Button
-                    onClick={() => {
-                      setAdding(true);
-                    }}
-                    type="primary"
-                  >
-                    + Add
-                  </Button>
-                )}
-              </>
-            </Card>
-          </Space>
+
+    const dbPasswords = result.map(
+      (password) => JSON.parse(password) as Password
+    );
+
+    const passwords = passwordListValidator.parse(dbPasswords);
+
+    return passwords;
+  } catch (error) {
+    notFound();
+  }
+};
+
+export default async function page() {
+  const session = await getServerSession(authOptions);
+
+  if (!session) notFound();
+
+  const passwords = await getPasswords(session.user.id);
+
+  return (
+    <div className="flex flex-col mt-4 items-center">
+      <div className="flex justify-center gap-5">
+        <Key className="h-16 w-16" />
+        <h1 className="text-6xl font-medium">Password Safe</h1>
+      </div>
+      <div>
+        <div className="p-4 rounded-sm shadow-md w-fit">
+          <List passwords={passwords} />
         </div>
-      </>
-    );
+      </div>
+    </div>
+  );
 }
-
-
-
