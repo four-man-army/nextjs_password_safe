@@ -9,11 +9,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import Image from "next/image";
 import SignOutButton from "@/components/SignOutButton";
+import { Inter } from "next/font/google";
 
 export const metadata: Metadata = {
   title: "Password Safe",
   description: "Home page",
 };
+
+const inter = Inter({ subsets: ["latin"] });
 
 export default async function RootLayout({
   children,
@@ -24,7 +27,7 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   
   return (
-    <html lang="en">
+    <html lang="en" className={inter.className}>
       <Providers>
         <body>
           <div className="h-screen">
