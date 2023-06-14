@@ -1,3 +1,4 @@
+'use client';
 import { NavbarOpenProvider } from "@/context/NavbarOpen";
 import { PasswordProvider } from "@/context/Password";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
