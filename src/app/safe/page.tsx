@@ -1,4 +1,5 @@
 import List from "@/components/List";
+import PasswordInput from "@/components/PasswordInput";
 import { fetchRedis } from "@/helpers/redis";
 import { authOptions } from "@/lib/auth";
 import { Password, passwordListValidator } from "@/lib/validators/password";
@@ -40,9 +41,10 @@ export default async function page() {
         <Key className="h-16 w-16" />
         <h1 className="text-6xl font-medium">Password Safe</h1>
       </div>
-      <div>
-        <div className="p-4 rounded-sm shadow-md w-fit">
-          <List passwords={passwords} />
+      <div className="lg:w-1/2 w-full">
+        <div className="p-4 rounded-sm shadow-md w-full">
+          <List initialPasswords={passwords} />
+          <PasswordInput />
         </div>
       </div>
     </div>
