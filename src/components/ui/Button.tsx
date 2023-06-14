@@ -11,6 +11,7 @@ export const buttonVariants = cva(
         default: "bg-blue-950 text-white hover:bg-blue-800",
         ghost: "bg-transparent hover:text-slate-900 hover:bg-slate-200",
         secondary: "bg-slate-500 text-slate-300 hover:text-white",
+        error: "bg-red-500 text-white hover:bg-red-400",
       },
       size: {
         default: "h-10 py-2 px-4",
