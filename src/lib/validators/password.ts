@@ -11,5 +11,3 @@ export const passwordListValidator = z.array(passwordValidator);
 
 export type Password = z.infer<typeof passwordValidator>;
 
-export type PasswordList = z.infer<typeof passwordListValidator>;
-
