@@ -6,8 +6,8 @@ import NavbarToggle from "@/components/NavbarToggle";
 import { Metadata } from "next";
 import "./globals.css"
 
-export const MetaData: Metadata = {
-  title: "Home",
+export const metadata: Metadata = {
+  title: "Password Safe | Home",
   description: "Home page",
 }
 
