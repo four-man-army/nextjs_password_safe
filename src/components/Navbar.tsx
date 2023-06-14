@@ -20,7 +20,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
       })}
     >
       <div className="flex h-6 m-4 bg-red-500 justify-center relative">
-        <Image src="/logo.jpeg" alt="logo" width={24} height={24} />
+        <Image src="/logo.jpg" alt="logo" width={24} height={24} />
       </div>
       <ul className="w-full text-slate-300 text-sm">
         <li className="h-full w-full">
