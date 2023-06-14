@@ -1,4 +1,5 @@
 import { NavbarOpenProvider } from "@/context/NavbarOpen";
+import { PasswordProvider } from "@/context/Password";
 import { FC, ReactNode } from "react";
 
 interface ProvidersProps {
@@ -6,7 +7,11 @@ interface ProvidersProps {
 }
 
 const Providers: FC<ProvidersProps> = ({ children }) => {
-  return <NavbarOpenProvider>{children}</NavbarOpenProvider>;
+  return (
+    <PasswordProvider>
+      <NavbarOpenProvider>{children}</NavbarOpenProvider>
+    </PasswordProvider>
+  );
 };
 
 export default Providers;
