@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { db } from "./db";
 import { UpstashRedisAdapter } from "@next-auth/upstash-redis-adapter";
+import { createHash } from "crypto";
 
 function getGoogleCredentials() {
   const googleClientId = process.env.GOOGLE_CLIENT_ID;
@@ -49,6 +50,9 @@ export const authOptions: NextAuthOptions = {
         session.user.email = token.email;
         session.user.name = token.name;
         session.user.image = token.picture;
+        session.user.encryptKey = createHash("sha256")
+          .update(token.id + token.email + token.name + token.picture)
+          .digest("hex");
       }
       return session;
     },
