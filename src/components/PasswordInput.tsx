@@ -1,5 +1,5 @@
 "use client";
-import { FC, FormEvent, useContext, useState } from "react";
+import { FC, FormEvent, useContext, useRef, useState } from "react";
 import Button from "./ui/Button";
 import { Input } from "./ui/Input";
 import { nanoid } from "nanoid";
@@ -63,7 +63,12 @@ const PasswordInput: FC<PasswordInputProps> = ({}) => {
       <div className="w-full mt-4">
         <form onSubmit={addPassword}>
           <div className="flex flex-row gap-2">
-            <Input type="text" placeholder="Username" id="username" />
+            <Input
+              autoFocus
+              type="text"
+              placeholder="Username"
+              id="username"
+            />
             <Input type="text" placeholder="Website" id="website" />
             <Input type="text" placeholder="Password" id="password" />
           </div>
