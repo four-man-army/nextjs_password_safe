@@ -47,7 +47,7 @@ const List: FC<ListProps> = ({ initialPasswords }) => {
             <TableRow key={password.id}>
               <TableCell>{password.username}</TableCell>
               <TableCell>{password.website}</TableCell>
-              <TableCell><PasswordField password={password.password} /></TableCell>
+            <TableCell><PasswordField password={password.password} id={password.id} /></TableCell>
             </TableRow>
         ))}
         </TableBody>
