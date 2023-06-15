@@ -6,7 +6,6 @@ import { getServerSession } from "next-auth";
 export async function POST(req: Request) {
   try {
     const passwordData = await req.json();
-    console.log(passwordData)
 
     const session = await getServerSession(authOptions);
 
