@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "./ui/Table";
 import { PasswordContext } from "@/context/Password";
+import PasswordField from "./PasswordField";
 
 interface ListProps {
   initialPasswords: Password[];
@@ -32,7 +33,7 @@ const List: FC<ListProps> = ({ initialPasswords }) => {
     );
   }
   return (
-    <div className="max-h-full overflow-y-auto">
+    <div>
       <Table>
         <TableHeader>
           <TableRow className="text-lg">
@@ -41,15 +42,15 @@ const List: FC<ListProps> = ({ initialPasswords }) => {
             <TableHead>Password</TableHead>
           </TableRow>
         </TableHeader>
+        <TableBody>
         {passwords.map((password) => (
-          <TableBody>
-            <TableRow>
+            <TableRow key={password.id}>
               <TableCell>{password.username}</TableCell>
               <TableCell>{password.website}</TableCell>
-              <TableCell>{password.password}</TableCell>
+              <TableCell><PasswordField password={password.password} /></TableCell>
             </TableRow>
-          </TableBody>
         ))}
+        </TableBody>
       </Table>
     </div>
   );

@@ -34,29 +34,28 @@ const PasswordInput: FC<PasswordInputProps> = ({}) => {
       password: (e.target as PasswordForm).elements.password.value,
     };
     mutate(data);
-    };
-    
-    const {mutate, isLoading } = useMutation({
-        mutationKey: ["addPassword"],
-        mutationFn: async (data: Password) => { 
-            setIsAdding(false);
-            const validPassword = passwordValidator.parse(data);
-            await axios.post("/api/passwords/add", validPassword);
+  };
 
-        },
-        onSuccess(_, password) {
-            toast.success("Password added");
-            add(password);
-        },
-        onError(error, password) { 
-            if (error instanceof ZodError) {
-                toast.error(error.issues[0].message);
-            } else {
-                toast.error("Something went wrong");
-            }
-            removePassword(password.id);
-        }
-    })
+  const { mutate, isLoading } = useMutation({
+    mutationKey: ["addPassword"],
+    mutationFn: async (data: Password) => {
+      setIsAdding(false);
+      const validPassword = passwordValidator.parse(data);
+      await axios.post("/api/passwords/add", validPassword);
+    },
+    onSuccess(_, password) {
+      toast.success("Password added");
+      add(password);
+    },
+    onError(error, password) {
+      if (error instanceof ZodError) {
+        toast.error(error.issues[0].message);
+      } else {
+        toast.error("Something went wrong");
+      }
+      removePassword(password.id);
+    },
+  });
 
   const [isAdding, setIsAdding] = useState(false);
   if (isAdding)
@@ -64,8 +63,8 @@ const PasswordInput: FC<PasswordInputProps> = ({}) => {
       <div className="w-full mt-4">
         <form onSubmit={addPassword}>
           <div className="flex flex-row gap-2">
-            <Input type="text" placeholder="Website" id="website" />
             <Input type="text" placeholder="Username" id="username" />
+            <Input type="text" placeholder="Website" id="website" />
             <Input type="text" placeholder="Password" id="password" />
           </div>
           <div className="flex flex-row gap-4 mt-4 w-full">
@@ -86,7 +85,11 @@ const PasswordInput: FC<PasswordInputProps> = ({}) => {
     );
   return (
     <div className="w-full mt-4">
-      <Button onClick={() => setIsAdding(true)} isLoading={isLoading} className="w-full">
+      <Button
+        onClick={() => setIsAdding(true)}
+        isLoading={isLoading}
+        className="w-full"
+      >
         Add
       </Button>
     </div>

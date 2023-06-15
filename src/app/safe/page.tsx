@@ -1,4 +1,4 @@
-import List from "@/components/List";
+import List from "@/components/PasswordList";
 import PasswordInput from "@/components/PasswordInput";
 import { fetchRedis } from "@/helpers/redis";
 import { authOptions } from "@/lib/auth";
