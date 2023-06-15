@@ -29,6 +29,7 @@ const List: FC<ListProps> = ({ initialPasswords }) => {
     return (
       <div>
         <p className="text-center text-2xl">No passwords found</p>
+        <p className="text-center text-gray-700 text-sm">Go ahead and add your first password.</p>
       </div>
     );
   }
