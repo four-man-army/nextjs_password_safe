@@ -20,6 +20,6 @@ export async function POST(req: Request) {
         });
         return new Response('OK', { status: 200 });
     } catch (error) {
-        
+        return new Response((error as Error).message, { status: 500 });
     }
 }
