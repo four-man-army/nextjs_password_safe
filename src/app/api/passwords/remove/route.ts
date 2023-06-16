@@ -1,3 +1,4 @@
+import { fetchRedis } from "@/helpers/redis";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { encrypt } from "@/lib/utils";
@@ -13,7 +14,7 @@ export async function POST(req: Request) {
 
     const password = passwordValidator.parse(passwordData);
 
-    const member = await db.zrange(`safe:${session.user.id}:passwords`, 0, -1) as DBMember[];
+    const member = await fetchRedis('zrange', `safe:${session.user.id}:passwords`) as DBMember[];
 
     const pipeline = db.pipeline();
 
