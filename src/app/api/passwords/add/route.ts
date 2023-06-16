@@ -1,6 +1,9 @@
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { encrypt } from "@/lib/utils";
 import { Password, passwordValidator } from "@/lib/validators/password";
+import { AES, DES } from "crypto-js";
+import CryptoJS from "crypto-js";
 import { getServerSession } from "next-auth";
 
 export async function POST(req: Request) {
@@ -16,7 +19,7 @@ export async function POST(req: Request) {
 
         await db.zadd(`safe:${session.user.id}:passwords`, {
             score: timestamp,
-            member: JSON.stringify(password)
+            member: encrypt(password, session.user.encryptKey)
         });
         return new Response('OK', { status: 200 });
     } catch (error) {
