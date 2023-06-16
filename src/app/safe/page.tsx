@@ -6,8 +6,9 @@ import { Password, passwordListValidator } from "@/lib/validators/password";
 import { Key } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
+import { decrypt } from "@/lib/utils";
 
-const getPasswords = async (userId: string) => {
+const getPasswords = async (userId: string, encryptionKey: string) => {
   try {
     const result: string[] = await fetchRedis(
       "zrange",
@@ -17,7 +18,7 @@ const getPasswords = async (userId: string) => {
     );
 
     const dbPasswords = result.map(
-      (password) => JSON.parse(password) as Password
+      (member) => JSON.parse(decrypt(member, encryptionKey)) as Password
     );
 
     const passwords = passwordListValidator.parse(dbPasswords);
@@ -33,7 +34,7 @@ export default async function page() {
 
   if (!session) notFound();
 
-  const passwords = await getPasswords(session.user.id);
+  const passwords = await getPasswords(session.user.id, session.user.encryptKey);
 
   return (
     <div className="flex flex-col mt-4 items-center">
