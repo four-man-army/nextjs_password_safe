@@ -15,8 +15,8 @@ const Navbar: FC<NavbarProps> = ({}) => {
   const path = usePathname();
   return (
     <aside
-      className={cn("bg-blue-950 transition-all duration-300 w-20", {
-        "w-52": navbarOpen,
+      className={cn("bg-blue-950 transition-all duration-300 sm:w-20 w-0 fixed sm:relative z-10 h-full", {
+        "w-52 sm:w-52": navbarOpen,
       })}
     >
       <div className="flex h-6 m-4 bg-red-500 justify-center relative">
