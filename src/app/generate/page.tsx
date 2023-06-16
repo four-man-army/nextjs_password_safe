@@ -1,34 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Typography, Col, InputNumber, Row, Slider, Button, Tooltip, Checkbox } from 'antd';
-import { CopyOutlined, CheckOutlined, RedoOutlined, RobotOutlined, LoadingOutlined } from '@ant-design/icons';
-import { useSession } from "next-auth/react";
+import { genPw } from '@/lib/utils';
+import { CheckOutlined, CopyOutlined, RedoOutlined, RobotOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Col, InputNumber, Row, Slider, Tooltip, Typography } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
-import Router from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from 'react';
 
 const { Title } = Typography;
-
-function genPw(length: number, specialChars: boolean): string {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const specialCharacters = '!@#$%^&*()_+~`|}{[]\\:;?><,./-=';
-  var result = '';
-
-  if (specialChars) {
-    for (var i = 0; i < length; i++) {
-      var list = characters + specialCharacters
-      result += list.charAt(Math.random() * list.length);
-    }
-    return result;
-  } else {
-    var list = characters;
-    for (var i = 0; i < length; i++) {
-      result += list.charAt(Math.random() * list.length);
-    }
-    return result;
-  }
-}
 
 export default function Home() {
   const [inputValue, setInputValue] = useState<number>(12);
