@@ -1,21 +1,28 @@
+import { Bot, HomeIcon, Key } from "lucide-react"
+import Link from "next/link";
+
 export default function Home() {
     return (
       <>
-        <div>
-
+        <div className="w-full text-center text-6xl mt-20 flex flex-row justify-center gap-4">
+          <HomeIcon className="h-[60px] w-[60px]" />
           <h1>Home</h1>
         </div>
-        <div>
-          <div style={{marginRight:"5vw"}}>
-            <div>
-            </div>
-            <label>Safe</label>
-          </div>
-          <div>
-          <div>
-            </div>
-            <label>Generator</label>
-          </div>
+        <div className="w-full h-2/5 flex flex-row justify-around mt-16">
+          <Link
+            href="/safe"
+            className="bg-transparent h-fit w-1/5 flex flex-col justify-center my-auto text-center border-4 border-blue-500 rounded-3xl hover:bg-blue-950 hover:text-white transition-colors duration-300"
+          >
+            <Key className="w-full h-full p-6" />
+            <p className="w-full text-4xl font-semibold mb-5">Safe</p>
+          </Link>
+          <Link
+            href="/generate"
+            className="bg-transparent h-fit w-1/5 flex flex-col justify-center my-auto text-center border-4 border-blue-500 rounded-3xl hover:bg-blue-950 hover:text-white transition-colors duration-300"
+          >
+            <Bot className="w-full h-full p-6" />
+            <p className="w-full text-4xl font-semibold mb-5">Generate</p>
+          </Link>
         </div>
       </>
     );
