@@ -18,21 +18,28 @@ interface ListProps {
 
 const List: FC<ListProps> = ({ initialPasswords }) => {
   const [passwords, setPasswords] = useState<Password[]>(initialPasswords);
-    const { passwords: passwordsUpdater, setPasswords: setInitialPasswords } = useContext(PasswordContext);
-    useEffect(() => {
-      setInitialPasswords(initialPasswords);
-    }, [initialPasswords]);
-    useEffect(() => {
-        setPasswords(passwordsUpdater);
+  const { passwords: passwordsUpdater, setPasswords: setInitialPasswords } =
+    useContext(PasswordContext);
+  
+  useEffect(() => {
+    setInitialPasswords(initialPasswords);
+  }, [initialPasswords]);
+
+  useEffect(() => {
+    setPasswords(passwordsUpdater);
   }, [passwordsUpdater]);
+
   if (passwords.length === 0) {
     return (
       <div>
         <p className="text-center text-2xl">No passwords found</p>
-        <p className="text-center text-gray-700 text-sm">Go ahead and add your first password.</p>
+        <p className="text-center text-gray-700 text-sm">
+          Go ahead and add your first password.
+        </p>
       </div>
     );
   }
+  
   return (
     <div>
       <Table>
@@ -44,13 +51,15 @@ const List: FC<ListProps> = ({ initialPasswords }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-        {passwords.map((password) => (
+          {passwords.map((password) => (
             <TableRow key={password.id}>
               <TableCell>{password.username}</TableCell>
               <TableCell>{password.website}</TableCell>
-            <TableCell><PasswordField password={password.password} id={password.id} /></TableCell>
+              <TableCell>
+                <PasswordField password={password.password} id={password.id} />
+              </TableCell>
             </TableRow>
-        ))}
+          ))}
         </TableBody>
       </Table>
     </div>
