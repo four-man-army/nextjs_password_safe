@@ -17,6 +17,7 @@ import { PasswordContext } from "@/context/Password";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { passwordValidator } from "@/lib/validators/password";
 
 interface RemovePasswordProps {
   id: string;
@@ -30,8 +31,9 @@ const RemovePassword: FC<RemovePasswordProps> = ({ id }) => {
     mutationKey: ["removePassword"],
     mutationFn: async (id: string) => {
       const password = getPassword(id);
-        if (!password) return new Error("no password found");
-      await axios.post("/api/passwords/remove", password);
+      if (!password) return new Error("no password found");
+      const validPassword = passwordValidator.parse(password);
+      await axios.post("/api/passwords/remove", validPassword);
     },
     onSuccess() {
       setOpen(false);
