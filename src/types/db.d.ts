@@ -4,3 +4,8 @@ interface User {
   name: string;
   image: string;
 }
+
+interface DBMember {
+  id: string;
+  ct: string;
+}
