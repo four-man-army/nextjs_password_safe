@@ -7,11 +7,18 @@ import { RadioGroup, RadioGroupItem } from "./ui/RadioGroup";
 import { Label } from "./ui/Label";
 import { Checkbox } from "./ui/Checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
-import { genPw } from "@/lib/utils";
+import { cn, genPw } from "@/lib/utils";
+import { ClipboardCopy, Info, RefreshCcw } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 interface GeneratorProps {}
 
-const Generator: FC<GeneratorProps> = ({ }) => {
+const Generator: FC<GeneratorProps> = ({}) => {
   const [length, setLength] = useState(8);
   const [radio, setRadio] = useState("all");
   const [checked, setChecked] = useState<{
@@ -48,12 +55,30 @@ const Generator: FC<GeneratorProps> = ({ }) => {
 
   useEffect(() => {
     setPassword(genPw(length, radio, checked));
-  }, [checked, length, radio])
+  }, [checked, length, radio]);
 
   return (
     <div className="w-full h-full flex flex-col gap-10">
-      <div className="w-full rounded-md shadow-lg p-10 relative overflow-hidden">
+      <div className="w-full flex flex-row rounded-md shadow-lg p-10 relative overflow-hidden">
         <p className="text-3xl font-semibold">{password}</p>
+        <div className="flex flex-row ml-auto my-auto gap-3">
+          <ClipboardCopy
+            className="hover:text-blue-500 transition-colors duration-300 cursor-pointer"
+            onClick={() => navigator.clipboard.writeText(password)}
+          />
+          <RefreshCcw
+            className="hover:text-blue-500 transition-all duration-300 cursor-pointer"
+            onClick={(e) => {
+              e.currentTarget.classList.add(
+                cn("-rotate-180", {
+                  "-rotate-0":
+                    !e.currentTarget.classList.contains("-rotate-180"),
+                })
+              );
+              setPassword(genPw(length, radio, checked));
+            }}
+          />
+        </div>
         <Progress
           value={
             length >= 12
@@ -98,32 +123,82 @@ const Generator: FC<GeneratorProps> = ({ }) => {
             />
           </div>
           <div className="h-fit w-1/3 my-auto">
-            <RadioGroup defaultValue="all" onValueChange={(e) => {
-              setRadio(e)
-              if (e === "all") setChecked({ upperCase: true, lowerCase: true, numbers: true, symbols: true })
-            }}>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem className="text-blue-500" value="say" id="r1" />
-                <Label htmlFor="r1" className="text-xl">
-                  Easy to say
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem
-                  className="text-blue-500"
-                  value="read"
-                  id="r2"
-                />
-                <Label htmlFor="r2" className="text-xl">
-                  Easy to read
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem className="text-blue-500" value="all" id="r3" />
-                <Label htmlFor="r3" className="text-xl">
-                  All characters
-                </Label>
-              </div>
+            <RadioGroup
+              defaultValue="all"
+              onValueChange={(e) => {
+                setRadio(e);
+                if (e === "all")
+                  setChecked({
+                    upperCase: true,
+                    lowerCase: true,
+                    numbers: true,
+                    symbols: true,
+                  });
+              }}
+            >
+              <TooltipProvider delayDuration={10}>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem
+                    className="text-blue-500"
+                    value="say"
+                    id="r1"
+                  />
+                  <Label htmlFor="r1" className="text-xl">
+                    Easy to say
+                  </Label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="w-4 h-4" />
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="bg-white">
+                      <p>
+                        Avoid numbers and special <br /> characters
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem
+                    className="text-blue-500"
+                    value="read"
+                    id="r2"
+                  />
+                  <Label htmlFor="r2" className="text-xl">
+                    Easy to read
+                  </Label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="w-4 h-4" />
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="bg-white">
+                      <p>
+                        Avoid ambiguous characters <br /> like l, 1, O, and 0
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem
+                    className="text-blue-500"
+                    value="all"
+                    id="r3"
+                  />
+                  <Label htmlFor="r3" className="text-xl">
+                    All characters
+                  </Label>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="w-4 h-4" />
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="bg-white">
+                      <p>
+                        Any character combinations <br /> like !, 7, h, K, and
+                        l1
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              </TooltipProvider>
             </RadioGroup>
           </div>
           <div className="h-fit w-1/3 my-auto flex flex-col gap-2">
