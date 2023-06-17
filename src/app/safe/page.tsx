@@ -34,18 +34,23 @@ export default async function page() {
 
   if (!session) notFound();
 
-  const passwords = await getPasswords(session.user.id, session.user.encryptKey);
+  const passwords = await getPasswords(
+    session.user.id,
+    session.user.encryptKey
+  );
 
   return (
-    <div className="flex flex-col mt-4 items-center">
-      <div className="flex justify-center gap-5">
-        <Key className="h-16 w-16" />
-        <h1 className="text-6xl font-medium">Password Safe</h1>
-      </div>
-      <div className="lg:w-1/2 w-full">
-        <div className="p-4 rounded-sm shadow-md w-full">
-          <List initialPasswords={passwords} />
-          <PasswordInput />
+    <div className="w-full h-4/5">
+      <div className="flex flex-col h-full mt-4 items-center">
+        <div className="flex justify-center gap-5">
+          <Key className="h-16 w-16" />
+          <h1 className="text-6xl font-medium">Password Safe</h1>
+        </div>
+        <div className="lg:w-1/2 w-full h-full">
+          <div className="p-4 rounded-sm shadow-md w-full max-h-full overflow-y-auto scrollbar-w-2 scrollbar-track-blue-lighter scrollbar-thumb-blue scrollbar-thumb-rounded">
+            <List initialPasswords={passwords} />
+            <PasswordInput />
+          </div>
         </div>
       </div>
     </div>

@@ -77,7 +77,7 @@ export default async function RootLayout({
                     )}
                   </div>
                 </header>
-                <main className="my-6 mx-4 p-6 h-full bg-white">
+                <main className="my-6 mx-4 p-6 h-full bg-white overflow-hidden">
                   {children}
                 </main>
               </section>
