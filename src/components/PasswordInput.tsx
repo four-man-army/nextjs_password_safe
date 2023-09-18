@@ -39,9 +39,9 @@ const PasswordInput: FC<PasswordInputProps> = ({}) => {
   const { mutate, isLoading } = useMutation({
     mutationKey: ["addPassword"],
     mutationFn: async (data: Password) => {
-      setIsAdding(false);
       const validPassword = passwordValidator.parse(data);
       await axios.post("/api/passwords/add", validPassword);
+      setIsAdding(false);
     },
     onSuccess(_, password) {
       toast.success("Password added");
