@@ -54,7 +54,7 @@ const List: FC<ListProps> = ({ initialPasswords }) => {
           {passwords.map((password) => (
             <TableRow key={password.id}>
               <TableCell>{password.username}</TableCell>
-              <TableCell>{password.website}</TableCell>
+              <TableCell><a className="hover:underline" href={password.website}>{password.website}</a></TableCell>
               <TableCell>
                 <PasswordField password={password.password} id={password.id} />
               </TableCell>
