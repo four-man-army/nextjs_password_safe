@@ -60,8 +60,8 @@ const Generator: FC<GeneratorProps> = ({}) => {
 
   return (
     <div className="w-full h-full flex flex-col gap-10">
-      <div className="w-full flex flex-row rounded-md shadow-lg p-10 relative overflow-hidden">
-        <p className="text-3xl font-semibold">{password}</p>
+      <div className="w-full flex flex-row rounded-md shadow-lg h-fit p-5 pb-7 relative">
+        <p className="text-3xl font-semibold truncate">{password}</p>
         <div className="flex flex-row ml-auto my-auto gap-3">
           <TooltipProvider>
             <Tooltip>
@@ -80,7 +80,7 @@ const Generator: FC<GeneratorProps> = ({}) => {
                 <RefreshCcw
                   className={cn(
                     "hover:text-blue-500 transition-all duration-300 cursor-pointer",
-                    { "animate-spin": animate }
+                    { "animate-rotate": animate }
                   )}
                   onClick={() => {
                     setPassword(genPw(length, radio, checked));
@@ -107,15 +107,15 @@ const Generator: FC<GeneratorProps> = ({}) => {
               ? 25
               : 0
           }
-          className="absolute inset-x-0 bottom-0 bg-slate-300 rounded-none"
+          className="absolute inset-x-0 bottom-0 bg-slate-300 rounded-none rounded-b-md"
         />
       </div>
       <div className="w-full rounded-md shadow-lg p-10 flex-grow">
         <p className="text-4xl font-extrabold border-b-2 border-gray-100 pb-2">
           Customize your password
         </p>
-        <div className="w-full h-full flex flex-row gap-4">
-          <div className="w-full h-10 flex flex-row gap-4 my-auto relative">
+        <div className="w-full h-full flex flex-row gap-4 justify-between">
+          <div className="w-1/2 h-10 flex flex-row gap-4 my-auto relative">
             <Label htmlFor="password" className="text-xl absolute -top-full">
               Password Length
             </Label>
