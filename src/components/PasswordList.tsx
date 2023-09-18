@@ -17,17 +17,11 @@ interface ListProps {
 }
 
 const List: FC<ListProps> = ({ initialPasswords }) => {
-  const [passwords, setPasswords] = useState<Password[]>(initialPasswords);
-  const { passwords: passwordsUpdater, setPasswords: setInitialPasswords } =
-    useContext(PasswordContext);
+  const { passwords, setPasswords } = useContext(PasswordContext);
   
   useEffect(() => {
-    setInitialPasswords(initialPasswords);
+    setPasswords(initialPasswords);
   }, [initialPasswords]);
-
-  useEffect(() => {
-    setPasswords(passwordsUpdater);
-  }, [passwordsUpdater]);
 
   if (passwords.length === 0) {
     return (

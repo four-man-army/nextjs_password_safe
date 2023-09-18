@@ -8,6 +8,8 @@ import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import { decrypt } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 const getPasswords = async (userId: string, encryptionKey: string) => {
   try {
     const result: string[] = await fetchRedis(

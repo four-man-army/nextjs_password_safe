@@ -35,8 +35,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# mongodb
-*.mongodb
-/test-results/
-/playwright-report/
-/playwright/.cache/
+# vscode
+.vscode/*
