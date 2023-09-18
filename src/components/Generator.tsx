@@ -1,14 +1,14 @@
 "use client";
+import { cn, genPw } from "@/lib/utils";
+import { CheckedState } from "@radix-ui/react-checkbox";
+import { ClipboardCopy, Info, RefreshCcw } from "lucide-react";
 import { FC, useEffect, useState } from "react";
-import { Slider } from "./ui/Slider";
+import { Checkbox } from "./ui/Checkbox";
 import { Input } from "./ui/Input";
+import { Label } from "./ui/Label";
 import { Progress } from "./ui/Progress";
 import { RadioGroup, RadioGroupItem } from "./ui/RadioGroup";
-import { Label } from "./ui/Label";
-import { Checkbox } from "./ui/Checkbox";
-import { CheckedState } from "@radix-ui/react-checkbox";
-import { cn, genPw } from "@/lib/utils";
-import { ClipboardCopy, Info, RefreshCcw } from "lucide-react";
+import { Slider } from "./ui/Slider";
 import {
   Tooltip,
   TooltipContent,
@@ -20,7 +20,7 @@ interface GeneratorProps {}
 
 const Generator: FC<GeneratorProps> = ({}) => {
   const [length, setLength] = useState(8);
-  const [radio, setRadio] = useState("all");
+  const [radio, setRadio] = useState<"all" | "read" | "say">("all");
   const [checked, setChecked] = useState<{
     upperCase: boolean;
     lowerCase: boolean;
@@ -33,10 +33,11 @@ const Generator: FC<GeneratorProps> = ({}) => {
     symbols: true,
   });
   const [password, setPassword] = useState(genPw(8, "all", checked));
+  const [animate, setAnimate] = useState(false);
 
   const handleCheckbox = (
     cs: CheckedState,
-    value: "upperCase" | "lowerCase" | "numbers" | "symbols"
+    value: keyof typeof checked
   ): void => {
     setChecked((prevState) => {
       if (
@@ -62,22 +63,37 @@ const Generator: FC<GeneratorProps> = ({}) => {
       <div className="w-full flex flex-row rounded-md shadow-lg p-10 relative overflow-hidden">
         <p className="text-3xl font-semibold">{password}</p>
         <div className="flex flex-row ml-auto my-auto gap-3">
-          <ClipboardCopy
-            className="hover:text-blue-500 transition-colors duration-300 cursor-pointer"
-            onClick={() => navigator.clipboard.writeText(password)}
-          />
-          <RefreshCcw
-            className="hover:text-blue-500 transition-all duration-300 cursor-pointer"
-            onClick={(e) => {
-              e.currentTarget.classList.add(
-                cn("-rotate-180", {
-                  "-rotate-0":
-                    !e.currentTarget.classList.contains("-rotate-180"),
-                })
-              );
-              setPassword(genPw(length, radio, checked));
-            }}
-          />
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <ClipboardCopy
+                  className="hover:text-blue-500 transition-colors duration-300 cursor-pointer"
+                  onClick={() => navigator.clipboard.writeText(password)}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="top" className="bg-white">
+                <p>Click to copy</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <RefreshCcw
+                  className={cn(
+                    "hover:text-blue-500 transition-all duration-300 cursor-pointer",
+                    { "animate-spin": animate }
+                  )}
+                  onClick={() => {
+                    setPassword(genPw(length, radio, checked));
+                    setAnimate(true);
+                  }}
+                  onAnimationEnd={() => setAnimate(false)}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="top" className="bg-white">
+                <p>Refresh</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
         <Progress
           value={
@@ -125,15 +141,28 @@ const Generator: FC<GeneratorProps> = ({}) => {
           <div className="h-fit w-1/3 my-auto">
             <RadioGroup
               defaultValue="all"
-              onValueChange={(e) => {
+              onValueChange={(e: typeof radio) => {
                 setRadio(e);
-                if (e === "all")
-                  setChecked({
-                    upperCase: true,
-                    lowerCase: true,
-                    numbers: true,
-                    symbols: true,
-                  });
+                switch (e) {
+                  case "all":
+                    setChecked({
+                      upperCase: true,
+                      lowerCase: true,
+                      numbers: true,
+                      symbols: true,
+                    });
+                    break;
+                  case "say":
+                    if (!checked.lowerCase && !checked.upperCase) {
+                      setChecked({
+                        lowerCase: true,
+                        upperCase: true,
+                        numbers: false,
+                        symbols: false,
+                      });
+                    }
+                    break;
+                }
               }}
             >
               <TooltipProvider delayDuration={10}>
@@ -150,10 +179,8 @@ const Generator: FC<GeneratorProps> = ({}) => {
                     <TooltipTrigger>
                       <Info className="w-4 h-4" />
                     </TooltipTrigger>
-                    <TooltipContent side="right" className="bg-white">
-                      <p>
-                        Avoid numbers and special <br /> characters
-                      </p>
+                    <TooltipContent side="right" className="bg-white w-52">
+                      <p>Avoid numbers and special characters</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -170,10 +197,8 @@ const Generator: FC<GeneratorProps> = ({}) => {
                     <TooltipTrigger>
                       <Info className="w-4 h-4" />
                     </TooltipTrigger>
-                    <TooltipContent side="right" className="bg-white">
-                      <p>
-                        Avoid ambiguous characters <br /> like l, 1, O, and 0
-                      </p>
+                    <TooltipContent side="right" className="bg-white w-56">
+                      <p>Avoid ambiguous characters like l, 1, O, and 0</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -190,11 +215,8 @@ const Generator: FC<GeneratorProps> = ({}) => {
                     <TooltipTrigger>
                       <Info className="w-4 h-4" />
                     </TooltipTrigger>
-                    <TooltipContent side="right" className="bg-white">
-                      <p>
-                        Any character combinations <br /> like !, 7, h, K, and
-                        l1
-                      </p>
+                    <TooltipContent side="right" className="bg-white w-56">
+                      <p>Any character combinations like !, 7, h, K, and l1</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
