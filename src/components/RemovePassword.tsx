@@ -50,7 +50,7 @@ const RemovePassword: FC<RemovePasswordProps> = ({ id }) => {
       <DialogTrigger>
         <Trash2 className="cursor-pointer hover:text-red-500 transition-colors duration-300"/>
       </DialogTrigger>
-      <DialogContent className="bg-white">
+      <DialogContent className="bg-white bottom-0 sm:bottom-auto">
         <DialogHeader>
           <DialogTitle>Remove Password</DialogTitle>
           <DialogDescription>
@@ -59,7 +59,7 @@ const RemovePassword: FC<RemovePasswordProps> = ({ id }) => {
         </DialogHeader>
         <DialogFooter>
           <DialogPrimitive.Close>
-            <Button>Cancel</Button>
+            <Button className="w-full sm:w-auto mt-2 sm:mt-0">Cancel</Button>
           </DialogPrimitive.Close>
           <Button
             variant="error"

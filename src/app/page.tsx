@@ -8,20 +8,24 @@ export default function Home() {
           <HomeIcon className="h-[60px] w-[60px]" />
           <h1>Home</h1>
         </div>
-        <div className="w-full h-2/5 flex flex-row justify-around mt-16">
+        <div className="w-full max-w-3xl h-2/5 flex mx-auto flex-row gap-10 justify-around mt-16">
           <Link
             href="/safe"
-            className="bg-transparent h-fit w-1/5 flex flex-col justify-center my-auto text-center border-4 border-blue-500 rounded-3xl hover:bg-blue-950 hover:text-white transition-colors duration-300"
+            className="bg-transparent w-1/2 flex flex-col justify-center my-auto text-center border-4 border-blue-500 rounded-3xl hover:bg-blue-950 hover:text-white transition-colors duration-300"
           >
             <Key className="w-full h-full p-6" />
-            <p className="w-full text-4xl font-semibold mb-5">Safe</p>
+            <p className="w-full text-4xl font-semibold mb-5 sm:inline hidden">
+              Safe
+            </p>
           </Link>
           <Link
             href="/generate"
-            className="bg-transparent h-fit w-1/5 flex flex-col justify-center my-auto text-center border-4 border-blue-500 rounded-3xl hover:bg-blue-950 hover:text-white transition-colors duration-300"
+            className="bg-transparent w-1/2 flex flex-col justify-center my-auto text-center border-4 border-blue-500 rounded-3xl hover:bg-blue-950 hover:text-white transition-colors duration-300"
           >
             <Bot className="w-full h-full p-6" />
-            <p className="w-full text-4xl font-semibold mb-5">Generate</p>
+            <p className="w-full text-4xl font-semibold mb-5 sm:inline hidden">
+              Generate
+            </p>
           </Link>
         </div>
       </>
