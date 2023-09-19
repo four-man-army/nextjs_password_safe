@@ -59,9 +59,9 @@ const Generator: FC<GeneratorProps> = ({}) => {
 
   return (
     <div className="w-full h-full flex flex-col gap-10">
-      <div className="w-full flex flex-row rounded-md shadow-lg h-fit p-5 pb-7 relative">
-        <p className="text-3xl font-semibold truncate">{password}</p>
-        <div className="flex flex-row ml-auto my-auto gap-3">
+      <div className="w-full flex flex-row justify-between rounded-md shadow-lg h-fit p-5 pb-7 max-w-full overflow-hidden relative">
+        <p className="text-3xl font-semibold w-fit  flex-1 truncate">{password}</p>
+        <div className="flex flex-row my-auto gap-3">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
