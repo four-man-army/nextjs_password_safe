@@ -51,7 +51,6 @@ const Generator: FC<GeneratorProps> = ({}) => {
         [value]: cs,
       };
     });
-    console.log(checked);
   };
 
   useEffect(() => {
@@ -110,12 +109,12 @@ const Generator: FC<GeneratorProps> = ({}) => {
           className="absolute inset-x-0 bottom-0 bg-slate-300 rounded-none rounded-b-md"
         />
       </div>
-      <div className="w-full rounded-md shadow-lg p-10 flex-grow">
+      <div className="w-full rounded-md shadow-lg p-10">
         <p className="text-4xl font-extrabold border-b-2 border-gray-100 pb-2">
           Customize your password
         </p>
-        <div className="w-full h-full flex flex-row gap-4 justify-between">
-          <div className="w-1/2 h-10 flex flex-row gap-4 my-auto relative">
+        <div className="w-full h-fit flex flex-row flex-wrap lg:flex-nowrap gap-4 pt-10 justify-around">
+          <div className="lg:w-1/2 h-10 w-full flex-grow md:flex-grow-0 flex flex-row gap-4 my-auto relative">
             <Label htmlFor="password" className="text-xl absolute -top-full">
               Password Length
             </Label>
@@ -138,7 +137,7 @@ const Generator: FC<GeneratorProps> = ({}) => {
               className="flex-grow"
             />
           </div>
-          <div className="h-fit w-1/3 my-auto">
+          <div className="h-fit lg:w-1/3 w-fit my-auto">
             <RadioGroup
               defaultValue="all"
               onValueChange={(e: typeof radio) => {
@@ -223,7 +222,7 @@ const Generator: FC<GeneratorProps> = ({}) => {
               </TooltipProvider>
             </RadioGroup>
           </div>
-          <div className="h-fit w-1/3 my-auto flex flex-col gap-2">
+          <div className="h-fit lg:w-1/3 w-fit my-auto flex flex-col gap-2">
             <div>
               <Checkbox
                 id="uppercase"

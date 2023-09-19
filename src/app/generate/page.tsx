@@ -10,7 +10,7 @@ export default function page() {
           <Bot className="h-16 w-16" />
           <h1 className="text-6xl font-medium">Password Generator</h1>
         </div>
-        <div className="w-2/3 h-1/2 p-4 mx-auto mt-8">
+        <div className="xl:w-2/3 w-11/12 h-full p-4 mx-auto mt-8">
           <Generator />
         </div>
       </div>
