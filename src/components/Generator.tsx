@@ -60,7 +60,9 @@ const Generator: FC<GeneratorProps> = ({}) => {
   return (
     <div className="w-full h-full flex flex-col gap-10">
       <div className="w-full flex flex-row justify-between rounded-md shadow-lg h-fit p-5 pb-7 max-w-full overflow-hidden relative">
-        <p className="text-3xl font-semibold w-fit  flex-1 truncate">{password}</p>
+        <p className="text-3xl font-semibold w-fit  flex-1 truncate">
+          {password}
+        </p>
         <div className="flex flex-row my-auto gap-3">
           <TooltipProvider>
             <Tooltip>
@@ -110,7 +112,7 @@ const Generator: FC<GeneratorProps> = ({}) => {
         />
       </div>
       <div className="w-full rounded-md shadow-lg p-10">
-        <p className="text-4xl font-extrabold border-b-2 border-gray-100 pb-2">
+        <p className="sm:text-4xl text-2xl font-extrabold border-b-2 border-gray-100 pb-2">
           Customize your password
         </p>
         <div className="w-full h-fit flex flex-row flex-wrap lg:flex-nowrap gap-4 pt-10 justify-around">
@@ -126,7 +128,7 @@ const Generator: FC<GeneratorProps> = ({}) => {
               step={1}
               value={length}
               onChange={(e) => setLength(parseInt(e.target.value))}
-              className="w-fit my-auto"
+              className="w-1/4 sm:w-fit my-auto"
             />
             <Slider
               min={1}
@@ -167,16 +169,16 @@ const Generator: FC<GeneratorProps> = ({}) => {
               <TooltipProvider delayDuration={10}>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem
-                    className="text-blue-500"
+                    className="text-blue-500 sm:w-4 w-2 sm:h-4 h-2"
                     value="say"
                     id="r1"
                   />
-                  <Label htmlFor="r1" className="text-xl">
+                  <Label htmlFor="r1" className="sm:text-xl text-sm">
                     Easy to say
                   </Label>
                   <Tooltip>
                     <TooltipTrigger>
-                      <Info className="w-4 h-4" />
+                      <Info className="sm:w-4 w-3" />
                     </TooltipTrigger>
                     <TooltipContent side="right" className="bg-white w-52">
                       <p>Avoid numbers and special characters</p>
@@ -185,16 +187,16 @@ const Generator: FC<GeneratorProps> = ({}) => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem
-                    className="text-blue-500"
+                    className="text-blue-500 sm:w-4 w-2 sm:h-4 h-2"
                     value="read"
                     id="r2"
                   />
-                  <Label htmlFor="r2" className="text-xl">
+                  <Label htmlFor="r2" className="sm:text-xl text-sm">
                     Easy to read
                   </Label>
                   <Tooltip>
                     <TooltipTrigger>
-                      <Info className="w-4 h-4" />
+                      <Info className="sm:w-4 w-3" />
                     </TooltipTrigger>
                     <TooltipContent side="right" className="bg-white w-56">
                       <p>Avoid ambiguous characters like l, 1, O, and 0</p>
@@ -203,16 +205,16 @@ const Generator: FC<GeneratorProps> = ({}) => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem
-                    className="text-blue-500"
+                    className="text-blue-500 sm:w-4 w-2 sm:h-4 h-2"
                     value="all"
                     id="r3"
                   />
-                  <Label htmlFor="r3" className="text-xl">
+                  <Label htmlFor="r3" className="sm:text-xl text-sm">
                     All characters
                   </Label>
                   <Tooltip>
                     <TooltipTrigger>
-                      <Info className="w-4 h-4" />
+                      <Info className="sm:w-4 w-3" />
                     </TooltipTrigger>
                     <TooltipContent side="right" className="bg-white w-56">
                       <p>Any character combinations like !, 7, h, K, and l1</p>
@@ -223,45 +225,49 @@ const Generator: FC<GeneratorProps> = ({}) => {
             </RadioGroup>
           </div>
           <div className="h-fit lg:w-1/3 w-fit my-auto flex flex-col gap-2">
-            <div>
+            <div className="flex items-center">
               <Checkbox
                 id="uppercase"
                 checked={checked.upperCase}
+                className="sm:w-4 w-2 sm:h-4 h-2"
                 onCheckedChange={(e) => handleCheckbox(e, "upperCase")}
               />
-              <Label htmlFor="uppercase" className="text-xl pl-1">
+              <Label htmlFor="uppercase" className="sm:text-xl text-sm pl-1">
                 Uppercase
               </Label>
             </div>
-            <div>
+            <div className="flex items-center">
               <Checkbox
                 id="lowercase"
                 checked={checked.lowerCase}
+                className="sm:w-4 w-2 sm:h-4 h-2"
                 onCheckedChange={(e) => handleCheckbox(e, "lowerCase")}
               />
-              <Label htmlFor="lowercase" className="text-xl pl-1">
+              <Label htmlFor="lowercase" className="sm:text-xl text-sm pl-1">
                 Lowercase
               </Label>
             </div>
-            <div>
+            <div className="flex items-center">
               <Checkbox
                 id="numbers"
                 checked={checked.numbers}
                 disabled={radio === "say"}
+                className="sm:w-4 w-2 sm:h-4 h-2"
                 onCheckedChange={(e) => handleCheckbox(e, "numbers")}
               />
-              <Label htmlFor="numbers" className="text-xl pl-1">
+              <Label htmlFor="numbers" className="sm:text-xl text-sm pl-1">
                 Numbers
               </Label>
             </div>
-            <div>
+            <div className="flex items-center">
               <Checkbox
                 id="symbols"
                 checked={checked.symbols}
                 disabled={radio === "say"}
+                className="sm:w-4 w-2 sm:h-4 h-2"
                 onCheckedChange={(e) => handleCheckbox(e, "symbols")}
               />
-              <Label htmlFor="symbols" className="text-xl pl-1">
+              <Label htmlFor="symbols" className="sm:text-xl text-sm pl-1">
                 Symbols
               </Label>
             </div>
