@@ -13,6 +13,10 @@ interface PasswordFieldProps {
 
 const PasswordField: FC<PasswordFieldProps> = ({ password, id }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  let width = window.innerWidth;
+  const hiddenPassword = width < 640 ? "****" : "**********";
+
   return (
     <div className="flex flex-row w-full">
       <p
@@ -20,22 +24,22 @@ const PasswordField: FC<PasswordFieldProps> = ({ password, id }) => {
           secure: !showPassword,
         })}
       >
-        {showPassword ? password : "**********"}
+        {showPassword ? password : hiddenPassword}
       </p>
-      <div className="ml-auto flex flex-row gap-2">
+      <div className="ml-auto flex pl-2 flex-row sm:gap-2 gap-1">
         {!showPassword ? (
           <Eye
-            className="hover:text-blue-500 transition-colors duration-300 cursor-pointer"
+            className="hover:text-blue-500 transition-colors duration-300 sm:w-6 w-4 cursor-pointer"
             onClick={() => setShowPassword(true)}
           />
         ) : (
           <EyeOff
-            className="hover:text-blue-500 transition-colors duration-300 cursor-pointer"
+            className="hover:text-blue-500 transition-colors duration-300 sm:w-6 w-4 cursor-pointer"
             onClick={() => setShowPassword(false)}
           />
         )}{" "}
-              <ClipboardCopy
-            className="hover:text-blue-500 transition-colors duration-300 cursor-pointer"
+        <ClipboardCopy
+          className="hover:text-blue-500 transition-colors duration-300 sm:w-6 w-4 cursor-pointer"
           onClick={() => navigator.clipboard.writeText(password)}
         />{" "}
         <RemovePassword id={id} />

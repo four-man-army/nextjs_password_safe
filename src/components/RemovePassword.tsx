@@ -48,7 +48,7 @@ const RemovePassword: FC<RemovePasswordProps> = ({ id }) => {
   return (
     <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
       <DialogTrigger>
-        <Trash2 className="cursor-pointer hover:text-red-500 transition-colors duration-300"/>
+        <Trash2 className="cursor-pointer hover:text-red-500 transition-colors sm:w-6 w-4 duration-300" />
       </DialogTrigger>
       <DialogContent className="bg-white bottom-0 sm:bottom-auto">
         <DialogHeader>

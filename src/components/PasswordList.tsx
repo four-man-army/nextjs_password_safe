@@ -39,17 +39,21 @@ const List: FC<ListProps> = ({ initialPasswords }) => {
       <Table>
         <TableHeader>
           <TableRow className="text-lg">
-            <TableHead>Username</TableHead>
-            <TableHead>Website</TableHead>
-            <TableHead>Password</TableHead>
+            <TableHead className="sm:px-4 px-2">Username</TableHead>
+            <TableHead className="sm:px-4 px-2">Website</TableHead>
+            <TableHead className="sm:px-4 px-2">Password</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {passwords.map((password) => (
             <TableRow key={password.id}>
-              <TableCell>{password.username}</TableCell>
-              <TableCell><a className="hover:underline" href={password.website}>{password.website}</a></TableCell>
-              <TableCell>
+              <TableCell className="sm:p-4 p-2">{password.username}</TableCell>
+              <TableCell className="sm:p-4 p-2">
+                <a className="hover:underline" href={password.website}>
+                  {password.website}
+                </a>
+              </TableCell>
+              <TableCell className="sm:p-4 p-2">
                 <PasswordField password={password.password} id={password.id} />
               </TableCell>
             </TableRow>
