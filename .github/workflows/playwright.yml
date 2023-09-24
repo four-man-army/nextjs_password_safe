@@ -17,11 +17,13 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+    - name: 'Create env file'
+      run: |
+        touch .env
+        echo UPSTASH_REDIS_REST_URL=${{ secrets.UPSTASH_REDIS_REST_URL }} >> .env
+        echo UPSTASH_REDIS_REST_TOKEN=${{ secrets.UPSTASH_REDIS_REST_TOKEN }} >> .env
     - name: Run Playwright tests
       run: npx playwright test
-      env:
-        UPSTASH_REDIS_REST_URL: ${{secrets.UPSTASH_REDIS_REST_URL}}
-        UPSTASH_REDIS_REST_TOKEN: ${{secrets.UPSTASH_REDIS_REST_TOKEN}}
     - uses: actions/upload-artifact@v3
       if: always()
       with:
