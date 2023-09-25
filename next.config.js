@@ -1,20 +1,11 @@
-const isGithubActions = process.env.GITHUB_ACTIONS || false;
-
-let assetPrefix = "/";
-let basePath = "";
-
-if (isGithubActions) {
-  const repo = process.env.GITHUB_REPOSITORY.replace(/.*?\//, "");
-
-  assetPrefix = `/${repo}/`;
-  basePath = `/${repo}`;
-}
-
-module.exports = {
-  assetPrefix: assetPrefix,
-  basePath: basePath,
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    appDir: true,
+  },
   images: {
-    loader: "imgix",
-    path: 'https://cetiri-kurca.imgix.net',
+    domains: ["lh3.googleusercontent.com"],
   },
 };
+
+module.exports = nextConfig;
