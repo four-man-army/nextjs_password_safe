@@ -87,4 +87,4 @@ jobs:
         run: |
           FULL_HTML_REPORT_URL=https://four-man-army.github.io/nextjs_password_safe/$HTML_REPORT_URL_PATH
 
-          echo "::notice title=📋 Published Playwright Test links::$FULL_HTML_REPORT_URL"
+          echo "::notice title=📋 Published Playwright Test Reports::report $FULL_HTML_REPORT_URL"
