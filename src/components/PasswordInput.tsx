@@ -1,15 +1,12 @@
 "use client";
-import { FC, FormEvent, useContext, useRef, useState } from "react";
+import { trpc } from "@/app/_trpc/client";
+import { PasswordContext } from "@/context/Password";
+import { Password } from "@/lib/validators/password";
+import { nanoid } from "nanoid";
+import { FC, FormEvent, useContext, useState } from "react";
+import { toast } from "react-hot-toast";
 import Button from "./ui/Button";
 import { Input } from "./ui/Input";
-import { nanoid } from "nanoid";
-import { Password, passwordValidator } from "@/lib/validators/password";
-import axios from "axios";
-import { PasswordContext } from "@/context/Password";
-import { ZodError } from "zod";
-import { toast } from "react-hot-toast";
-import { useMutation } from "@tanstack/react-query";
-import { trpc } from "@/app/_trpc/client";
 
 interface PasswordInputProps {}
 
@@ -40,7 +37,7 @@ const PasswordInput: FC<PasswordInputProps> = ({}) => {
   };
 
   const { mutate, isLoading} = trpc.addPassword.useMutation({
-    onSuccess(_, password) { 
+    onSuccess() { 
       toast.success("Password added");
     },
     onError(error, password) {
