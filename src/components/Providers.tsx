@@ -1,8 +1,11 @@
-'use client';
+"use client";
+import { trpc } from "@/app/_trpc/client";
 import { NavbarOpenProvider } from "@/context/NavbarOpen";
 import { PasswordProvider } from "@/context/Password";
+import { absoluteUrl } from "@/lib/utils";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { FC, ReactNode } from "react";
+import { httpBatchLink } from "@trpc/client";
+import { FC, ReactNode, useState } from "react";
 import { Toaster } from "react-hot-toast";
 
 interface ProvidersProps {
@@ -10,13 +13,25 @@ interface ProvidersProps {
 }
 
 const Providers: FC<ProvidersProps> = ({ children }) => {
-  const query = new QueryClient();
+  const [queryClient] = useState(() => new QueryClient());
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      links: [
+        httpBatchLink({
+          url: absoluteUrl("/api/trpc"),
+        }),
+      ],
+    })
+  );
+
   return (
     <PasswordProvider>
       <Toaster position="top-center" reverseOrder={false} />
-      <QueryClientProvider client={query}>
-        <NavbarOpenProvider>{children}</NavbarOpenProvider>
-      </QueryClientProvider>
+      <trpc.Provider client={trpcClient} queryClient={queryClient}>
+        <QueryClientProvider client={queryClient}>
+          <NavbarOpenProvider>{children}</NavbarOpenProvider>
+        </QueryClientProvider>
+      </trpc.Provider>
     </PasswordProvider>
   );
 };

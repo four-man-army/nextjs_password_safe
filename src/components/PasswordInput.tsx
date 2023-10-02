@@ -9,6 +9,7 @@ import { PasswordContext } from "@/context/Password";
 import { ZodError } from "zod";
 import { toast } from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
+import { trpc } from "@/app/_trpc/client";
 
 interface PasswordInputProps {}
 
@@ -33,26 +34,17 @@ const PasswordInput: FC<PasswordInputProps> = ({}) => {
       username: (e.target as PasswordForm).elements.username.value,
       password: (e.target as PasswordForm).elements.password.value,
     };
+    add(data);
     mutate(data);
+    setIsAdding(false)
   };
 
-  const { mutate, isLoading } = useMutation({
-    mutationKey: ["addPassword"],
-    mutationFn: async (data: Password) => {
-      const validPassword = passwordValidator.parse(data);
-      await axios.post("/api/passwords/add", validPassword);
-      setIsAdding(false);
-    },
-    onSuccess(_, password) {
+  const { mutate, isLoading} = trpc.addPassword.useMutation({
+    onSuccess(_, password) { 
       toast.success("Password added");
-      add(password);
     },
     onError(error, password) {
-      if (error instanceof ZodError) {
-        toast.error(error.issues[0].message);
-      } else {
-        toast.error("Something went wrong");
-      }
+      toast.error(error.message);
       removePassword(password.id);
     },
   });
