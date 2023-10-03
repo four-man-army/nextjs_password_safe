@@ -3,7 +3,6 @@ import React from "react";
 import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
 import NavbarToggle from "@/components/NavbarToggle";
-import { Metadata } from "next";
 import "./globals.css"
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -11,13 +10,11 @@ import Image from "next/image";
 import SignOutButton from "@/components/SignOutButton";
 import { Inter } from "next/font/google";
 import { buttonVariants } from "@/components/ui/Button";
-
-export const metadata: Metadata = {
-  title: "Password Safe",
-  description: "Home page",
-};
+import { constructMetadata } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
+
+export const metadata = constructMetadata();
 
 export default async function RootLayout({
   children,
