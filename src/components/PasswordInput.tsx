@@ -1,12 +1,14 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
 import { PasswordContext } from "@/context/Password";
-import { Password } from "@/lib/validators/password";
+import { Password, passwordValidator } from "@/lib/validators/password";
 import { nanoid } from "nanoid";
 import { FC, FormEvent, useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 import Button from "./ui/Button";
 import { Input } from "./ui/Input";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface PasswordInputProps {}
 
@@ -23,21 +25,27 @@ interface PasswordForm extends HTMLFormElement {
 const PasswordInput: FC<PasswordInputProps> = ({}) => {
   const { addPassword: add, removePassword } = useContext(PasswordContext);
 
-  const addPassword = async (e: FormEvent<PasswordForm>) => {
-    e.preventDefault();
-    const data: Password = {
-      id: nanoid(),
-      website: (e.target as PasswordForm).elements.website.value,
-      username: (e.target as PasswordForm).elements.username.value,
-      password: (e.target as PasswordForm).elements.password.value,
-    };
-    add(data);
-    mutate(data);
-    setIsAdding(false)
-  };
+  const onSubmit = (password: Password) => {
+    reset();
+    add(password);
+    setIsAdding(false);
+    mutate(password);
+  }
 
-  const { mutate, isLoading} = trpc.addPassword.useMutation({
-    onSuccess() { 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm<Password>({
+    defaultValues: {
+      id: nanoid(),
+    },
+    resolver: zodResolver(passwordValidator),
+  });
+
+  const { mutate, isLoading } = trpc.addPassword.useMutation({
+    onSuccess() {
       toast.success("Password added");
     },
     onError(error, password) {
@@ -50,16 +58,27 @@ const PasswordInput: FC<PasswordInputProps> = ({}) => {
   if (isAdding)
     return (
       <div className="w-full mt-4">
-        <form onSubmit={addPassword}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-row gap-2">
             <Input
+              {...register("username")}
               autoFocus
               type="text"
               placeholder="Username"
               id="username"
             />
-            <Input type="text" placeholder="Website" id="website" />
-            <Input type="text" placeholder="Password" id="password" />
+            <Input
+              {...register("website")}
+              type="text"
+              placeholder="Website"
+              id="website"
+            />
+            <Input
+              {...register("password")}
+              type="text"
+              placeholder="Password"
+              id="password"
+            />
           </div>
           <div className="flex flex-row gap-4 mt-4 w-full">
             <Button
