@@ -66,18 +66,21 @@ const PasswordInput: FC<PasswordInputProps> = ({}) => {
               type="text"
               placeholder="Username"
               id="username"
+              error={errors.username?.message}
             />
             <Input
               {...register("website")}
               type="text"
               placeholder="Website"
               id="website"
+              error={errors.website?.message}
             />
             <Input
               {...register("password")}
               type="text"
               placeholder="Password"
               id="password"
+              error={errors.password?.message}
             />
           </div>
           <div className="flex flex-row gap-4 mt-4 w-full">
