@@ -18,6 +18,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { passwordValidator } from "@/lib/validators/password";
+import { trpc } from "@/app/_trpc/client";
 
 interface RemovePasswordProps {
   id: string;
@@ -25,16 +26,9 @@ interface RemovePasswordProps {
 
 const RemovePassword: FC<RemovePasswordProps> = ({ id }) => {
   const [open, setOpen] = useState(false);
-  const { getPassword, removePassword } = useContext(PasswordContext);
+  const { removePassword } = useContext(PasswordContext);
 
-  const { mutate, isLoading } = useMutation({
-    mutationKey: ["removePassword"],
-    mutationFn: async (id: string) => {
-      const password = getPassword(id);
-      if (!password) return new Error("no password found");
-      const validPassword = passwordValidator.parse(password);
-      await axios.post("/api/passwords/remove", validPassword);
-    },
+  const { mutate, isLoading} = trpc.removePassword.useMutation({
     onSuccess() {
       setOpen(false);
       toast.success("Password removed");
@@ -42,7 +36,7 @@ const RemovePassword: FC<RemovePasswordProps> = ({ id }) => {
     },
     onError(error) {
       setOpen(false);
-      toast.error((error as Error).message);
+      toast.error(error.message);
     },
   });
   return (
@@ -63,7 +57,7 @@ const RemovePassword: FC<RemovePasswordProps> = ({ id }) => {
           </DialogPrimitive.Close>
           <Button
             variant="error"
-            onClick={() => mutate(id)}
+            onClick={() => mutate({id})}
             isLoading={isLoading}
           >
             Remove
