@@ -20,17 +20,15 @@ jobs:
           # update the Node version to meet your needs
           node-version: 16
           cache: npm
-
+      - name: 'Create env file'
+        run: |
+          touch .env
+          echo UPSTASH_REDIS_REST_URL=${{ secrets.UPSTASH_REDIS_REST_URL }} >> .env
+          echo UPSTASH_REDIS_REST_TOKEN=${{ secrets.UPSTASH_REDIS_REST_TOKEN }} >> .env
+          echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env
+          echo GOOGLE_KEY=${{ secrets.GOOGLE_KEY }} >> .env
+          echo NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} >> .env
       - name: Build
         run: |
           npm ci
-          > .env.local
-          echo DB_NAME=${{ secrets.DB_NAME }} >> .env.local
-          echo DB_URL=${{ secrets.DB_URL }} >> .env.local
-          echo USERS_READ=${{ secrets.USERS_READ }} >> .env.local
-          echo USERS_READ_PW=${{ secrets.USERS_READ_PW }} >> .env.local
-          echo USERS_WRITE=${{ secrets.USERS_WRITE }} >> .env.local
-          echo USERS_WRITE_PW=${{ secrets.USERS_WRITE_PW }} >> .env.local
-          npm run build
-          npm run export
-          touch out/.nojekyll
+          npm run build --if-present

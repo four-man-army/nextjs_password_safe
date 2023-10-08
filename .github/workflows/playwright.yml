@@ -1,43 +1,90 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, beta ]
-  pull_request:
-    branches: [ main, beta ]
+    branches-ignore: [ gh-pages ]
+
+concurrency:
+  group: ${{ github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - name: extract current branch
-      run: |
-        if [ "${{github.event_name}}" = "pull_request" ]; then
-          URL=https://nextjs-password-safe-git-$(echo ${{github.head_ref}} | sed -e 's/_//g')-four-man-army.vercel.app/
-          echo $URL
-          echo "TEST_URL=$URL" >> $GITHUB_ENV
-        else
-          CURRENT_BRANCH=$(echo $GITHUB_REF | sed -e 's/refs\/heads\///g' | sed -e 's/_//g')
-          URL=https://nextjs-password-safe-git-$CURRENT_BRANCH-four-man-army.vercel.app/
-          echo $CURRENT_BRANCH
-          echo $URL
-          echo "TEST_URL=$URL" >> $GITHUB_ENV
-        fi
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 18
     - name: Install dependencies
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+    - name: 'Create env file'
+      run: |
+        touch .env
+        echo UPSTASH_REDIS_REST_URL=${{ secrets.UPSTASH_REDIS_REST_URL }} >> .env
+        echo UPSTASH_REDIS_REST_TOKEN=${{ secrets.UPSTASH_REDIS_REST_TOKEN }} >> .env
+        echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env
+        echo GOOGLE_KEY=${{ secrets.GOOGLE_KEY }} >> .env
+        echo NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} >> .env
     - name: Run Playwright tests
-      run: npm run test
-      env:
-        PASSWORD: ${{secrets.PASSWORD}}
-        EMAIL: ${{secrets.EMAIL}}
+      run: npx playwright test
     - uses: actions/upload-artifact@v3
       if: always()
       with:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
+
+  publish_report:
+    name: Publish HTML Report
+    # using always() is not ideal here, because it would also run if the workflow was cancelled
+    if: "success() || needs.test.result == 'failure'"
+    needs: [test]
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    env:
+      # Unique URL path for each workflow run attempt
+      HTML_REPORT_URL_PATH: reports/${{ github.ref_name }}/${{ github.run_id }}/${{ github.run_attempt }}
+    steps:
+      - name: Checkout GitHub Pages Branch
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+      - name: Set Git User
+        # see: https://github.com/actions/checkout/issues/13#issuecomment-724415212
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Download zipped HTML report
+        uses: actions/download-artifact@v2
+        with:
+          name: playwright-report
+          path: ${{ env.HTML_REPORT_URL_PATH }}
+      - name: Push HTML Report
+        timeout-minutes: 3
+        # commit report, then try push-rebase-loop until it's able to merge the HTML report to the gh-pages branch
+        # this is necessary when this job is running at least twice at the same time (e.g. through two pushes at the same time)
+        run: |
+          git add .
+          git commit -m "workflow: add HTML report for run-id ${{ github.run_id }} (attempt:  ${{ github.run_attempt }})"
+
+          while true; do
+            git pull --rebase
+            if [ $? -ne 0 ]; then
+              echo "Failed to rebase. Please review manually."
+              exit 1
+            fi
+
+            git push
+            if [ $? -eq 0 ]; then
+              echo "Successfully pushed HTML report to repo."
+              exit 0
+            fi
+          done
+      - name: Output Report URL as Worfklow Annotation
+        run: |
+          FULL_HTML_REPORT_URL=https://four-man-army.github.io/nextjs_password_safe/$HTML_REPORT_URL_PATH
+
+          echo "::notice title=📋 Published Playwright Test Reports::report $FULL_HTML_REPORT_URL"
