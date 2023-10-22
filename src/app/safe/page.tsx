@@ -48,9 +48,11 @@ export default async function page() {
           <Key className="h-16 w-16" />
           <h1 className="text-6xl font-medium">Password Safe</h1>
         </div>
-        <div className="lg:w-1/2 w-full h-full">
-          <div className="p-4 rounded-sm shadow-md w-full max-h-full overflow-y-auto scrollbar-w-2 scrollbar-track-blue-lighter scrollbar-thumb-blue scrollbar-thumb-rounded">
-            <List initialPasswords={passwords} />
+        <div className="lg:w-1/2 w-full h-full min-h-0">
+          <div className="p-4 rounded-sm shadow-md w-full h-full flex flex-col">
+            <div className="flex-grow overflow-y-auto">
+              <List initialPasswords={passwords} />
+            </div>
             <PasswordInput />
           </div>
         </div>
