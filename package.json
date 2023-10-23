@@ -36,6 +36,7 @@
     "dotenv": "^16.0.3",
     "eslint": "8.29.0",
     "eslint-config-next": "^13.4.5",
+    "framer-motion": "^10.16.4",
     "jsencrypt": "^3.3.1",
     "lucide-react": "^0.241.0",
     "nanoid": "^4.0.2",
