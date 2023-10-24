@@ -1,7 +1,7 @@
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { db } from "./db";
-import { UpstashRedisAdapter } from "@next-auth/upstash-redis-adapter";
 import { createHash } from "crypto";
 
 function getGoogleCredentials() {
@@ -19,7 +19,7 @@ function getGoogleCredentials() {
 }
 
 export const authOptions: NextAuthOptions = {
-  adapter: UpstashRedisAdapter(db),
+  adapter: PrismaAdapter(db),
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
@@ -29,8 +29,26 @@ export const authOptions: NextAuthOptions = {
   },
   providers: [GoogleProvider(getGoogleCredentials())],
   callbacks: {
+    async session({ token, session }) {
+      if (token) {
+        session.user.id = token.id;
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.image = token.picture;
+        session.user.encryptKey = createHash("sha256")
+          .update(token.id + token.email + token.name + token.picture)
+          .digest("hex");
+      }
+
+      return session;
+    },
+
     async jwt({ token, user }) {
-      const dbUser = (await db.get(`user:${token.id}`)) as User | null;
+      const dbUser = await db.user.findFirst({
+        where: {
+          email: token.email,
+        },
+      });
 
       if (!dbUser) {
         token.id = user!.id;
@@ -39,22 +57,10 @@ export const authOptions: NextAuthOptions = {
 
       return {
         id: dbUser.id,
-        email: dbUser.email,
         name: dbUser.name,
+        email: dbUser.email,
         picture: dbUser.image,
       };
-    },
-    async session({ session, token }) {
-      if (token) {
-        session.user.id = token.id;
-        session.user.email = token.email;
-        session.user.name = token.name;
-        session.user.image = token.picture;
-        session.user.encryptKey = createHash("sha256")
-          .update(token.id + token.email + token.name + token.picture)
-          .digest("hex");
-      }
-      return session;
     },
     redirect() {
       return "/";
