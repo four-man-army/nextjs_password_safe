@@ -41,9 +41,6 @@ const PasswordInput: FC<PasswordInputProps> = ({ user }) => {
     formState: { errors },
     reset,
   } = useForm<Password>({
-    defaultValues: {
-      id: nanoid(),
-    },
     resolver: zodResolver(passwordValidator),
   });
 
@@ -104,6 +101,12 @@ const PasswordInput: FC<PasswordInputProps> = ({ user }) => {
                 placeholder="Password"
                 id="password"
                 error={errors.password?.message}
+              />
+              <input
+                {...register("id")}
+                type="hidden"
+                value={nanoid()}
+                id="id"
               />
             </motion.div>
             <motion.div

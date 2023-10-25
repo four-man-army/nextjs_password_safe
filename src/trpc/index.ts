@@ -1,8 +1,6 @@
-import { Password, passwordValidator } from "@/lib/validators/password";
-import { privateProcedure, router } from "./trpc";
 import { db } from "@/lib/db";
-import { decrypt, encrypt } from "@/lib/utils";
 import { z } from "zod";
+import { privateProcedure, router } from "./trpc";
 
 export const appRouter = router({
   addPassword: privateProcedure
@@ -12,6 +10,7 @@ export const appRouter = router({
 
       await db.password.create({
         data: {
+          id: input.id,
           hashedPassword: input.hashedPassword,
           user: {
             connect: {
@@ -39,7 +38,7 @@ export const appRouter = router({
     }),
   getPasswords: privateProcedure
     .query(async ({ ctx }) => {
-      const { userId, user } = ctx;
+      const { userId } = ctx;
 
       const passwords = await db.password.findMany({
         where: {
