@@ -1,6 +1,9 @@
 "use client";
-import { Password } from "@/lib/validators/password";
+import { trpc } from "@/app/_trpc/client";
+import { Ghost } from "lucide-react";
 import { FC, useContext, useEffect, useState } from "react";
+import PasswordField from "./PasswordField";
+import { ScrollArea } from "./ui/ScrollArea";
 import {
   Table,
   TableBody,
@@ -9,23 +12,33 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/Table";
+import { decrypt } from "@/lib/utils";
+import type { User } from "next-auth";
+import { Password } from "@/lib/validators/password";
 import { PasswordContext } from "@/context/Password";
-import PasswordField from "./PasswordField";
-import { Ghost } from "lucide-react";
-import { ScrollArea } from "./ui/ScrollArea";
 
 interface ListProps {
-  initialPasswords: Password[];
+  user: User & {
+    id: string;
+    encryptKey: string;
+  };
 }
 
-const List: FC<ListProps> = ({ initialPasswords }) => {
-  const { passwords, setPasswords } = useContext(PasswordContext);
+const List: FC<ListProps> = ({ user }) => {
+  const {passwords, setPasswords} = useContext(PasswordContext);
+  const { data, isLoading, isSuccess } = trpc.getPasswords.useQuery();
 
-  useEffect(() => {
-    setPasswords(initialPasswords);
-  }, [initialPasswords]);
+  useEffect(() => { 
+    if (isSuccess) {
+      setPasswords(data.map((password) => {
+        return JSON.parse(
+          decrypt(password.hashedPassword, user.encryptKey)
+        ) as Password;
+      }));
+    }
+  }, [isSuccess]);
 
-  if (passwords.length === 0) {
+  if (passwords?.length === 0) {
     return (
       <div className="mt-16 flex flex-col items-center gap-2">
         <Ghost className="h-8 w-8 text-zinc-800" />
@@ -49,7 +62,7 @@ const List: FC<ListProps> = ({ initialPasswords }) => {
           </TableRow>
         </TableHeader>
           <TableBody className="h-full">
-            {passwords.map((password) => (
+            {passwords?.map((password) => (
               <TableRow key={password.id}>
                 <TableCell className="sm:p-4 p-2">
                   {password.username}

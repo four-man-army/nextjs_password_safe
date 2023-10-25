@@ -8,19 +8,31 @@ import { nanoid } from "nanoid";
 import { FC, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
+import type { User } from "next-auth";
 import Button from "./ui/Button";
 import { Input } from "./ui/Input";
+import { encrypt } from "@/lib/utils";
 
-interface PasswordInputProps {}
+interface PasswordInputProps {
+  user: User & {
+    id: string;
+    encryptKey: string;
+  };
+}
 
-const PasswordInput: FC<PasswordInputProps> = ({}) => {
+const PasswordInput: FC<PasswordInputProps> = ({ user }) => {
   const { addPassword: add, removePassword } = useContext(PasswordContext);
+
+  const utils = trpc.useContext();
 
   const onSubmit = (password: Password) => {
     reset();
     add(password);
     setIsAdding(false);
-    mutate(password);
+    mutate({
+      id: password.id,
+      hashedPassword: encrypt(password, user.encryptKey),
+    });
   };
 
   const {
@@ -29,9 +41,6 @@ const PasswordInput: FC<PasswordInputProps> = ({}) => {
     formState: { errors },
     reset,
   } = useForm<Password>({
-    defaultValues: {
-      id: nanoid(),
-    },
     resolver: zodResolver(passwordValidator),
   });
 
@@ -70,7 +79,7 @@ const PasswordInput: FC<PasswordInputProps> = ({}) => {
               initial="hidden"
               exit="close"
               className="flex flex-row gap-2 justify-between"
-              >
+            >
               <Input
                 {...register("username")}
                 autoFocus
@@ -85,7 +94,7 @@ const PasswordInput: FC<PasswordInputProps> = ({}) => {
                 placeholder="Website"
                 id="website"
                 error={errors.website?.message}
-                />
+              />
               <Input
                 {...register("password")}
                 type="text"
@@ -93,8 +102,17 @@ const PasswordInput: FC<PasswordInputProps> = ({}) => {
                 id="password"
                 error={errors.password?.message}
               />
+              <input
+                {...register("id")}
+                type="hidden"
+                value={nanoid()}
+                id="id"
+              />
             </motion.div>
-            <motion.div className="flex flex-row gap-4 mt-4 w-full" exit={{gap:0}}>
+            <motion.div
+              className="flex flex-row gap-4 mt-4 w-full"
+              exit={{ gap: 0 }}
+            >
               <motion.div
                 key="close"
                 variants={closeButton}
@@ -110,9 +128,7 @@ const PasswordInput: FC<PasswordInputProps> = ({}) => {
                   className="w-full"
                   onFocus={(e) => e.currentTarget.blur()}
                 >
-                  <motion.p exit={{x: -100}}>
-                  Cancel
-                  </motion.p>
+                  <motion.p exit={{ x: -100 }}>Cancel</motion.p>
                 </Button>
               </motion.div>
               <motion.div className="w-full" layoutId="1">
@@ -130,7 +146,7 @@ const PasswordInput: FC<PasswordInputProps> = ({}) => {
             onClick={() => setIsAdding(true)}
             isLoading={isLoading}
             className="w-full"
-            >
+          >
             <motion.p layoutId="2">Add</motion.p>
           </Button>
         </motion.div>

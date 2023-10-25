@@ -3,9 +3,9 @@ import React from "react";
 import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
 import NavbarToggle from "@/components/NavbarToggle";
-import "./globals.css"
+import "./globals.css";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { auth, authOptions } from "@/lib/auth";
 import Image from "next/image";
 import SignOutButton from "@/components/SignOutButton";
 import { Inter } from "next/font/google";
@@ -20,14 +20,13 @@ export default async function RootLayout({
   children,
 }: {
   children: ReactNode;
-  }) {
-  
-  const session = await getServerSession(authOptions);
-  
+}) {
+  const session = await auth();
+
   return (
     <html lang="en" className={inter.className}>
-      <Providers>
-        <body>
+      <body>
+        <Providers>
           <div className="h-screen">
             <section className="flex flex-row h-full">
               <Navbar />
@@ -39,8 +38,11 @@ export default async function RootLayout({
                       <div className="my-auto mr-4">
                         <a
                           href="/login"
-                          className={buttonVariants({variant: "ghost", size: "sm"})}
-                        >                 
+                          className={buttonVariants({
+                            variant: "ghost",
+                            size: "sm",
+                          })}
+                        >
                           Login
                         </a>
                       </div>
@@ -80,8 +82,8 @@ export default async function RootLayout({
               </section>
             </section>
           </div>
-        </body>
-      </Providers>
+        </Providers>
+      </body>
     </html>
   );
 }
