@@ -52,7 +52,7 @@ const RemovePassword: FC<RemovePasswordProps> = ({ id }) => {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <DialogPrimitive.Close>
+          <DialogPrimitive.Close asChild>
             <Button className="w-full sm:w-auto mt-2 sm:mt-0">Cancel</Button>
           </DialogPrimitive.Close>
           <Button
