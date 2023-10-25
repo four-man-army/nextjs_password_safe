@@ -51,7 +51,8 @@ export default async function RootLayout({
                         <div className="flex flex-1 items-center gap-x-4 text-sm font-semibold leading-6 text-gray-900">
                           <div className="relative h-8 w-8">
                             <Image
-                              fill
+                              width={32}
+                              height={32}
                               referrerPolicy="no-referrer"
                               className="rounded-full"
                               src={session.user.image || ""}
