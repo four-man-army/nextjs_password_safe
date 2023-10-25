@@ -1,14 +1,13 @@
 import PasswordInput from "@/components/PasswordInput";
 import List from "@/components/PasswordList";
-import { authOptions } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { Key } from "lucide-react";
-import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
 export default async function page() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (!session) notFound();
 
