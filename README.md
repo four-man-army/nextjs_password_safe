@@ -16,7 +16,9 @@
 <p>Our application, to make a password safe with best practices.
 
 ### Deployments
+
 [![.github/workflows/playwright.yml](https://github.com/four-man-army/nextjs_password_safe/actions/workflows/playwright.yml/badge.svg)](https://github.com/four-man-army/nextjs_password_safe/actions/workflows/playwright.yml)
+
 <p>
 <ol>
   <li><a href="https://nextjs-password-safe.vercel.app/">Main production deployment</a></li>
@@ -29,11 +31,12 @@ Or just follow the instructions below to run your preferred branch.
 ## Getting Started
 
 ### Executing program
+
 1. `npm install`
 2. `npm run dev`
 
-
 ## Learn More
+
 To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
@@ -42,7 +45,9 @@ To learn more about Next.js, take a look at the following resources:
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
 ## Documentation
+
 ### Directory structure
+
 ```bash
 ├── src
 │   │   # Next.js routes
@@ -53,7 +58,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 │   ├── components
 │   │   │   # shadcn ui components
 │   │   ├── ui
-│   │   # React context files 
+│   │   # React context files
 │   ├── context
 │   │   # helper functions
 │   ├── helpers
@@ -68,17 +73,21 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 ```
 
 ### Database
+
 We use mysql as our database.
 
 ### Authentication
+
 We use NextAuth.js for authentication.
 
 ### Testing
+
 We use Playwright for testing, and we use Vercel for deployment.
 
 ### Reflexion
 
 #### What went well
+
 - We managed to get a working product in time
 - We managed to get a working product with all the features we wanted
 - We managed to get a working product with a good design
@@ -86,20 +95,15 @@ We use Playwright for testing, and we use Vercel for deployment.
 - We managed to get a working product with a good user interface
 
 #### What went wrong
+
 - We had some issues with the database, but we managed to fix it
 - We had some issues with the authentication, but we managed to fix it
 - We had some issues with the testing, but we managed to fix it
 - We had some issues with the deployment, but we managed to fix it
 
 #### What we learned
+
 - We learned how to use Next.js
 - We learned how to use NextAuth.js
 - We learned how to use MongoDB
 - We learned how to use Redis
-
-
-
-
-
-
-

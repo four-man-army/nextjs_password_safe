@@ -21,7 +21,7 @@ export default async function page() {
         <div className="lg:w-1/2 w-full h-full min-h-0">
           <div className="p-4 rounded-sm shadow-md w-full h-full flex flex-col">
             <div className="flex-grow overflow-y-auto">
-              <List user={session.user}/>
+              <List user={session.user} />
             </div>
             <PasswordInput user={session.user} />
           </div>

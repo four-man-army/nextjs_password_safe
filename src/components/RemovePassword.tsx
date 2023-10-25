@@ -28,7 +28,7 @@ const RemovePassword: FC<RemovePasswordProps> = ({ id }) => {
   const [open, setOpen] = useState(false);
   const { removePassword } = useContext(PasswordContext);
 
-  const { mutate, isLoading} = trpc.removePassword.useMutation({
+  const { mutate, isLoading } = trpc.removePassword.useMutation({
     onSuccess() {
       setOpen(false);
       toast.success("Password removed");
@@ -57,7 +57,7 @@ const RemovePassword: FC<RemovePasswordProps> = ({ id }) => {
           </DialogPrimitive.Close>
           <Button
             variant="error"
-            onClick={() => mutate({id})}
+            onClick={() => mutate({ id })}
             isLoading={isLoading}
           >
             Remove

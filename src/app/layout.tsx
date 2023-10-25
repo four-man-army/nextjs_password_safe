@@ -1,16 +1,14 @@
-import { ReactNode } from "react";
-import React from "react";
-import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
 import NavbarToggle from "@/components/NavbarToggle";
-import "./globals.css";
-import { getServerSession } from "next-auth";
-import { auth, authOptions } from "@/lib/auth";
-import Image from "next/image";
+import Providers from "@/components/Providers";
 import SignOutButton from "@/components/SignOutButton";
-import { Inter } from "next/font/google";
 import { buttonVariants } from "@/components/ui/Button";
+import { auth } from "@/lib/auth";
 import { constructMetadata } from "@/lib/utils";
+import { Inter } from "next/font/google";
+import Image from "next/image";
+import { ReactNode } from "react";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

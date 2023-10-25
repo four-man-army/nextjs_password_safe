@@ -12,7 +12,7 @@ export default withAuth(
 
     const sensitiveRoutes = ["/safe"];
     const isAccessingSensitiveRoute = sensitiveRoutes.some((route) =>
-      pathname.startsWith(route)
+      pathname.startsWith(route),
     );
 
     if (isLoginPage) {
@@ -33,7 +33,7 @@ export default withAuth(
         return true;
       },
     },
-  }
+  },
 );
 
 export const config = {

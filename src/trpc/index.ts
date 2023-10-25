@@ -4,7 +4,7 @@ import { privateProcedure, router } from "./trpc";
 
 export const appRouter = router({
   addPassword: privateProcedure
-    .input(z.object({ id: z.string(), hashedPassword: z.string()}))
+    .input(z.object({ id: z.string(), hashedPassword: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const { userId } = ctx;
 
@@ -36,18 +36,17 @@ export const appRouter = router({
 
       return { status: "OK" };
     }),
-  getPasswords: privateProcedure
-    .query(async ({ ctx }) => {
-      const { userId } = ctx;
+  getPasswords: privateProcedure.query(async ({ ctx }) => {
+    const { userId } = ctx;
 
-      const passwords = await db.password.findMany({
-        where: {
-          userId,
-        },
-      });
+    const passwords = await db.password.findMany({
+      where: {
+        userId,
+      },
+    });
 
-      return passwords ;
-    }),
+    return passwords;
+  }),
 });
 
 export type AppRouter = typeof appRouter;

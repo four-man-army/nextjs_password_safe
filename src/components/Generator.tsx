@@ -37,12 +37,12 @@ const Generator: FC<GeneratorProps> = ({}) => {
 
   const handleCheckbox = (
     cs: CheckedState,
-    value: keyof typeof checked
+    value: keyof typeof checked,
   ): void => {
     setChecked((prevState) => {
       if (
         Object.entries({ ...prevState, [value]: cs }).every(
-          ([_, v]) => v === false
+          ([_, v]) => v === false,
         )
       )
         return prevState;
@@ -81,7 +81,7 @@ const Generator: FC<GeneratorProps> = ({}) => {
                 <RefreshCcw
                   className={cn(
                     "hover:text-blue-500 transition-all duration-300 cursor-pointer",
-                    { "animate-rotate": animate }
+                    { "animate-rotate": animate },
                   )}
                   onClick={() => {
                     setPassword(genPw(length, radio, checked));

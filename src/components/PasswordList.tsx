@@ -25,16 +25,18 @@ interface ListProps {
 }
 
 const List: FC<ListProps> = ({ user }) => {
-  const {passwords, setPasswords} = useContext(PasswordContext);
+  const { passwords, setPasswords } = useContext(PasswordContext);
   const { data, isLoading, isSuccess } = trpc.getPasswords.useQuery();
 
-  useEffect(() => { 
+  useEffect(() => {
     if (isSuccess) {
-      setPasswords(data.map((password) => {
-        return JSON.parse(
-          decrypt(password.hashedPassword, user.encryptKey)
-        ) as Password;
-      }));
+      setPasswords(
+        data.map((password) => {
+          return JSON.parse(
+            decrypt(password.hashedPassword, user.encryptKey),
+          ) as Password;
+        }),
+      );
     }
   }, [isSuccess]);
 
@@ -52,35 +54,30 @@ const List: FC<ListProps> = ({ user }) => {
   }
 
   return (
-      <Table>
-        <TableHeader>
-          <TableRow className="text-lg">
-            <TableHead className="sm:px-4 px-2">Username</TableHead>
-            <TableHead className="sm:px-4 px-2">Website</TableHead>
-            <TableHead className="sm:px-4 px-2">Password</TableHead>
+    <Table>
+      <TableHeader>
+        <TableRow className="text-lg">
+          <TableHead className="sm:px-4 px-2">Username</TableHead>
+          <TableHead className="sm:px-4 px-2">Website</TableHead>
+          <TableHead className="sm:px-4 px-2">Password</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody className="h-full">
+        {passwords?.map((password) => (
+          <TableRow key={password.id}>
+            <TableCell className="sm:p-4 p-2">{password.username}</TableCell>
+            <TableCell className="sm:p-4 p-2">
+              <a className="hover:underline" href={password.website}>
+                {password.website}
+              </a>
+            </TableCell>
+            <TableCell className="sm:p-4 p-2">
+              <PasswordField password={password.password} id={password.id} />
+            </TableCell>
           </TableRow>
-        </TableHeader>
-          <TableBody className="h-full">
-            {passwords?.map((password) => (
-              <TableRow key={password.id}>
-                <TableCell className="sm:p-4 p-2">
-                  {password.username}
-                </TableCell>
-                <TableCell className="sm:p-4 p-2">
-                  <a className="hover:underline" href={password.website}>
-                    {password.website}
-                  </a>
-                </TableCell>
-                <TableCell className="sm:p-4 p-2">
-                  <PasswordField
-                    password={password.password}
-                    id={password.id}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-      </Table>
+        ))}
+      </TableBody>
+    </Table>
   );
 };
 

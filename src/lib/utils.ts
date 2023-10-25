@@ -25,7 +25,7 @@ export function genPw(
     lowerCase: boolean;
     numbers: boolean;
     symbols: boolean;
-  }
+  },
 ): string {
   const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const lowerCase = "abcdefghijklmnopqrstuvwxyz";
@@ -34,13 +34,13 @@ export function genPw(
   var result = "";
 
   const getList = (): string => {
-    var list = ""
+    var list = "";
     if (modes.upperCase) list += upperCase;
     if (modes.lowerCase) list += lowerCase;
     if (modes.numbers) list += numbers;
     if (modes.symbols) list += specialCharacters;
     return list;
-  }
+  };
 
   switch (type) {
     case "say":
@@ -53,7 +53,10 @@ export function genPw(
     case "read":
       for (var i = 0; i < length; i++) {
         var list = getList();
-        var newList = list.replace(/([Oo01Iilg9MNmnWVwv\\$#!&*+{}\[\]<>/\(\)])/g, "");
+        var newList = list.replace(
+          /([Oo01Iilg9MNmnWVwv\\$#!&*+{}\[\]<>/\(\)])/g,
+          "",
+        );
         result += newList.charAt(Math.random() * newList.length);
       }
       break;
@@ -63,8 +66,8 @@ export function genPw(
         result += list.charAt(Math.random() * list.length);
       }
       break;
-    }
-    return result;
+  }
+  return result;
 }
 
 export function absoluteUrl(path: string) {

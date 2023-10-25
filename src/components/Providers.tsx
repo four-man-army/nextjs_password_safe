@@ -21,7 +21,7 @@ const Providers: FC<ProvidersProps> = ({ children }) => {
           url: absoluteUrl("/api/trpc"),
         }),
       ],
-    })
+    }),
   );
 
   return (

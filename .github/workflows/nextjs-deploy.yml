@@ -2,17 +2,16 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
       # https://github.com/actions/checkout
       - uses: actions/checkout@v3
-        
+
       # a standard step for GitHub actions on Node
       # https://github.com/actions/setup-node
       - uses: actions/setup-node@v3
@@ -20,7 +19,7 @@ jobs:
           # update the Node version to meet your needs
           node-version: 16
           cache: npm
-      - name: 'Create env file'
+      - name: "Create env file"
         run: |
           touch .env
           echo UPSTASH_REDIS_REST_URL=${{ secrets.UPSTASH_REDIS_REST_URL }} >> .env
