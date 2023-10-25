@@ -30,7 +30,7 @@ const List: FC<ListProps> = ({ user }) => {
 
   useEffect(() => { 
     if (isSuccess) {
-      setPasswords(data.map((password) => {
+      setPasswords(data.map((password: typeof data[number]) => {
         return JSON.parse(
           decrypt(password.hashedPassword, user.encryptKey)
         ) as Password;
