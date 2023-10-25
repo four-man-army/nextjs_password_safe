@@ -52,8 +52,7 @@ const List: FC<ListProps> = ({ user }) => {
   }
 
   return (
-      <Table className="h-full">
-        <ScrollArea className="h-full max-h-full">
+      <Table>
         <TableHeader>
           <TableRow className="text-lg">
             <TableHead className="sm:px-4 px-2">Username</TableHead>
@@ -81,7 +80,6 @@ const List: FC<ListProps> = ({ user }) => {
               </TableRow>
             ))}
           </TableBody>
-        </ScrollArea>
       </Table>
   );
 };
