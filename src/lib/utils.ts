@@ -109,7 +109,7 @@ export function constructMetadata({
       creator: "@bimbobjorn",
     },
     icons,
-    metadataBase: new URL("https://nextjs-password-safe.vercel.app"),
+    metadataBase: new URL("https://www.password-safe.ch/"),
     themeColor: "#FFF",
     ...(noIndex && {
       robots: {

@@ -1,9 +1,13 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
+import { PasswordContext } from "@/context/Password";
+import { decrypt } from "@/lib/utils";
+import { Password } from "@/lib/validators/password";
 import { Ghost } from "lucide-react";
-import { FC, useContext, useEffect, useState } from "react";
+import type { User } from "next-auth";
+import { FC, useContext, useEffect } from "react";
 import PasswordField from "./PasswordField";
-import { ScrollArea } from "./ui/ScrollArea";
+import { Skeleton } from "./ui/Skeleton";
 import {
   Table,
   TableBody,
@@ -12,10 +16,6 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/Table";
-import { decrypt } from "@/lib/utils";
-import type { User } from "next-auth";
-import { Password } from "@/lib/validators/password";
-import { PasswordContext } from "@/context/Password";
 
 interface ListProps {
   user: User & {
@@ -26,19 +26,29 @@ interface ListProps {
 
 const List: FC<ListProps> = ({ user }) => {
   const { passwords, setPasswords } = useContext(PasswordContext);
-  const { data, isLoading, isSuccess } = trpc.getPasswords.useQuery();
+  const { data, isLoading, isSuccess } =
+    trpc.getPasswords.useQuery();
 
   useEffect(() => {
     if (isSuccess) {
       setPasswords(
         data.map((password) => {
           return JSON.parse(
-            decrypt(password.hashedPassword, user.encryptKey),
+            decrypt(password.hashedPassword, user.encryptKey)
           ) as Password;
-        }),
+        })
       );
     }
-  }, [isSuccess]);
+  }, [isSuccess, data, setPasswords]);
+
+  if (isLoading) {
+    return <div className="h-full w-full">
+      <Skeleton className="w-full p-5" />
+      <Skeleton className="w-full p-5" />
+      <Skeleton className="w-full p-5" />
+      <Skeleton className="w-full p-5" />
+    </div>
+  }
 
   if (passwords?.length === 0) {
     return (
