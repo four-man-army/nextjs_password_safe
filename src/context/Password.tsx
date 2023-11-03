@@ -11,7 +11,7 @@ export const PasswordContext = createContext<{
   removePassword: (id: string) => void;
 }>({
   passwords: [],
-  setPasswords: () => { },
+  setPasswords: () => {},
   getPassword: () => undefined,
   addPassword: () => {},
   removePassword: () => {},
@@ -34,7 +34,13 @@ export function PasswordProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <PasswordContext.Provider
-      value={{ passwords, setPasswords, addPassword, removePassword, getPassword }}
+      value={{
+        passwords,
+        setPasswords,
+        addPassword,
+        removePassword,
+        getPassword,
+      }}
     >
       {children}
     </PasswordContext.Provider>

@@ -3,7 +3,11 @@ import { NextAuthOptions, getServerSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { db } from "./db";
 import { createHash } from "crypto";
-import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
+import {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from "next";
 
 function getGoogleCredentials() {
   const googleClientId = process.env.GOOGLE_CLIENT_ID;
