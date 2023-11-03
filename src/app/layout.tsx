@@ -10,7 +10,7 @@ import Image from "next/image";
 import { ReactNode } from "react";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+import { GeistSans, GeistMono } from "geist/font";
 
 export const metadata = constructMetadata();
 
@@ -22,7 +22,7 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body>
         <Providers>
           <div className="h-screen">
