@@ -7,7 +7,6 @@ const middleware = t.middleware;
 
 const isAuth = middleware(async (opts) => {
   const session = await getServerSession(authOptions);
-  
 
   if (!session?.user || !session.user.id) {
     throw new TRPCError({ code: "UNAUTHORIZED" });

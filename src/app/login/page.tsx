@@ -26,7 +26,7 @@ export default function Page() {
         <div className="w-full flex flex-col items-center max-w-md space-y-8">
           <div className="flex flex-col items-center gap-8">
             <div className="w-20 h-20 relative rounded-full">
-            <Image src="/logo.jpg" fill alt="logo" className="rounded-full" />
+              <Image src="/logo.jpg" fill alt="logo" className="rounded-full" />
             </div>
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
               Sign in to your account
@@ -75,4 +75,4 @@ export default function Page() {
       </div>
     </>
   );
-};
+}
