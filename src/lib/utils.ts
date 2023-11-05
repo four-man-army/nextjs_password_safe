@@ -9,6 +9,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function addHttps(input: string): string {
+  if (input.includes("http://") || input.includes("https://")) {
+    return input;
+  } else {
+    const safeInput = encodeURI(input);
+    return "https://" + safeInput;
+  }
+}
+
 export function encrypt(password: Password, key: string) {
   return AES.encrypt(JSON.stringify(password), key).toString();
 }
