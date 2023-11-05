@@ -1,7 +1,7 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
 import { PasswordContext } from "@/context/Password";
-import { addHttps, decrypt } from "@/lib/utils";
+import { addHttps, decrypt, escapeHtml } from "@/lib/utils";
 import { Password } from "@/lib/validators/password";
 import { Ghost } from "lucide-react";
 import type { User } from "next-auth";
@@ -78,7 +78,7 @@ const List: FC<ListProps> = ({ user }) => {
           <TableRow key={password.id}>
             <TableCell className="sm:p-4 p-2">{password.username}</TableCell>
             <TableCell className="sm:p-4 p-2">
-              <a className="hover:underline" href={addHttps(password.website)}>
+              <a className="hover:underline" href={addHttps(escapeHtml(password.website))}>
                 {password.website}
               </a>
             </TableCell>

@@ -18,6 +18,25 @@ export function addHttps(input: string): string {
   }
 }
 
+export function escapeHtml(input: string): string {
+  return input.replace(/[&<>"']/g, (match) => {
+    switch (match) {
+      case "&":
+        return "&amp;";
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case '"':
+        return "&quot;";
+      case "'":
+        return "&#x27;"; // &apos; is not supported in HTML4
+      default:
+        return match;
+    }
+  });
+}
+
 export function encrypt(password: Password, key: string) {
   return AES.encrypt(JSON.stringify(password), key).toString();
 }
