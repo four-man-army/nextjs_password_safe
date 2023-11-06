@@ -5,7 +5,6 @@ import SignOutButton from "@/components/SignOutButton";
 import { buttonVariants } from "@/components/ui/Button";
 import { auth } from "@/lib/auth";
 import { constructMetadata } from "@/lib/utils";
-import { Inter } from "next/font/google";
 import Image from "next/image";
 import { ReactNode } from "react";
 import "./globals.css";
