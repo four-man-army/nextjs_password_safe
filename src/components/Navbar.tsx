@@ -1,7 +1,7 @@
 "use client";
 
 import { NavbarOpenContext } from "@/context/NavbarOpen";
-import { FC, useContext, useEffect } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { Home, Key, Bot } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -12,11 +12,11 @@ interface NavbarProps {}
 
 const Navbar: FC<NavbarProps> = ({}) => {
   const { navbarOpen, setNavbarOpen } = useContext(NavbarOpenContext);
+  const [ width, setWidth ] = useState(0);
   const path = usePathname();
-  let width: number = 0;
 
   useEffect(() => {
-    width = window.innerWidth;
+    setWidth(window.innerWidth);
    }, [])
 
   return (
