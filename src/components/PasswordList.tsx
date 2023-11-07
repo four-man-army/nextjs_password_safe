@@ -38,7 +38,7 @@ const List: FC<ListProps> = ({ user }) => {
         }),
       );
     }
-  }, [isSuccess, data, setPasswords]);
+  }, [isSuccess, user.encryptKey, data, setPasswords]);
 
   if (isLoading) {
     return (
