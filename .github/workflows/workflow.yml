@@ -1,7 +1,5 @@
 name: directory-listing
-on:
-  push:
-    branches: ["gh-pages"]
+on: [push]
 
 jobs:
   pages-directory-listing:
