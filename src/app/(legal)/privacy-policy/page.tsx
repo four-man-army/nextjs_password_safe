@@ -88,7 +88,7 @@ export default function Home() {
       <h2 className="text-md font-bold">Cookies and Web Beacons</h2>
 
       <p>
-        Like any other website, Password Safe uses "cookies". These cookies are
+        Like any other website, Password Safe uses &quot;cookies&quot;. These cookies are
         used to store information including visitors&apos; preferences, and the pages
         on the website that the visitor accessed or visited. The information is
         used to optimize the users&apos; experience by customizing our web page
