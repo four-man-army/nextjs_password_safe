@@ -42,7 +42,7 @@
     "framer-motion": "^10.16.4",
     "geist": "^1.0.0",
     "jsencrypt": "^3.3.1",
-    "lucide-react": "^0.241.0",
+    "lucide-react": "^0.292.0",
     "nanoid": "^4.0.2",
     "next": "^13.4.5",
     "next-auth": "^4.22.1",
