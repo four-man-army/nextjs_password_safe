@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Home() {
     return (
-    <div className="flex flex-col gap-3 overflow-y-scroll">
+    <div className="flex flex-col gap-3">
       <h1 className="text-2xl font-bold">Privacy Policy for Cetiri kurca</h1>
 
       <p>
