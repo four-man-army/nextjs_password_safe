@@ -7,6 +7,7 @@ import { auth } from "@/lib/auth";
 import { constructMetadata } from "@/lib/utils";
 import Image from "next/image";
 import { ReactNode } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 import { GeistSans, GeistMono } from "geist/font";
@@ -81,6 +82,7 @@ export default async function RootLayout({
             </section>
           </div>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
