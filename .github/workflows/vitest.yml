@@ -2,7 +2,7 @@ name: Runs unit tests
 
 on:
   push:
-    branches-ignore: [gh-pages]
+    branches-ignore: [gh-pages,'dependabot/**']
 
 jobs:
   test:
