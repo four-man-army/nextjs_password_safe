@@ -14,7 +14,7 @@ export default defineConfig({
     command: "npm run build && npm run start",
     port: 3000,
   },
-  testDir: "./tests",
+  testDir: "./tests/e2e",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
