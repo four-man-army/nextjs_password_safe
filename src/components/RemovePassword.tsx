@@ -1,6 +1,12 @@
 "use client";
 
-import { FC, useContext, useRef, useState } from "react";
+import { trpc } from "@/app/_trpc/client";
+import { PasswordContext } from "@/context/Password";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { Trash2 } from "lucide-react";
+import { FC, useContext, useState } from "react";
+import { toast } from "react-hot-toast";
+import Button from "./ui/Button";
 import {
   Dialog,
   DialogContent,
@@ -10,15 +16,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/Dialog";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { Trash2 } from "lucide-react";
-import Button from "./ui/Button";
-import { PasswordContext } from "@/context/Password";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { toast } from "react-hot-toast";
-import { passwordValidator } from "@/lib/validators/password";
-import { trpc } from "@/app/_trpc/client";
 
 interface RemovePasswordProps {
   id: string;
