@@ -59,13 +59,8 @@ describe("genPw function", () => {
   it("should generate a password based on type and modes", () => {
     const length = 12;
     const type = "say";
-    const modes = {
-      upperCase: true,
-      lowerCase: true,
-      numbers: true,
-      symbols: true,
-    };
-    const result = genPw(length, type, modes);
+    const modes = ["uppercase", "lowercase", "numbers", "symbols"];
+    const result = genPw(length, type, modes as any);
     expect(result).toBeTypeOf("string");
     expect(result.length).toBe(length);
   });
