@@ -3,7 +3,7 @@ import { Bot } from "lucide-react";
 
 export default function page() {
   return (
-    <div className="w-full h-full mt-4 flex flex-col">
+    <div className="w-full h-full pt-4 flex flex-col">
       <div className="flex justify-center gap-5">
         <Bot className="h-full w-fit" />
         <h1 className="sm:text-6xl text-4xl font-medium w-fit">

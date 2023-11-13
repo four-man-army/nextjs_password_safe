@@ -48,12 +48,7 @@ export function decrypt(text: string, key: string) {
 export function genPw(
   length: number,
   type: string,
-  modes: {
-    upperCase: boolean;
-    lowerCase: boolean;
-    numbers: boolean;
-    symbols: boolean;
-  },
+  modes: ("uppercase" | "lowercase" | "numbers" | "symbols")[]
 ): string {
   const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const lowerCase = "abcdefghijklmnopqrstuvwxyz";
@@ -63,18 +58,17 @@ export function genPw(
 
   const getList = (): string => {
     var list = "";
-    if (modes.upperCase) list += upperCase;
-    if (modes.lowerCase) list += lowerCase;
-    if (modes.numbers) list += numbers;
-    if (modes.symbols) list += specialCharacters;
+    if (modes.includes("uppercase")) list += upperCase;
+    if (modes.includes("lowercase")) list += lowerCase;
+    if (modes.includes("numbers")) list += numbers;
+    if (modes.includes("symbols")) list += specialCharacters;
     return list;
   };
 
   switch (type) {
     case "say":
       for (var i = 0; i < length; i++) {
-        modes.symbols = false;
-        modes.numbers = false;
+        modes.filter((mode) => mode !== "symbols" && mode !== "numbers");
         result += getList().charAt(Math.random() * getList().length);
       }
       break;
@@ -83,7 +77,7 @@ export function genPw(
         var list = getList();
         var newList = list.replace(
           /([Oo01Iilg9MNmnWVwv\\$#!&*+{}\[\]<>/\(\)])/g,
-          "",
+          ""
         );
         result += newList.charAt(Math.random() * newList.length);
       }

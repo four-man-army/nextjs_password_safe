@@ -3,7 +3,7 @@ import { cn, genPw } from "@/lib/utils";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { ClipboardCopy, Info, RefreshCcw } from "lucide-react";
 import { FC, useEffect, useState } from "react";
-import { Checkbox } from "./ui/Checkbox";
+import { Checkbox, CheckboxGroup } from "@nextui-org/react";
 import { Input } from "./ui/Input";
 import { Label } from "./ui/Label";
 import { Progress } from "./ui/Progress";
@@ -15,47 +15,42 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/Tooltip";
+import { z } from "zod";
+import toast from "react-hot-toast";
 
 interface GeneratorProps {}
 
 const Generator: FC<GeneratorProps> = ({}) => {
   const [length, setLength] = useState(8);
   const [radio, setRadio] = useState<"all" | "read" | "say">("all");
-  const [checked, setChecked] = useState<{
-    upperCase: boolean;
-    lowerCase: boolean;
-    numbers: boolean;
-    symbols: boolean;
-  }>({
-    upperCase: true,
-    lowerCase: true,
-    numbers: true,
-    symbols: true,
-  });
-  const [password, setPassword] = useState(genPw(8, "all", checked));
+  const [selected, setSelected] = useState<
+    ("uppercase" | "lowercase" | "numbers" | "symbols")[]
+  >(["uppercase", "lowercase", "numbers", "symbols"]);
+  const [password, setPassword] = useState(genPw(8, "all", selected));
   const [animate, setAnimate] = useState(false);
 
-  const handleCheckbox = (
-    cs: CheckedState,
-    value: keyof typeof checked,
-  ): void => {
-    setChecked((prevState) => {
-      if (
-        Object.entries({ ...prevState, [value]: cs }).every(
-          ([_, v]) => v === false,
-        )
-      )
-        return prevState;
-      return {
-        ...prevState,
-        [value]: cs,
-      };
-    });
+  const handleCheckbox = (value: string[]): void => {
+    try {
+      const parsedValue = z
+        .array(z.enum(["uppercase", "lowercase", "numbers", "symbols"]))
+        .parse(value);
+      setSelected((prevState) => {
+        if (value.length === 0) {
+          return prevState;
+        } else {
+          return parsedValue;
+        }
+      });
+    } catch (e) {
+      if (e instanceof z.ZodError) {
+        toast.error(e.issues[0].message);
+      }
+    }
   };
 
   useEffect(() => {
-    setPassword(genPw(length, radio, checked));
-  }, [checked, length, radio]);
+    setPassword(genPw(length, radio, selected));
+  }, [selected, length, radio]);
 
   return (
     <div className="w-full h-full flex flex-col gap-10">
@@ -81,10 +76,10 @@ const Generator: FC<GeneratorProps> = ({}) => {
                 <RefreshCcw
                   className={cn(
                     "hover:text-blue-500 transition-all duration-300 cursor-pointer",
-                    { "animate-rotate": animate },
+                    { "animate-rotate": animate }
                   )}
                   onClick={() => {
-                    setPassword(genPw(length, radio, checked));
+                    setPassword(genPw(length, radio, selected));
                     setAnimate(true);
                   }}
                   onAnimationEnd={() => setAnimate(false)}
@@ -146,21 +141,25 @@ const Generator: FC<GeneratorProps> = ({}) => {
                 setRadio(e);
                 switch (e) {
                   case "all":
-                    setChecked({
-                      upperCase: true,
-                      lowerCase: true,
-                      numbers: true,
-                      symbols: true,
-                    });
+                    setSelected([
+                      "uppercase",
+                      "lowercase",
+                      "numbers",
+                      "symbols",
+                    ]);
                     break;
                   case "say":
-                    if (!checked.lowerCase && !checked.upperCase) {
-                      setChecked({
-                        lowerCase: true,
-                        upperCase: true,
-                        numbers: false,
-                        symbols: false,
-                      });
+                    if (
+                      !selected.includes("lowercase") &&
+                      !selected.includes("lowercase")
+                    ) {
+                      setSelected(["uppercase", "lowercase"]);
+                    } else {
+                      setSelected((prevState) =>
+                        prevState.filter(
+                          (item) => item !== "numbers" && item !== "symbols"
+                        )
+                      );
                     }
                     break;
                 }
@@ -224,53 +223,35 @@ const Generator: FC<GeneratorProps> = ({}) => {
               </TooltipProvider>
             </RadioGroup>
           </div>
-          <div className="h-fit lg:w-1/3 w-fit my-auto flex flex-col gap-2">
-            <div className="flex items-center">
+          <div className="h-fit lg:w-1/3 w-fit my-auto flex flex-col">
+            <CheckboxGroup value={selected} onValueChange={handleCheckbox}>
               <Checkbox
-                id="uppercase"
-                checked={checked.upperCase}
-                className="sm:w-4 w-2 sm:h-4 h-2"
-                onCheckedChange={(e) => handleCheckbox(e, "upperCase")}
-              />
-              <Label htmlFor="uppercase" className="sm:text-xl text-sm pl-1">
+                value="uppercase"
+                isSelected={selected.includes("uppercase")}
+              >
                 Uppercase
-              </Label>
-            </div>
-            <div className="flex items-center">
+              </Checkbox>
               <Checkbox
-                id="lowercase"
-                checked={checked.lowerCase}
-                className="sm:w-4 w-2 sm:h-4 h-2"
-                onCheckedChange={(e) => handleCheckbox(e, "lowerCase")}
-              />
-              <Label htmlFor="lowercase" className="sm:text-xl text-sm pl-1">
+                value="lowercase"
+                isSelected={selected.includes("lowercase")}
+              >
                 Lowercase
-              </Label>
-            </div>
-            <div className="flex items-center">
+              </Checkbox>
               <Checkbox
-                id="numbers"
-                checked={checked.numbers}
-                disabled={radio === "say"}
-                className="sm:w-4 w-2 sm:h-4 h-2"
-                onCheckedChange={(e) => handleCheckbox(e, "numbers")}
-              />
-              <Label htmlFor="numbers" className="sm:text-xl text-sm pl-1">
+                value="numbers"
+                isSelected={selected.includes("numbers")}
+                isDisabled={radio === "say"}
+              >
                 Numbers
-              </Label>
-            </div>
-            <div className="flex items-center">
+              </Checkbox>
               <Checkbox
-                id="symbols"
-                checked={checked.symbols}
-                disabled={radio === "say"}
-                className="sm:w-4 w-2 sm:h-4 h-2"
-                onCheckedChange={(e) => handleCheckbox(e, "symbols")}
-              />
-              <Label htmlFor="symbols" className="sm:text-xl text-sm pl-1">
+                value="symbols"
+                isSelected={selected.includes("symbols")}
+                isDisabled={radio === "say"}
+              >
                 Symbols
-              </Label>
-            </div>
+              </Checkbox>
+            </CheckboxGroup>
           </div>
         </div>
       </div>
