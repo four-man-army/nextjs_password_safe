@@ -1,13 +1,11 @@
 "use client";
 import { cn, genPw } from "@/lib/utils";
-import { CheckedState } from "@radix-ui/react-checkbox";
 import { ClipboardCopy, Info, RefreshCcw } from "lucide-react";
 import { FC, useEffect, useState } from "react";
-import { Checkbox, CheckboxGroup } from "@nextui-org/react";
+import { Checkbox, CheckboxGroup, Radio, RadioGroup } from "@nextui-org/react";
 import { Input } from "./ui/Input";
 import { Label } from "./ui/Label";
 import { Progress } from "./ui/Progress";
-import { RadioGroup, RadioGroupItem } from "./ui/RadioGroup";
 import { Slider } from "./ui/Slider";
 import {
   Tooltip,
@@ -123,7 +121,7 @@ const Generator: FC<GeneratorProps> = ({}) => {
               step={1}
               value={length}
               onChange={(e) => setLength(parseInt(e.target.value))}
-              className="w-1/4 sm:w-fit my-auto"
+              className="w-fit my-auto"
             />
             <Slider
               min={1}
@@ -137,44 +135,50 @@ const Generator: FC<GeneratorProps> = ({}) => {
           <div className="h-fit lg:w-1/3 w-fit my-auto">
             <RadioGroup
               defaultValue="all"
-              onValueChange={(e: typeof radio) => {
-                setRadio(e);
-                switch (e) {
-                  case "all":
-                    setSelected([
-                      "uppercase",
-                      "lowercase",
-                      "numbers",
-                      "symbols",
-                    ]);
-                    break;
-                  case "say":
-                    if (
-                      !selected.includes("lowercase") &&
-                      !selected.includes("lowercase")
-                    ) {
-                      setSelected(["uppercase", "lowercase"]);
-                    } else {
-                      setSelected((prevState) =>
-                        prevState.filter(
-                          (item) => item !== "numbers" && item !== "symbols"
-                        )
-                      );
-                    }
-                    break;
+              onValueChange={(s) => {
+                try {
+                  const e = z.enum(["all", "read", "say"]).parse(s);
+                  setRadio(e);
+                  switch (e) {
+                    case "all":
+                      setSelected([
+                        "uppercase",
+                        "lowercase",
+                        "numbers",
+                        "symbols",
+                      ]);
+                      break;
+                    case "say":
+                      if (
+                        !selected.includes("lowercase") &&
+                        !selected.includes("lowercase")
+                      ) {
+                        setSelected(["uppercase", "lowercase"]);
+                      } else {
+                        setSelected((prevState) =>
+                          prevState.filter(
+                            (item) => item !== "numbers" && item !== "symbols"
+                          )
+                        );
+                      }
+                      break;
+                  }
+                } catch (e) {
+                  if (e instanceof z.ZodError) {
+                    toast.error(e.issues[0].message);
+                  }
                 }
               }}
             >
               <TooltipProvider delayDuration={10}>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem
-                    className="text-blue-500 sm:w-4 w-2 sm:h-4 h-2"
+                  <Radio
+                    className="text-blue-500"
                     value="say"
                     id="r1"
-                  />
-                  <Label htmlFor="r1" className="sm:text-xl text-sm">
+                  >
                     Easy to say
-                  </Label>
+                  </Radio>
                   <Tooltip>
                     <TooltipTrigger>
                       <Info className="sm:w-4 w-3" />
@@ -185,14 +189,13 @@ const Generator: FC<GeneratorProps> = ({}) => {
                   </Tooltip>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem
-                    className="text-blue-500 sm:w-4 w-2 sm:h-4 h-2"
+                  <Radio
+                    className="text-blue-500"
                     value="read"
                     id="r2"
-                  />
-                  <Label htmlFor="r2" className="sm:text-xl text-sm">
+                  >
                     Easy to read
-                  </Label>
+                  </Radio>
                   <Tooltip>
                     <TooltipTrigger>
                       <Info className="sm:w-4 w-3" />
@@ -203,14 +206,13 @@ const Generator: FC<GeneratorProps> = ({}) => {
                   </Tooltip>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem
-                    className="text-blue-500 sm:w-4 w-2 sm:h-4 h-2"
+                  <Radio
+                    className="text-blue-500"
                     value="all"
                     id="r3"
-                  />
-                  <Label htmlFor="r3" className="sm:text-xl text-sm">
+                  >
                     All characters
-                  </Label>
+                  </Radio>
                   <Tooltip>
                     <TooltipTrigger>
                       <Info className="sm:w-4 w-3" />
