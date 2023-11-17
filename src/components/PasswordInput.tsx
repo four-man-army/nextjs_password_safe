@@ -11,7 +11,8 @@ import { toast } from "react-hot-toast";
 import type { User } from "next-auth";
 import { Button } from "@nextui-org/react";
 import { Input } from "./ui/Input";
-import { encrypt } from "@/lib/utils";
+import { cn, encrypt } from "@/lib/utils";
+import { buttonVariants } from "./ui/Button";
 
 interface PasswordInputProps {
   user: User & {
@@ -125,7 +126,7 @@ const PasswordInput: FC<PasswordInputProps> = ({ user }) => {
                   type="reset"
                   color="danger"
                   onClick={() => setIsAdding(false)}
-                  className="w-full"
+                  className={cn(buttonVariants({ variant: "error" }), "w-full")}
                 >
                   <motion.p exit={{ x: -100 }}>Cancel</motion.p>
                 </Button>
@@ -135,7 +136,10 @@ const PasswordInput: FC<PasswordInputProps> = ({ user }) => {
                   type="submit"
                   color="primary"
                   isLoading={isLoading}
-                  className="w-full"
+                  className={cn(
+                    buttonVariants({ variant: "default" }),
+                    "w-full"
+                  )}
                 >
                   <motion.p layoutId="2">Add</motion.p>
                 </Button>
@@ -149,7 +153,7 @@ const PasswordInput: FC<PasswordInputProps> = ({ user }) => {
             type="submit"
             onClick={() => setIsAdding(true)}
             isLoading={isLoading}
-            className="w-full"
+            className={cn(buttonVariants({ variant: "default" }), "w-full")}
             color="primary"
           >
             <motion.p layoutId="2">Add</motion.p>
