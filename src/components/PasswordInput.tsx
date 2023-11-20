@@ -126,7 +126,7 @@ const PasswordInput: FC<PasswordInputProps> = ({ user }) => {
                   type="reset"
                   color="danger"
                   onClick={() => setIsAdding(false)}
-                  className={cn(buttonVariants({ variant: "error" }), "w-full")}
+                  className={"w-full rounded-md"}
                 >
                   <motion.p exit={{ x: -100 }}>Cancel</motion.p>
                 </Button>
@@ -136,10 +136,7 @@ const PasswordInput: FC<PasswordInputProps> = ({ user }) => {
                   type="submit"
                   color="primary"
                   isLoading={isLoading}
-                  className={cn(
-                    buttonVariants({ variant: "default" }),
-                    "w-full"
-                  )}
+                  className="w-full rounded-md"
                 >
                   <motion.p layoutId="2">Add</motion.p>
                 </Button>
@@ -153,7 +150,7 @@ const PasswordInput: FC<PasswordInputProps> = ({ user }) => {
             type="submit"
             onClick={() => setIsAdding(true)}
             isLoading={isLoading}
-            className={cn(buttonVariants({ variant: "default" }), "w-full")}
+            className="w-full rounded-md"
             color="primary"
           >
             <motion.p layoutId="2">Add</motion.p>
