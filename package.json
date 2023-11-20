@@ -39,7 +39,7 @@
     "dotenv": "^16.0.3",
     "eslint": "8.29.0",
     "eslint-config-next": "^13.4.5",
-    "framer-motion": "^10.16.4",
+    "framer-motion": "^10.16.5",
     "geist": "^1.1.0",
     "jsencrypt": "^3.3.1",
     "lucide-react": "^0.292.0",
