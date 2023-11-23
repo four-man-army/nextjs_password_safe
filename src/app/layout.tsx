@@ -25,7 +25,7 @@ export default async function RootLayout({
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body>
         <Providers>
-          <div className="h-screen">
+          <div className="h-screen max-h-screen overflow-hidden">
             <section className="flex flex-row h-full">
               <Navbar />
               <section className="flex flex-col w-full bg-slate-100">
@@ -75,7 +75,7 @@ export default async function RootLayout({
                     )}
                   </div>
                 </header>
-                <main className="my-6 mx-4 p-6 h-full bg-white">
+                <main className="my-6 mx-4 p-6 h-full bg-white overflow-auto">
                   {children}
                 </main>
               </section>

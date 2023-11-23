@@ -1,42 +1,29 @@
-name: Playwright Tests
+name: Runs unit tests
+
 on:
   push:
-    branches-ignore: [gh-pages, 'dependabot/**']
-
-concurrency:
-  group: ${{ github.ref_name }}
-  cancel-in-progress: true
+    branches-ignore: [gh-pages,'dependabot/**']
 
 jobs:
   test:
-    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: 'npm'
       - name: Install dependencies
         run: npm ci
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-      - name: "Create env file"
-        run: |
-          touch .env
-          echo UPSTASH_REDIS_REST_URL=${{ secrets.UPSTASH_REDIS_REST_URL }} >> .env
-          echo UPSTASH_REDIS_REST_TOKEN=${{ secrets.UPSTASH_REDIS_REST_TOKEN }} >> .env
-          echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env
-          echo GOOGLE_KEY=${{ secrets.GOOGLE_KEY }} >> .env
-          echo NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} >> .env
-      - name: Run Playwright tests
-        run: npx playwright test
+      - name: Execute Unit tests
+        run: npm run test:unit
       - uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: playwright-report
-          path: playwright-report/
+          name: html
+          path: html/
           retention-days: 30
-
+  
   publish_report:
     name: Publish HTML Report
     # using always() is not ideal here, because it would also run if the workflow was cancelled
@@ -46,7 +33,7 @@ jobs:
     continue-on-error: true
     env:
       # Unique URL path for each workflow run attempt
-      HTML_REPORT_URL_PATH: reports/e2e/${{ github.ref_name }}/${{ github.run_id }}/${{ github.run_attempt }}
+      HTML_REPORT_URL_PATH: reports/unit/${{ github.ref_name }}/${{ github.run_id }}/${{ github.run_attempt }}
     steps:
       - name: Checkout GitHub Pages Branch
         uses: actions/checkout@v2
@@ -60,7 +47,7 @@ jobs:
       - name: Download zipped HTML report
         uses: actions/download-artifact@v2
         with:
-          name: playwright-report
+          name: html
           path: ${{ env.HTML_REPORT_URL_PATH }}
       - name: Push HTML Report
         timeout-minutes: 3

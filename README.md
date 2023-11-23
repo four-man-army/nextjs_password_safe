@@ -15,9 +15,11 @@
 
 <p>Our application, to make a password safe with best practices.
 
-### Deployments
+### Testing
 
-[![.github/workflows/playwright.yml](https://github.com/four-man-army/nextjs_password_safe/actions/workflows/playwright.yml/badge.svg)](https://github.com/four-man-army/nextjs_password_safe/actions/workflows/playwright.yml)
+View all test reports [here](https://four-man-army.github.io/nextjs_password_safe/)
+
+### Deployments
 
 <p>
 <ol>
@@ -74,7 +76,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ### Database
 
-We use mysql as our database.
+We use MySQL as our database.
 
 ### Authentication
 
@@ -82,7 +84,7 @@ We use NextAuth.js for authentication.
 
 ### Testing
 
-We use Playwright for testing, and we use Vercel for deployment.
+We use Playwright for end-to-end testing, and we use Vitest for unit testing.
 
 ### Reflexion
 
