@@ -43,7 +43,7 @@
     "geist": "^1.1.0",
     "jsencrypt": "^3.3.1",
     "lucide-react": "^0.292.0",
-    "nanoid": "^4.0.2",
+    "nanoid": "^5.0.3",
     "next": "^13.4.5",
     "next-auth": "^4.24.5",
     "prettier": "^3.0.3",
