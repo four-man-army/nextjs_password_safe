@@ -3,6 +3,7 @@ import { trpc } from "@/app/_trpc/client";
 import { NavbarOpenProvider } from "@/context/NavbarOpen";
 import { PasswordProvider } from "@/context/Password";
 import { absoluteUrl } from "@/lib/utils";
+import { NextUIProvider } from "@nextui-org/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { FC, ReactNode, useState } from "react";
@@ -21,17 +22,19 @@ const Providers: FC<ProvidersProps> = ({ children }) => {
           url: absoluteUrl("/api/trpc"),
         }),
       ],
-    }),
+    })
   );
 
   return (
     <PasswordProvider>
-      <Toaster position="top-center" reverseOrder={false} />
-      <trpc.Provider client={trpcClient} queryClient={queryClient}>
-        <QueryClientProvider client={queryClient}>
-          <NavbarOpenProvider>{children}</NavbarOpenProvider>
-        </QueryClientProvider>
-      </trpc.Provider>
+      <NextUIProvider>
+        <Toaster position="top-center" reverseOrder={false} />
+        <trpc.Provider client={trpcClient} queryClient={queryClient}>
+          <QueryClientProvider client={queryClient}>
+            <NavbarOpenProvider>{children}</NavbarOpenProvider>
+          </QueryClientProvider>
+        </trpc.Provider>
+      </NextUIProvider>
     </PasswordProvider>
   );
 };

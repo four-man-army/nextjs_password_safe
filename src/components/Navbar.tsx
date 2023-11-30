@@ -12,12 +12,36 @@ interface NavbarProps {}
 
 const Navbar: FC<NavbarProps> = ({}) => {
   const { navbarOpen, setNavbarOpen } = useContext(NavbarOpenContext);
-  const [ width, setWidth ] = useState(0);
+  const [width, setWidth] = useState(0);
   const path = usePathname();
 
   useEffect(() => {
     setWidth(window.innerWidth);
-   }, [])
+  }, []);
+
+  const routes = [
+    {
+      href: "/",
+      name: "Home",
+      Icon: (className: string) => {
+        return <Home className={className} />;
+      },
+    },
+    {
+      href: "/safe",
+      name: "Password Safe",
+      Icon: (className: string) => {
+        return <Key className={className} />;
+      },
+    },
+    {
+      href: "/generate",
+      name: "Password Genrator",
+      Icon: (className: string) => {
+        return <Bot className={className} />;
+      },
+    },
+  ];
 
   return (
     <>
@@ -28,7 +52,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
             "absolute z-40 top-0 left-0 w-screen h-screen transition-all duration-300 backdrop-blur-sm",
             {
               hidden: !navbarOpen,
-            },
+            }
           )}
         />
       )}
@@ -37,91 +61,39 @@ const Navbar: FC<NavbarProps> = ({}) => {
           "bg-blue-950 transition-all z-50 duration-300 sm:w-20 w-0 fixed sm:relative h-full",
           {
             "w-52 sm:w-52": navbarOpen,
-          },
+          }
         )}
       >
         <div className="flex h-6 m-4 bg-red-500 justify-center relative">
           <Image src="/logo.jpg" alt="logo" width={24} height={24} />
         </div>
         <ul className={cn("w-full text-slate-300 text-sm overflow-hidden")}>
-          <li className="h-full w-full">
-            <Link
-              href="/"
-              className={cn(
-                "flex m-1 px-6 gap-2 justify-end h-10 rounded-lg hover:text-white transition-all bg-transparent",
-                {
-                  "bg-blue-500": path === "/",
-                },
-              )}
-              onClick={() => width < 640 && setNavbarOpen(false)}
-            >
-              <span className="flex">
-                <Home className="w-4 my-auto" />
-              </span>
-              <span
+          {routes.map((route, i) => (
+            <li key={i} className="h-full w-full">
+              <Link
+                href={route.href}
                 className={cn(
-                  "overflow-hidden truncate transition-all duration-300 h-fit my-auto w-0 flex-shrink",
+                  "flex m-1 px-6 gap-2 justify-end h-10 rounded-lg hover:text-white transition-all bg-transparent",
                   {
-                    "w-full": navbarOpen,
-                  },
+                    "bg-blue-500": path === route.href,
+                  }
                 )}
+                onClick={() => width < 640 ? setNavbarOpen(false) : null}
               >
-                Home
-              </span>
-            </Link>
-          </li>
-          <li className="h-full w-full">
-            <Link
-              href="/safe"
-              className={cn(
-                "flex m-1 px-6 gap-2 justify-end h-10 rounded-lg hover:text-white transition-all bg-transparent",
-                {
-                  "bg-blue-500": path === "/safe",
-                },
-              )}
-              onClick={() => width < 640 && setNavbarOpen(false)}
-            >
-              <span className="flex">
-                <Key className="w-4 my-auto" />
-              </span>
-              <span
-                className={cn(
-                  "overflow-hidden truncate transition-all duration-300 h-fit my-auto w-0 flex-shrink",
-                  {
-                    "w-full": navbarOpen,
-                  },
-                )}
-              >
-                Password Safe
-              </span>
-            </Link>
-          </li>
-          <li className="h-full w-full">
-            <Link
-              href="/generate"
-              className={cn(
-                "flex m-1 px-6 gap-2 justify-end h-10 rounded-lg hover:text-white transition-all bg-transparent",
-                {
-                  "bg-blue-500": path === "/generate",
-                },
-              )}
-              onClick={() => width < 640 && setNavbarOpen(false)}
-            >
-              <span className="flex">
-                <Bot className="w-4 my-auto" />
-              </span>
-              <span
-                className={cn(
-                  "overflow-hidden truncate transition-all duration-300 h-fit my-auto w-0 flex-shrink",
-                  {
-                    "w-full": navbarOpen,
-                  },
-                )}
-              >
-                Password Genrator
-              </span>
-            </Link>
-          </li>
+                <span className="flex">{route.Icon("w-4 my-auto")}</span>
+                <span
+                  className={cn(
+                    "overflow-hidden truncate transition-all duration-300 h-fit my-auto w-0 flex-shrink",
+                    {
+                      "w-full": navbarOpen,
+                    }
+                  )}
+                >
+                  {route.name}
+                </span>
+              </Link>
+            </li>
+          ))}
         </ul>
       </aside>
     </>
