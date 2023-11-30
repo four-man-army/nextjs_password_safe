@@ -1,13 +1,11 @@
 "use client";
 import { cn, genPw } from "@/lib/utils";
-import { CheckedState } from "@radix-ui/react-checkbox";
 import { ClipboardCopy, Info, RefreshCcw } from "lucide-react";
 import { FC, useEffect, useState } from "react";
-import { Checkbox } from "./ui/Checkbox";
+import { Checkbox, CheckboxGroup, Radio, RadioGroup } from "@nextui-org/react";
 import { Input } from "./ui/Input";
 import { Label } from "./ui/Label";
 import { Progress } from "./ui/Progress";
-import { RadioGroup, RadioGroupItem } from "./ui/RadioGroup";
 import { Slider } from "./ui/Slider";
 import {
   Tooltip,
@@ -15,47 +13,42 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/Tooltip";
+import { z } from "zod";
+import toast from "react-hot-toast";
 
 interface GeneratorProps {}
 
 const Generator: FC<GeneratorProps> = ({}) => {
   const [length, setLength] = useState(8);
   const [radio, setRadio] = useState<"all" | "read" | "say">("all");
-  const [checked, setChecked] = useState<{
-    upperCase: boolean;
-    lowerCase: boolean;
-    numbers: boolean;
-    symbols: boolean;
-  }>({
-    upperCase: true,
-    lowerCase: true,
-    numbers: true,
-    symbols: true,
-  });
-  const [password, setPassword] = useState(genPw(8, "all", checked));
+  const [selected, setSelected] = useState<
+    ("uppercase" | "lowercase" | "numbers" | "symbols")[]
+  >(["uppercase", "lowercase", "numbers", "symbols"]);
+  const [password, setPassword] = useState(genPw(8, "all", selected));
   const [animate, setAnimate] = useState(false);
 
-  const handleCheckbox = (
-    cs: CheckedState,
-    value: keyof typeof checked,
-  ): void => {
-    setChecked((prevState) => {
-      if (
-        Object.entries({ ...prevState, [value]: cs }).every(
-          ([_, v]) => v === false,
-        )
-      )
-        return prevState;
-      return {
-        ...prevState,
-        [value]: cs,
-      };
-    });
+  const handleCheckbox = (value: string[]): void => {
+    try {
+      const parsedValue = z
+        .array(z.enum(["uppercase", "lowercase", "numbers", "symbols"]))
+        .parse(value);
+      setSelected((prevState) => {
+        if (value.length === 0) {
+          return prevState;
+        } else {
+          return parsedValue;
+        }
+      });
+    } catch (e) {
+      if (e instanceof z.ZodError) {
+        toast.error(e.issues[0].message);
+      }
+    }
   };
 
   useEffect(() => {
-    setPassword(genPw(length, radio, checked));
-  }, [checked, length, radio]);
+    setPassword(genPw(length, radio, selected));
+  }, [selected, length, radio]);
 
   return (
     <div className="w-full h-full flex flex-col gap-10">
@@ -81,10 +74,10 @@ const Generator: FC<GeneratorProps> = ({}) => {
                 <RefreshCcw
                   className={cn(
                     "hover:text-blue-500 transition-all duration-300 cursor-pointer",
-                    { "animate-rotate": animate },
+                    { "animate-rotate": animate }
                   )}
                   onClick={() => {
-                    setPassword(genPw(length, radio, checked));
+                    setPassword(genPw(length, radio, selected));
                     setAnimate(true);
                   }}
                   onAnimationEnd={() => setAnimate(false)}
@@ -128,7 +121,7 @@ const Generator: FC<GeneratorProps> = ({}) => {
               step={1}
               value={length}
               onChange={(e) => setLength(parseInt(e.target.value))}
-              className="w-1/4 sm:w-fit my-auto"
+              className="w-fit my-auto"
             />
             <Slider
               min={1}
@@ -142,40 +135,50 @@ const Generator: FC<GeneratorProps> = ({}) => {
           <div className="h-fit lg:w-1/3 w-fit my-auto">
             <RadioGroup
               defaultValue="all"
-              onValueChange={(e: typeof radio) => {
-                setRadio(e);
-                switch (e) {
-                  case "all":
-                    setChecked({
-                      upperCase: true,
-                      lowerCase: true,
-                      numbers: true,
-                      symbols: true,
-                    });
-                    break;
-                  case "say":
-                    if (!checked.lowerCase && !checked.upperCase) {
-                      setChecked({
-                        lowerCase: true,
-                        upperCase: true,
-                        numbers: false,
-                        symbols: false,
-                      });
-                    }
-                    break;
+              onValueChange={(s) => {
+                try {
+                  const e = z.enum(["all", "read", "say"]).parse(s);
+                  setRadio(e);
+                  switch (e) {
+                    case "all":
+                      setSelected([
+                        "uppercase",
+                        "lowercase",
+                        "numbers",
+                        "symbols",
+                      ]);
+                      break;
+                    case "say":
+                      if (
+                        !selected.includes("lowercase") &&
+                        !selected.includes("lowercase")
+                      ) {
+                        setSelected(["uppercase", "lowercase"]);
+                      } else {
+                        setSelected((prevState) =>
+                          prevState.filter(
+                            (item) => item !== "numbers" && item !== "symbols"
+                          )
+                        );
+                      }
+                      break;
+                  }
+                } catch (e) {
+                  if (e instanceof z.ZodError) {
+                    toast.error(e.issues[0].message);
+                  }
                 }
               }}
             >
               <TooltipProvider delayDuration={10}>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem
-                    className="text-blue-500 sm:w-4 w-2 sm:h-4 h-2"
+                  <Radio
+                    className="text-blue-500"
                     value="say"
                     id="r1"
-                  />
-                  <Label htmlFor="r1" className="sm:text-xl text-sm">
+                  >
                     Easy to say
-                  </Label>
+                  </Radio>
                   <Tooltip>
                     <TooltipTrigger>
                       <Info className="sm:w-4 w-3" />
@@ -186,14 +189,13 @@ const Generator: FC<GeneratorProps> = ({}) => {
                   </Tooltip>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem
-                    className="text-blue-500 sm:w-4 w-2 sm:h-4 h-2"
+                  <Radio
+                    className="text-blue-500"
                     value="read"
                     id="r2"
-                  />
-                  <Label htmlFor="r2" className="sm:text-xl text-sm">
+                  >
                     Easy to read
-                  </Label>
+                  </Radio>
                   <Tooltip>
                     <TooltipTrigger>
                       <Info className="sm:w-4 w-3" />
@@ -204,14 +206,13 @@ const Generator: FC<GeneratorProps> = ({}) => {
                   </Tooltip>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem
-                    className="text-blue-500 sm:w-4 w-2 sm:h-4 h-2"
+                  <Radio
+                    className="text-blue-500"
                     value="all"
                     id="r3"
-                  />
-                  <Label htmlFor="r3" className="sm:text-xl text-sm">
+                  >
                     All characters
-                  </Label>
+                  </Radio>
                   <Tooltip>
                     <TooltipTrigger>
                       <Info className="sm:w-4 w-3" />
@@ -224,53 +225,35 @@ const Generator: FC<GeneratorProps> = ({}) => {
               </TooltipProvider>
             </RadioGroup>
           </div>
-          <div className="h-fit lg:w-1/3 w-fit my-auto flex flex-col gap-2">
-            <div className="flex items-center">
+          <div className="h-fit lg:w-1/3 w-fit my-auto flex flex-col">
+            <CheckboxGroup value={selected} onValueChange={handleCheckbox}>
               <Checkbox
-                id="uppercase"
-                checked={checked.upperCase}
-                className="sm:w-4 w-2 sm:h-4 h-2"
-                onCheckedChange={(e) => handleCheckbox(e, "upperCase")}
-              />
-              <Label htmlFor="uppercase" className="sm:text-xl text-sm pl-1">
+                value="uppercase"
+                isSelected={selected.includes("uppercase")}
+              >
                 Uppercase
-              </Label>
-            </div>
-            <div className="flex items-center">
+              </Checkbox>
               <Checkbox
-                id="lowercase"
-                checked={checked.lowerCase}
-                className="sm:w-4 w-2 sm:h-4 h-2"
-                onCheckedChange={(e) => handleCheckbox(e, "lowerCase")}
-              />
-              <Label htmlFor="lowercase" className="sm:text-xl text-sm pl-1">
+                value="lowercase"
+                isSelected={selected.includes("lowercase")}
+              >
                 Lowercase
-              </Label>
-            </div>
-            <div className="flex items-center">
+              </Checkbox>
               <Checkbox
-                id="numbers"
-                checked={checked.numbers}
-                disabled={radio === "say"}
-                className="sm:w-4 w-2 sm:h-4 h-2"
-                onCheckedChange={(e) => handleCheckbox(e, "numbers")}
-              />
-              <Label htmlFor="numbers" className="sm:text-xl text-sm pl-1">
+                value="numbers"
+                isSelected={selected.includes("numbers")}
+                isDisabled={radio === "say"}
+              >
                 Numbers
-              </Label>
-            </div>
-            <div className="flex items-center">
+              </Checkbox>
               <Checkbox
-                id="symbols"
-                checked={checked.symbols}
-                disabled={radio === "say"}
-                className="sm:w-4 w-2 sm:h-4 h-2"
-                onCheckedChange={(e) => handleCheckbox(e, "symbols")}
-              />
-              <Label htmlFor="symbols" className="sm:text-xl text-sm pl-1">
+                value="symbols"
+                isSelected={selected.includes("symbols")}
+                isDisabled={radio === "say"}
+              >
                 Symbols
-              </Label>
-            </div>
+              </Checkbox>
+            </CheckboxGroup>
           </div>
         </div>
       </div>

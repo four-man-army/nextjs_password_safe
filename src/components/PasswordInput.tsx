@@ -9,9 +9,10 @@ import { FC, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import type { User } from "next-auth";
-import Button from "./ui/Button";
+import { Button } from "@nextui-org/react";
 import { Input } from "./ui/Input";
-import { encrypt } from "@/lib/utils";
+import { cn, encrypt } from "@/lib/utils";
+import { buttonVariants } from "./ui/Button";
 
 interface PasswordInputProps {
   user: User & {
@@ -123,16 +124,20 @@ const PasswordInput: FC<PasswordInputProps> = ({ user }) => {
               >
                 <Button
                   type="reset"
-                  variant="error"
+                  color="danger"
                   onClick={() => setIsAdding(false)}
-                  className="w-full"
-                  onFocus={(e) => e.currentTarget.blur()}
+                  className={"w-full rounded-md"}
                 >
                   <motion.p exit={{ x: -100 }}>Cancel</motion.p>
                 </Button>
               </motion.div>
-              <motion.div className="w-full" layoutId="1">
-                <Button type="submit" className="w-full">
+              <motion.div layout className="w-full" layoutId="1">
+                <Button
+                  type="submit"
+                  color="primary"
+                  isLoading={isLoading}
+                  className="w-full rounded-md"
+                >
                   <motion.p layoutId="2">Add</motion.p>
                 </Button>
               </motion.div>
@@ -140,12 +145,13 @@ const PasswordInput: FC<PasswordInputProps> = ({ user }) => {
           </form>
         </div>
       ) : (
-        <motion.div layoutId="1" className="w-full mt-4" key="closed">
+        <motion.div layout layoutId="1" className="w-full mt-4" key="closed">
           <Button
             type="submit"
             onClick={() => setIsAdding(true)}
             isLoading={isLoading}
-            className="w-full"
+            className="w-full rounded-md"
+            color="primary"
           >
             <motion.p layoutId="2">Add</motion.p>
           </Button>
