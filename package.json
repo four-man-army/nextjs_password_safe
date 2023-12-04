@@ -59,7 +59,7 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "@playwright/test": "^1.38.1",
+    "@playwright/test": "^1.40.1",
     "@vitest/ui": "^0.34.6",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.24",
