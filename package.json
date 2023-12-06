@@ -11,7 +11,8 @@
     "start": "next start",
     "lint": "next lint",
     "export": "next export",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "configure-husky": "npx husky install && npx husky add .husky/pre-commit \"npx --no-install lint-staged\""
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
@@ -65,9 +66,21 @@
     "@vitest/ui": "^0.34.6",
     "autoprefixer": "^10.4.14",
     "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
     "postcss": "^8.4.24",
     "tailwindcss": "^3.3.2",
     "vitest": "^0.34.6"
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts,jsx,tsx,json}": [
+      "eslint . --fix",
+      "prettier --write ."
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "browser": {
     "fs": false,
