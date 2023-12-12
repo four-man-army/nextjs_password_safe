@@ -47,8 +47,8 @@ export default defineConfig({
     },
 
     {
-      name: "webkit",
-      use: { browserName: "webkit" },
+      name: "edge",
+      use: { channel: "msedge" },
     },
 
     /* Test against mobile viewports. */
