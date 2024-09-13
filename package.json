@@ -47,6 +47,7 @@
     "nanoid": "^5.0.4",
     "next": "^14.0.4",
     "next-auth": "^4.24.5",
+    "password_safe": "file:",
     "prettier": "^3.1.1",
     "prisma": "^5.7.1",
     "react": "^18.2.0",
@@ -55,7 +56,7 @@
     "react-hot-toast": "^2.4.1",
     "tailwind-merge": "^2.1.0",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "4.9.3",
+    "typescript": "5.4.2",
     "zod": "^3.22.2"
   },
   "devDependencies": {
